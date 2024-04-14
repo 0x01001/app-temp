@@ -1,0 +1,36 @@
+targets:
+  $default:
+    sources:
+      - lib/**
+      - lib/data/graphql/**
+    builders:
+      # auto_route_generator:
+      #   import: "package:auto_route_generator/builder.dart"
+      #   runs_before: ["auto_route_generator:autoRouterBuilder"]
+      #   builder_factories: ["autoRouteBuilder"]
+      #   build_extensions: { ".dart": [".route.json"] }
+      #   auto_apply: dependents
+      #   build_to: cache
+      # auto_router_generator:
+      #   import: "package:auto_route_generator/builder.dart"
+      #   builder_factories: ["autoRouterBuilder"]
+      #   build_extensions: { ".dart": [".dart.json"] }
+      #   auto_apply: dependents
+      #   build_to: source
+      # artemis:
+      #   options:
+      #     generate_helpers: true
+
+      #     schema_mapping:
+      #       - schema: lib/data/graphql/schema.graphql
+      #         queries_glob: lib/data/graphql/pokedex.graphql
+      #         output: lib/data/graphql/generated/pokedex_graphql.dart
+
+      #     scalar_mapping:
+      #       - graphql_type: DateTime
+      #         dart_type: DateTime
+      #         use_custom_parser: true
+# global_options:
+#   freezed:freezed:
+#     runs_before:
+#       - isar_generator:isar_generator
