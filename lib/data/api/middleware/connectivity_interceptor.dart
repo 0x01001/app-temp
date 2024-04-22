@@ -1,8 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../app/index.dart';
 import '../../../domain/index.dart';
 import '../../../shared/index.dart';
 import 'base_interceptor.dart';
@@ -14,7 +14,7 @@ class ConnectivityInterceptor extends BaseInterceptor {
 
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final repository = getIt.get<AppRepository>();
+    final repository = GetIt.instance.get<AppRepository>();
     bool? result = repository.isConnected;
     // Log.d('onRequest > result: $result');
     if (result == null) {

@@ -38,8 +38,7 @@ Flutter project using clean architecture and riverpod pattern.
 
 ### Install
 
-- Export paths:
-  - Add to `.zshrc` or `.bashrc` file
+- Export paths: Add to `.zshrc` or `.bashrc` file
 
 ```
 export PATH="$PATH:<path to flutter>/flutter/bin"
@@ -47,8 +46,8 @@ export PATH="$PATH:<path to flutter>/flutter/bin/cache/dart-sdk/bin"
 export PATH="$PATH:~/.pub-cache/bin"
 ```
 
-    - Save file `.zshrc`
-    - Run `source ~/.zshrc`
+- Save file `.zshrc`
+- Run `source ~/.zshrc`
 
 ### Config and run app
 
