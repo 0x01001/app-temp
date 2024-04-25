@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../shared/index.dart';
+import '../../components/app_list.dart';
 import '../../index.dart';
-import '../../shared_view/app_list.dart';
 import '../auth/provider/provider.dart';
 
 @RoutePage()

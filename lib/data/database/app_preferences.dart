@@ -14,9 +14,9 @@ class AppPreferences {
   final SharedPreferences _sharedPreference;
   final FlutterSecureStorage _secureStorage;
 
-  bool? get isDarkMode {
-    return _sharedPreference.getBool(SharedPreferenceKeys.isDarkMode);
-  }
+  // bool? get isDarkMode {
+  //   return _sharedPreference.getBool(SharedPreferenceKeys.isDarkMode);
+  // }
 
   String get deviceToken {
     return _sharedPreference.getString(SharedPreferenceKeys.deviceToken) ?? '';
@@ -71,9 +71,9 @@ class AppPreferences {
     return _sharedPreference.setString(SharedPreferenceKeys.currentUser, json.encode(data));
   }
 
-  Future<bool> saveIsDarkMode(bool isDarkMode) {
-    return _sharedPreference.setBool(SharedPreferenceKeys.isDarkMode, isDarkMode);
-  }
+  // Future<bool> saveIsDarkMode(bool isDarkMode) {
+  //   return _sharedPreference.setBool(SharedPreferenceKeys.isDarkMode, isDarkMode);
+  // }
 
   Future<bool> saveDeviceToken(String token) {
     return _sharedPreference.setString(SharedPreferenceKeys.deviceToken, token);

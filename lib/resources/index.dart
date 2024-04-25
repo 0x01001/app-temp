@@ -1,5 +1,3 @@
-export 'dimens/app_dimen.dart';
-export 'dimens/dimens.dart';
 export 'generated/assets.gen.dart';
 export 'generated/fonts.gen.dart';
 export 'generated/l10n.dart';

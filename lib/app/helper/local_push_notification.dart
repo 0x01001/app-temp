@@ -20,31 +20,15 @@ class LocalPushNotification {
   Future<void> init() async {
     /// Change icon at android\app\src\main\res\drawable\app_icon.png
     const androidInit = AndroidInitializationSettings(_androidDefaultIcon);
-
-    /// don't request permission here
-    /// we use firebase_messaging package to request permission instead
-    // const iOSInit = IOSInitializationSettings(
-    //   requestAlertPermission: false,
-    //   requestBadgePermission: false,
-    //   requestSoundPermission: false,
-    // );
-    const iOSInit = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
+    const iOSInit = DarwinInitializationSettings(requestAlertPermission: true, requestBadgePermission: true, requestSoundPermission: true);
     const init = InitializationSettings(android: androidInit, iOS: iOSInit);
 
     /// init local notification
     await Future.wait([
-      FlutterLocalNotificationsPlugin().initialize(
-        init,
-        // TODO: handle later: onSelectNotification: _onSelectNotification,
-      ),
+      FlutterLocalNotificationsPlugin().initialize(init, onDidReceiveNotificationResponse: _onSelectNotification),
     ]);
 
     /// Create an Android Notification Channel.
-    ///
     /// We use this channel in the `AndroidManifest.xml` file to override the
     /// default FCM channel to enable heads up notifications.
     await FlutterLocalNotificationsPlugin().resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(const AndroidNotificationChannel(
@@ -53,6 +37,17 @@ class LocalPushNotification {
           description: _channelDescription,
           importance: Importance.high,
         ));
+  }
+
+  Future<dynamic> _onSelectNotification(NotificationResponse res) async {
+    /*Do whatever you want to do on notification click. In this case, I'll show an alert dialog*/
+    // showDialog(
+    //   context: context,
+    //   builder: (_) => AlertDialog(
+    //     title: Text(payload),
+    //     content: Text("Payload: ${res.payload}"),
+    //   ),
+    // );
   }
 
   Future<void> notify(NotificationEntity notification) async {
@@ -72,12 +67,7 @@ class LocalPushNotification {
       autoCancel: true,
       enableVibration: true,
       playSound: true,
-      styleInformation: imageFile != null
-          ? BigPictureStyleInformation(
-              FilePathAndroidBitmap(imageFile.path),
-              hideExpandedLargeIcon: true,
-            )
-          : null,
+      styleInformation: imageFile != null ? BigPictureStyleInformation(FilePathAndroidBitmap(imageFile.path), hideExpandedLargeIcon: true) : null,
     );
     // const iOSPlatformChannelSpecifics = IOSNotificationDetails();
     const iOSPlatformChannelSpecifics = DarwinNotificationDetails();

@@ -5,7 +5,6 @@ import '../../shared/index.dart';
 
 class AppUtils {
   const AppUtils._();
-  // static bool isLoading = false;
 
   // Example:
   // static String mapGenderToText(Gender gender) {
@@ -22,13 +21,11 @@ class AppUtils {
   // }
 
   static void showLoading({bool? enableTimeout = true}) {
-    // isLoading = true;
     EasyLoading.show();
     if (enableTimeout == true) Future.delayed(const Duration(milliseconds: UiConstants.loadingTimeout), hideLoading);
   }
 
   static void hideLoading() {
-    // isLoading = false;
     EasyLoading.dismiss();
   }
 

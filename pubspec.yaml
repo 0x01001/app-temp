@@ -90,7 +90,6 @@ dependencies:
   # flutter_downloader: ^1.11.3
   isar: ^3.1.0+1
   isar_flutter_libs: ^3.1.0+1
-  # adaptive_dialog: ^2.0.0
   easy_debounce: ^2.0.3
   external_app_launcher: ^4.0.0 # open other app https://github.com/GeekyAnts/external_app_launcher/issues/26
   enum_to_string: ^2.0.1
@@ -105,14 +104,12 @@ dependencies:
 dev_dependencies:
   auto_route_generator: 7.3.2
   injectable_generator: ^2.4.1
-  # objectbox_generator: 2.1.0
   build_runner: ^2.4.8
   flutter_gen_runner: ^5.4.0
   riverpod_generator: 2.3.11
   riverpod_lint: 2.3.9
   custom_lint: 0.6.0
   custom_lint_builder: 0.6.1
-  # dart_code_metrics: 5.7.5
   flutter_launcher_icons: 0.13.1
   flutter_lints: ^3.0.1
   flutter_native_splash: ^2.3.10
@@ -127,12 +124,10 @@ dev_dependencies:
 # Config generate when build
 flutter_gen:
   output: lib/resources/generated
-  # line_lenght: 160
   null_safety: true
 
   integrations:
     flutter_svg: true
-    # flare_flutter: true
 
   assets:
     enabled: true

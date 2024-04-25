@@ -34,8 +34,8 @@ class AppRepositoryImpl implements AppRepository {
         return _isConnected ?? false;
       });
 
-  @override
-  bool? get isDarkMode => _appPreferences.isDarkMode;
+  // @override
+  // bool? get isDarkMode => _appPreferences.isDarkMode;
 
   @override
   String get languageCode => _appPreferences.languageCode;
@@ -66,6 +66,6 @@ class AppRepositoryImpl implements AppRepository {
     return _appPreferences.saveLanguageCode(languageCode);
   }
 
-  @override
-  Future<bool> saveIsDarkMode(bool isDarkMode) => _appPreferences.saveIsDarkMode(isDarkMode);
+  // @override
+  // Future<bool> saveIsDarkMode(bool isDarkMode) => _appPreferences.saveIsDarkMode(isDarkMode);
 }

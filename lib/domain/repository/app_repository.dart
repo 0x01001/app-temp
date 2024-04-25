@@ -7,7 +7,7 @@ abstract class AppRepository {
 
   bool get isFirstLogin;
 
-  bool? get isDarkMode;
+  // bool? get isDarkMode;
 
   String get languageCode;
 
@@ -23,7 +23,7 @@ abstract class AppRepository {
 
   Future<bool> saveIsFirstLaunchApp(bool isFirstLaunchApp);
 
-  Future<bool> saveIsDarkMode(bool isDarkMode);
+  // Future<bool> saveIsDarkMode(bool isDarkMode);
 
   Future<bool> saveLanguageCode(String languageCode);
 }

@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../domain/index.dart';
@@ -23,13 +21,12 @@ class App extends _$App with Base {
   }
 
   Future<AppEntity> init() async {
-    bool? isDarkMode = appRepository.isDarkMode;
-    if (isDarkMode == null) {
-      final brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
-      isDarkMode = brightness == Brightness.dark;
-    }
-    // AppThemeSetting.currentAppThemeType = isDarkMode ? AppThemeType.dark : AppThemeType.light;
-    final model = AppEntity(isDarkMode: isDarkMode, languageCode: appRepository.languageCode);
+    // bool? isDarkMode = appRepository.isDarkMode;
+    // if (isDarkMode == null) {
+    //   final brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    //   isDarkMode = brightness == Brightness.dark;
+    // }
+    final model = AppEntity(languageCode: appRepository.languageCode);
     Log.d('AppProvider > build: ${model.toString()}');
     return model;
   }
@@ -39,10 +36,9 @@ class App extends _$App with Base {
       if (previous.languageCode != data.languageCode) {
         await appRepository.saveLanguageCode(data.languageCode ?? LocaleConstants.defaultLocale);
       }
-      if (previous.isDarkMode != data.isDarkMode) {
-        // AppThemeSetting.currentAppThemeType = data.isDarkMode == true ? AppThemeType.dark : AppThemeType.light;
-        await appRepository.saveIsDarkMode(data.isDarkMode ?? UiConstants.defaultDarkMode);
-      }
+      // if (previous.isDarkMode != data.isDarkMode) {
+      //   await appRepository.saveIsDarkMode(data.isDarkMode ?? UiConstants.defaultDarkMode);
+      // }
       return data;
     });
   }

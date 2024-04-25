@@ -73,6 +73,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final _nav = getIt.get<AppNavigator>();
     return AppBar(
+      surfaceTintColor: Colors.transparent,
       toolbarHeight: preferredSize.height,
       automaticallyImplyLeading: automaticallyImplyLeading,
       flexibleSpace: flexibleSpace,

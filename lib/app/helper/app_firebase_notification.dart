@@ -46,7 +46,8 @@ class AppFirebaseNotification {
 
   Future<void> _firebaseOnMessagingHandler(RemoteMessage message) async {
     // when app IOS and android is open and recived noti
-    Log.d('firebaseOnMessagingHandler: ${message.data}');
+    Log.d('firebaseOnMessagingHandler: ${message.notification}');
+    // getIt.get<LocalPushNotification>().notify(notification); //TODO: show notify
   }
 
   Future<void> init() async {
