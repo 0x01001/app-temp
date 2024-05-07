@@ -5,8 +5,7 @@ import 'package:flutter/foundation.dart';
 import '../index.dart';
 
 class ConfigEntity extends BaseEntity {
-  final SchemeEntity? schemeKHCN;
-  final SchemeEntity? schemeSME;
+  final SchemeEntity? scheme;
   final bool? inReview;
   final String? versionInReview; // 1.0.0_1, 1.0.0_2 ...
   final bool? isForceUpdateIos;
@@ -19,8 +18,7 @@ class ConfigEntity extends BaseEntity {
   final List<String>? whitelistIgnoreForceUpdate;
 
   const ConfigEntity({
-    this.schemeKHCN,
-    this.schemeSME,
+    this.scheme,
     this.inReview,
     // this.data,
     this.versionInReview,
@@ -34,7 +32,7 @@ class ConfigEntity extends BaseEntity {
   });
 
   ConfigEntity copyWith({
-    SchemeEntity? schemeKHCN,
+    SchemeEntity? scheme,
     SchemeEntity? schemeSME,
     bool? inReview,
     // List<ResourceEntity>? data,
@@ -48,8 +46,7 @@ class ConfigEntity extends BaseEntity {
     List<String>? whitelistIgnoreForceUpdate,
   }) {
     return ConfigEntity(
-      schemeKHCN: schemeKHCN ?? this.schemeKHCN,
-      schemeSME: schemeSME ?? this.schemeSME,
+      scheme: scheme ?? this.scheme,
       inReview: inReview ?? this.inReview,
       // data: data ?? this.data,
       versionInReview: versionInReview ?? this.versionInReview,
@@ -65,7 +62,7 @@ class ConfigEntity extends BaseEntity {
 
   @override
   String toString() {
-    return 'ConfigEntity(schemeKHCN: $schemeKHCN, schemeSME: $schemeSME, inReview: $inReview,  versionInReview: $versionInReview, whitelistLoginEmailDomains: $whitelistLoginEmailDomains, isForceUpdateIos: $isForceUpdateIos, isForceUpdateAndroid: $isForceUpdateAndroid, forceUpdateIosVersion: $forceUpdateIosVersion, forceUpdateAndroidVersion: $forceUpdateAndroidVersion, whitelistTesters: $whitelistTesters, whitelistIgnoreForceUpdate: $whitelistIgnoreForceUpdate)';
+    return 'ConfigEntity(scheme: $scheme,   inReview: $inReview,  versionInReview: $versionInReview, whitelistLoginEmailDomains: $whitelistLoginEmailDomains, isForceUpdateIos: $isForceUpdateIos, isForceUpdateAndroid: $isForceUpdateAndroid, forceUpdateIosVersion: $forceUpdateIosVersion, forceUpdateAndroidVersion: $forceUpdateAndroidVersion, whitelistTesters: $whitelistTesters, whitelistIgnoreForceUpdate: $whitelistIgnoreForceUpdate)';
   }
 
   @override
@@ -73,8 +70,7 @@ class ConfigEntity extends BaseEntity {
     if (identical(this, other)) return true;
 
     return other is ConfigEntity &&
-        other.schemeKHCN == schemeKHCN &&
-        other.schemeSME == schemeSME &&
+        other.scheme == scheme &&
         other.inReview == inReview &&
         // listEquals(other.data, data) &&
         other.versionInReview == versionInReview &&
@@ -89,8 +85,7 @@ class ConfigEntity extends BaseEntity {
 
   @override
   int get hashCode {
-    return schemeKHCN.hashCode ^
-        schemeSME.hashCode ^
+    return scheme.hashCode ^
         inReview.hashCode ^
         // data.hashCode ^
         versionInReview.hashCode ^

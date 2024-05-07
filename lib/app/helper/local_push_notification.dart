@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../domain/index.dart';
 import '../../shared/index.dart';
 
 @LazySingleton()
@@ -12,7 +12,7 @@ class LocalPushNotification {
   static const _channelId = 'com.flutter.app';
   static const _channelName = 'NFT';
   static const _channelDescription = 'NFT';
-  static const _androidDefaultIcon = 'app_icon';
+  static const _androidDefaultIcon = 'ic_stat_ic_notification';
   static const _bitCount = 31;
 
   int get _randomNotificationId => Random().nextInt(pow(2, _bitCount).toInt() - 1);
@@ -50,10 +50,11 @@ class LocalPushNotification {
     // );
   }
 
-  Future<void> notify(NotificationEntity notification) async {
+  Future<void> notify(RemoteNotification? notification) async {
     File? imageFile;
-    if (notification.image?.isNotEmpty == true) {
-      imageFile = await FileUtils.getImageFileFromUrl(notification.image!);
+    final img = Platform.isAndroid ? notification?.android?.imageUrl : notification?.apple?.imageUrl;
+    if (img?.isNotEmpty == true) {
+      imageFile = await FileUtils.getImageFileFromUrl(img!);
       Log.d('Downloaded Image File: $imageFile');
     }
 
@@ -68,20 +69,18 @@ class LocalPushNotification {
       enableVibration: true,
       playSound: true,
       styleInformation: imageFile != null ? BigPictureStyleInformation(FilePathAndroidBitmap(imageFile.path), hideExpandedLargeIcon: true) : null,
+      icon: notification?.android?.smallIcon,
+      // sound: const UriAndroidNotificationSound('assets/sound/pop.mp3'),
     );
     // const iOSPlatformChannelSpecifics = IOSNotificationDetails();
     const iOSPlatformChannelSpecifics = DarwinNotificationDetails();
-
-    final platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
-    );
+    final platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
     await FlutterLocalNotificationsPlugin()
         .show(
           _randomNotificationId,
-          notification.title,
-          notification.message,
+          notification?.title,
+          notification?.body,
           platformChannelSpecifics,
           // TODO: handle later payload: jsonEncode(data),
         )

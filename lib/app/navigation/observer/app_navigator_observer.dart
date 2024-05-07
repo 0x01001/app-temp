@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
+import '../../../shared/index.dart';
 import '../../index.dart';
 
 class AppNavigatorObserver extends NavigatorObserver {
   AppNavigatorObserver();
-
   // static const _enableLog = LogConfig.enableNavigatorObserverLog;
-  final getIt = GetIt.instance;
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {

@@ -14,7 +14,7 @@ class ConnectivityInterceptor extends BaseInterceptor {
 
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final repository = GetIt.instance.get<AppRepository>();
+    final repository = getIt.get<AppRepository>();
     bool? result = repository.isConnected;
     // Log.d('onRequest > result: $result');
     if (result == null) {

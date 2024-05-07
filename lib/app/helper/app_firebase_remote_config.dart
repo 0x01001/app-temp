@@ -26,7 +26,7 @@ class AppFirebaseRemoteConfig {
       );
       // await Future.delayed(const Duration(seconds: 1));
       await remoteConfig.fetchAndActivate();
-      // final schemeKHCN = remoteConfig.getString('schemeKHCN');
+      // final scheme = remoteConfig.getString('scheme');
       final versionInReview = remoteConfig.getString('versionInReview');
       final isForceUpdateIos = remoteConfig.getBool('isForceUpdateIos');
       final isForceUpdateAndroid = remoteConfig.getBool('isForceUpdateAndroid');
@@ -52,10 +52,10 @@ class AppFirebaseRemoteConfig {
       // }
 
       _configModel = ConfigEntity(
-        // schemeKHCN: SchemeModel.fromMap(
+        // scheme: SchemeModel.fromMap(
         //   {
-        //     ...(schemeKHCN == '' ? {} : jsonDecode(schemeKHCN)),
-        //     'type': 'khcn',
+        //     ...(scheme == '' ? {} : jsonDecode(scheme)),
+        //     'type': 'xxx', // yyy
         //   },
         // ),
         // data: resource,

@@ -105,16 +105,16 @@ build_prod_ios:
 	cd tools && $(BUILD_CMD) prod build ios
 
 build_dev_ipa:
-	cd tools && $(BUILD_CMD) dev build ipa --export-options-plist=ios/exportOptions.plist
+	cd tools && $(BUILD_CMD) dev build ipa --export-options-plist=ios/export_options_dev.plist
 
 build_qa_ipa:
-	cd tools && $(BUILD_CMD) qa build ipa --export-options-plist=ios/exportOptions.plist
+	cd tools && $(BUILD_CMD) qa build ipa --export-options-plist=ios/export_options_dev.plist
 
 build_stg_ipa:
-	cd tools && $(BUILD_CMD) stg build ipa --export-options-plist=ios/exportOptions.plist
+	cd tools && $(BUILD_CMD) stg build ipa --export-options-plist=ios/export_options_pro.plist
 
 build_prod_ipa:
-	cd tools && $(BUILD_CMD) prod build ipa --export-options-plist=ios/exportOptions.plist
+	cd tools && $(BUILD_CMD) prod build ipa --export-options-plist=ios/export_options_pro.plist
 
 build_shorebird_dev_android:
 	cd tools && $(BUILD_CMD) dev shorebird release android

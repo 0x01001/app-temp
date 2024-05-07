@@ -15,6 +15,7 @@ export 'constants/symbol_constants.dart';
 export 'constants/ui_constants.dart';
 export 'constants/uni_links_constants.dart';
 export 'constants/url_constants.dart';
+export 'di/di.dart';
 export 'exception/base/app_exception.dart';
 export 'exception/base/app_exception_wrapper.dart';
 export 'exception/base/exception_mapper.dart';

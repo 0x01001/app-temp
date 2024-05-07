@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../shared/index.dart';
+import '../index.dart';
 
 @LazySingleton()
 class AppFirebaseNotification {
@@ -47,7 +48,7 @@ class AppFirebaseNotification {
   Future<void> _firebaseOnMessagingHandler(RemoteMessage message) async {
     // when app IOS and android is open and recived noti
     Log.d('firebaseOnMessagingHandler: ${message.notification}');
-    // getIt.get<LocalPushNotification>().notify(notification); //TODO: show notify
+    getIt.get<LocalPushNotification>().notify(message.notification);
   }
 
   Future<void> init() async {

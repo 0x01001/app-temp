@@ -36,12 +36,7 @@ class FileUtils {
   }
 
   /// Write content to a file by file-name
-  static Future<File> writeFile(
-    String filename,
-    Uint8List buffer, {
-    bool temporary = false,
-    bool override = false,
-  }) async {
+  static Future<File> writeFile(String filename, Uint8List buffer, {bool temporary = false, bool override = false}) async {
     final theFile = await _getFile(filename, temporary: temporary);
     if (theFile == null) {
       final newFilePath = await _filePath(filename, temporary: temporary);
@@ -57,8 +52,7 @@ class FileUtils {
           fileExtension = '.${oldFileName.removeLast()}';
         }
 
-        final newFileName =
-            '${oldFileName.join(".")}_${(DateTime.now().millisecondsSinceEpoch) / 1000}$fileExtension';
+        final newFileName = '${oldFileName.join(".")}_${(DateTime.now().millisecondsSinceEpoch) / 1000}$fileExtension';
 
         return await writeFile(newFileName, buffer, temporary: temporary, override: override);
       }
@@ -144,8 +138,6 @@ class FileUtils {
 
   /// Return `file-path` according to either temporary folder or document folder
   static Future<String> _filePath(String filename, {bool temporary = false}) async {
-    return temporary
-        ? "${(await _getTemporaryDir())?.path ?? ''}/$filename"
-        : "${(await _getDocumentDir())?.path ?? ''}/$filename";
+    return temporary ? "${(await _getTemporaryDir())?.path ?? ''}/$filename" : "${(await _getDocumentDir())?.path ?? ''}/$filename";
   }
 }

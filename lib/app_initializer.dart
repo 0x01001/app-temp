@@ -1,7 +1,7 @@
-import 'app/di/di.dart' as di;
 import 'app/index.dart';
 import 'data/index.dart';
 import 'domain/index.dart';
+import 'shared/di/di.dart' as di;
 import 'shared/index.dart';
 
 class AppInitializer {

@@ -1,5 +1,3 @@
-import 'package:get_it/get_it.dart';
-
 import '../index.dart';
 
 class SharedConfig extends Config {
@@ -14,7 +12,7 @@ class SharedConfig extends Config {
   @override
   Future<void> config() async {
     Log.d('Shared > config > start');
-    await GetIt.instance.get<AppInfo>().init();
+    await getIt.get<AppInfo>().init();
     Log.d('Shared > config > end');
   }
 }

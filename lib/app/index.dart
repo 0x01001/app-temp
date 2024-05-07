@@ -36,7 +36,6 @@ export 'components/shimmer/rectangle_shimmer.dart';
 export 'components/shimmer/shimmer.dart';
 export 'components/shimmer/shimmer_loading.dart';
 export 'config/app_config.dart';
-export 'di/di.dart';
 export 'helper/app_code_push.dart';
 export 'helper/app_firebase_analytic.dart';
 export 'helper/app_firebase_notification.dart';
