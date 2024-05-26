@@ -168,6 +168,7 @@ jobs:
       #     echo "SECRET_KEY=${{ secrets.DEV_SECRET_KEY }}" >> ${{env.ENV_PATH}}
       #     echo "SECRET_IV=${{ secrets.DEV_SECRET_IV }}" >> ${{env.ENV_PATH}}
 
+      # https://github.com/xxxx/app-name/settings/secrets/actions
       - name: Build APK
         run: flutter build apk -t lib/main.dart --flavor dev --build-name=${{ steps.tag.outputs.version }} --build-number=${{ github.run_number }} --dart-define FLAVOR=dev --dart-define API_KEY=${{ secrets.DEV_API_KEY }} --dart-define SECRET_KEY=${{ secrets.DEV_SECRET_KEY }} --dart-define SECRET_IV=${{ secrets.DEV_SECRET_IV }} --dart-define DUMMY_APP_ID=${{ secrets.DUMMY_APP_ID }}
 

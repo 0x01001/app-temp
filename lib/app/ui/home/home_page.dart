@@ -24,11 +24,31 @@ class HomePage extends HookConsumerWidget {
         },
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: AppButton(
-            'Test',
-            onPressed: () {
-              getIt.get<AppNavigator>().showSuccessMessager('message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123.');
-            },
+          child: Column(
+            children: [
+              AppButton(
+                'Test 7',
+                onPressed: () {
+                  getIt.get<AppNavigator>().showSuccessMessager('message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123.');
+                },
+              ),
+              TextButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showMaterialBanner(
+                    MaterialBanner(
+                      content: const Text('This is a MaterialBanner'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+                          child: const Text('DISMISS'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: const Text('DISMISS'),
+              )
+            ],
           ),
         ),
       ),

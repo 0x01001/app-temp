@@ -1,5 +1,6 @@
 // import 'dart:async';
 import 'dart:convert';
+
 // import 'dart:developer' as dev;
 
 import 'package:flutter/foundation.dart';
@@ -9,7 +10,7 @@ import '../index.dart';
 class Log {
   const Log._();
 
-  static const _enableLog = LogConfig.enableGeneralLog;
+  static const _enableLog = true; // LogConfig.enableGeneralLog;  //TODO: need uncomment
 
   static void d(Object? message, {String? name, DateTime? time, int? colorCode}) {
     _log('$message', name: name ?? '', time: time, colorCode: colorCode ?? 36);

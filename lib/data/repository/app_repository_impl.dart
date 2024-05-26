@@ -3,9 +3,11 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dartx/dartx.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/index.dart';
+import '../../shared/index.dart';
 import '../index.dart';
 
 @LazySingleton(as: AppRepository)
@@ -28,8 +30,8 @@ class AppRepositoryImpl implements AppRepository {
   bool? get isConnected => _isConnected;
 
   @override
-  Stream<bool> get onConnectivityChanged => Connectivity().onConnectivityChanged.map((event) {
-        _isConnected = event != ConnectivityResult.none;
+  Stream<bool> get onConnectivityChanged => Connectivity().onConnectivityChanged.map((result) {
+        _isConnected = result.all((x) => x != ConnectivityResult.none);
         // Log.d('onConnectivityChanged: $_isConnected');
         return _isConnected ?? false;
       });
@@ -42,9 +44,9 @@ class AppRepositoryImpl implements AppRepository {
 
   @override
   StreamSubscription<dynamic> subscriptionConnectivity() {
-    return Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      // Log.d('subscriptionConnectivity: $result');
-      _isConnected = result != ConnectivityResult.none;
+    return Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
+      _isConnected = result.all((x) => x != ConnectivityResult.none);
+      Log.w('connected: $_isConnected - $result');
     });
   }
 

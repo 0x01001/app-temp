@@ -15,9 +15,10 @@ cd %app_path%
 :: %2: build/run - shorebird
 :: %3 (optional): apk/appbundle/ios/ipa - patch/preview/release
 :: %4 (optional): --export-options-plist=ios/exportOptions.plist - android/ios
-set cmd=flutter %2 %3 %4 -t lib\main.dart --flavor %1 %dart_define%
+:: %5 (optional): --flutter-version 3.19.4 for shorebird
+set cmd=fvm flutter %2 %3 %4 -t lib\main.dart --flavor %1 %dart_define%
 if %2%==shorebird (
-    set cmd=shorebird %3 %4 -t lib\main.dart --flavor %1 '--' %dart_define%
+    set cmd=shorebird %3 %4 -t lib\main.dart --flavor %1 '--' %dart_define% 
 )
 echo %cmd%
 %cmd%

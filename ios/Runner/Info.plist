@@ -59,5 +59,18 @@
 		<string>Requires access to LocationWhenInUse..</string>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
 		<true/>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string>YOUR_HOST</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>YOUR_SCHEME</string>
+				</array>
+			</dict>
+		</array>
 	</dict>
 </plist>

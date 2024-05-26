@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:injectable/injectable.dart';
 
@@ -13,19 +15,39 @@ class AppFirebaseRemoteConfig {
   final AppInfo _appInfo;
   ConfigEntity? _configModel;
   ConfigEntity? get config => _configModel;
+  // StreamSubscription<RemoteConfigUpdate>? _streamSubscription;
 
   Future<void> init() async {
     try {
       final remoteConfig = FirebaseRemoteConfig.instance;
 
-      await remoteConfig.setConfigSettings(
-        RemoteConfigSettings(
-          fetchTimeout: const Duration(seconds: 60),
-          minimumFetchInterval: const Duration(seconds: 0),
-        ),
-      );
-      // await Future.delayed(const Duration(seconds: 1));
-      await remoteConfig.fetchAndActivate();
+      await remoteConfig.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: const Duration(seconds: 30),
+        minimumFetchInterval: Duration.zero,
+      ));
+
+      try {
+        await remoteConfig.activate();
+        // Only fetch after a delay to prevent an internal bug from occurring
+        // See https://github.com/FirebaseExtended/flutterfire/issues/6196
+        await Future<void>.delayed(const Duration(seconds: 1));
+        Log.d('AppFirebaseRemoteConfig > fetchAndActivate() > start');
+        final result = await remoteConfig.fetchAndActivate();
+        Log.d('AppFirebaseRemoteConfig > fetchAndActivate() > done: $result');
+      } catch (error) {
+        if (error is FirebaseException && error.message == 'cancelled') {
+          // do nothing; this happens when fetchAndActivate() is called
+          // multiple times at once (before the other calls are finished)
+          Log.e('AppFirebaseRemoteConfig > cancel...');
+        } else {
+          Log.e('AppFirebaseRemoteConfig > e: $error');
+        }
+      }
+      // await remoteConfig.ensureInitialized();
+      // remoteConfig.onConfigUpdated.listen((RemoteConfigUpdate event) async {
+      //   Log.d('AppFirebaseRemoteConfig > updatedKeys: ${event.updatedKeys.join(', ')}');
+      // });
+
       // final scheme = remoteConfig.getString('scheme');
       final versionInReview = remoteConfig.getString('versionInReview');
       final isForceUpdateIos = remoteConfig.getBool('isForceUpdateIos');
@@ -70,8 +92,11 @@ class AppFirebaseRemoteConfig {
         whitelistIgnoreForceUpdate: ignoreForceUpdate,
       );
       Log.d('AppFirebaseRemoteConfig > init: ${_configModel.toString()}');
+      if (isForceUpdate == true) {
+        //TODO: not implement
+      }
     } catch (e) {
-      Log.e(e.toString());
+      Log.e('AppFirebaseRemoteConfig > e: $e');
     }
   }
 

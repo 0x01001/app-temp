@@ -13,6 +13,7 @@ class AppCodePush {
   int? currentPatchVersion;
 
   Future<void> init() async {
+    // not support assets yet https://github.com/shorebirdtech/shorebird/issues/318
     final _isShorebirdAvailable = _shorebirdCodePush.isShorebirdAvailable();
     Log.w('AppCodePush is supported: $_isShorebirdAvailable');
     if (!_isShorebirdAvailable) return;
@@ -20,8 +21,8 @@ class AppCodePush {
     Log.d('AppCodePush > version: $version');
     final isUpdateAvailable = await _shorebirdCodePush.isNewPatchAvailableForDownload();
     Log.d('AppCodePush > isUpdateAvailable: $isUpdateAvailable');
-    if (_remoteConfig.isForceUpdate == true) {
-      //TODO: not implement
+    if (isUpdateAvailable) {
+      _shorebirdCodePush.downloadUpdateIfAvailable();
     }
   }
 }

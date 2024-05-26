@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../shared/index.dart';
-import '../../index.dart';
+// import '../../../shared/index.dart';
+// import '../../index.dart';
 
 class AppNavigatorObserver extends NavigatorObserver {
   AppNavigatorObserver();
@@ -14,7 +14,7 @@ class AppNavigatorObserver extends NavigatorObserver {
     //   Log.w('didPush: from ${previousRoute?.settings.name} to ${route.settings.name}');
     // }
     final msg = previousRoute?.settings.name != null ? 'push from ${previousRoute?.settings.name} to ${route.settings.name}' : 'push to ${route.settings.name}';
-    getIt.get<AppFirebaseAnalytic>().logScreen(msg);
+    // getIt.get<AppFirebaseAnalytic>().logScreen(msg);
   }
 
   @override
@@ -24,7 +24,7 @@ class AppNavigatorObserver extends NavigatorObserver {
     //   Log.w('didPop: ${route.settings.name} back to ${previousRoute?.settings.name}');
     // }
     final msg = route.settings.name != null ? 'pop ${route.settings.name} back to ${previousRoute?.settings.name}' : 'back to ${previousRoute?.settings.name}';
-    getIt.get<AppFirebaseAnalytic>().logScreen(msg);
+    // getIt.get<AppFirebaseAnalytic>().logScreen(msg);
   }
 
   @override
@@ -33,7 +33,7 @@ class AppNavigatorObserver extends NavigatorObserver {
     // if (_enableLog) {
     //   Log.w('didRemove: ${route.settings.name} back to ${previousRoute?.settings.name}');
     // }
-    getIt.get<AppFirebaseAnalytic>().logScreen('remove ${route.settings.name} back to ${previousRoute?.settings.name}');
+    // getIt.get<AppFirebaseAnalytic>().logScreen('remove ${route.settings.name} back to ${previousRoute?.settings.name}');
   }
 
   @override
@@ -42,7 +42,7 @@ class AppNavigatorObserver extends NavigatorObserver {
     // if (_enableLog) {
     //   Log.w('didReplace: ${oldRoute?.settings.name} by ${newRoute?.settings.name}');
     // }
-    getIt.get<AppFirebaseAnalytic>().logScreen('replace ${oldRoute?.settings.name} by ${newRoute?.settings.name}');
+    // getIt.get<AppFirebaseAnalytic>().logScreen('replace ${oldRoute?.settings.name} by ${newRoute?.settings.name}');
   }
 
   @override

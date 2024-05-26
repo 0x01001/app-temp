@@ -23,7 +23,6 @@ class CustomLogInterceptor extends BaseInterceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (!_enableLogInterceptor || !enableLogRequestInfo) {
       handler.next(options);
-
       return;
     }
 
@@ -52,8 +51,8 @@ class CustomLogInterceptor extends BaseInterceptor {
       }
     }
 
-    Log.r(log.join('\n'));
-    Log.r('************ End Request ************');
+    Log.d(log.join('\n'));
+    Log.d('************ End Request ************');
     handler.next(options);
   }
 

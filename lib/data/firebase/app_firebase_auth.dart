@@ -48,6 +48,7 @@ class AppFirebaseAuth {
     AuthModel? user;
 
     try {
+      Log.d('AppFirebase > login: $email');
       final UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
       final result = userCredential.user;
       if (result != null) {

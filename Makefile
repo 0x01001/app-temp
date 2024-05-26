@@ -118,9 +118,16 @@ build_prod_ipa:
 
 build_shorebird_dev_android:
 	cd tools && $(BUILD_CMD) dev shorebird release android
-
+# not working using "shorebird release android..." instead of "make build_shorebird_dev_android"
+ 
 patch_shorebird_dev_android:
 	cd tools && $(BUILD_CMD) dev shorebird patch android
+
+build_shorebird_prod_android:
+	cd tools && $(BUILD_CMD) prod shorebird release android
+ 
+patch_shorebird_prod_android:
+	cd tools && $(BUILD_CMD) prod shorebird patch android
 
 dart_fix:	
 	dart fix --apply

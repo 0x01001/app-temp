@@ -39,23 +39,46 @@ class ViewUtils {
   }
 
   static void showTopBarMessage(BuildContext context, String message, {Duration? duration, Color? backgroundColor, Widget? icon}) {
-    _flushbar = Flushbar(
-      positionOffset: kToolbarHeight + AppSize.topSafeAreaPadding,
-      margin: const EdgeInsets.all(15),
-      borderRadius: BorderRadius.circular(8),
-      flushbarPosition: FlushbarPosition.TOP,
-      message: message,
-      duration: duration ?? DurationConstants.defaultTopBarDuration,
-      backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.surfaceVariant,
-      messageColor: Theme.of(context).colorScheme.inverseSurface,
-      icon: icon,
-      shouldIconPulse: false,
-      animationDuration: const Duration(milliseconds: 300),
-    )..show(context);
+    // _flushbar = Flushbar(
+    //   positionOffset: kToolbarHeight + AppSize.topSafeAreaPadding,
+    //   margin: const EdgeInsets.all(15),
+    //   borderRadius: BorderRadius.circular(8),
+    //   flushbarPosition: FlushbarPosition.TOP,
+    //   message: message,
+    //   duration: duration ?? DurationConstants.defaultTopBarDuration,
+    //   backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.surfaceVariant,
+    //   messageColor: Theme.of(context).colorScheme.inverseSurface,
+    //   icon: icon,
+    //   shouldIconPulse: false,
+    //   animationDuration: const Duration(milliseconds: 300),
+    // )..show(context);
+    ScaffoldMessenger.of(context).showMaterialBanner(
+      MaterialBanner(
+        content: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            if (icon != null) icon,
+            AppText(message, type: TextType.title),
+          ],
+        ),
+        actions: [],
+        //   [TextButton(
+        //     onPressed: () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+        //     child: const Text('DISMISS'),
+        //   ),
+        // ],
+      ),
+    );
+    Future.delayed(
+      duration ?? DurationConstants.defaultTopBarDuration,
+      () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+    );
   }
 
   static void hideTopBarMessage() {
-    _flushbar?.dismiss();
+    // _flushbar?.dismiss();
+    final context = AppSize.buildContext;
+    ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
   }
 
   static void hideKeyboard(BuildContext context) {

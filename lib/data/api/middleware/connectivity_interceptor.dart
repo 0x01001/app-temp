@@ -1,6 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dartx/dartx.dart';
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../domain/index.dart';
@@ -19,7 +19,7 @@ class ConnectivityInterceptor extends BaseInterceptor {
     // Log.d('onRequest > result: $result');
     if (result == null) {
       final connectivityResult = await Connectivity().checkConnectivity();
-      result = connectivityResult != ConnectivityResult.none;
+      result = connectivityResult.all((x) => x != ConnectivityResult.none);
     }
     if (!result) {
       return handler.reject(
