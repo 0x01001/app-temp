@@ -9,7 +9,7 @@ class MockApiClient extends RestApiClient {
   MockApiClient()
       : super(
           dio: DioBuilder.createDio(
-            options: BaseOptions(baseUrl: UrlConstants.appApiBaseUrl),
+            options: BaseOptions(baseUrl: Constant.appApiBaseUrl),
           ),
         );
 }

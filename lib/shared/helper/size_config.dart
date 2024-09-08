@@ -17,10 +17,10 @@ class AppSize {
   static late double bottomSafeAreaPadding;
   static late double devicePixelRatio;
 
-  static late BuildContext buildContext;
+  // static late BuildContext buildContext;
 
   static void init(BuildContext context) {
-    buildContext = context;
+    // buildContext = context;
     _mediaQueryData = MediaQuery.of(context);
     screenWidth = _mediaQueryData.size.width;
     screenHeight = _mediaQueryData.size.height;

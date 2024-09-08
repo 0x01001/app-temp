@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import '../../../shared/index.dart';
-import '../../mapper/base/base_error_response_mapper.dart';
+import '../../index.dart';
 
 class DioExceptionMapper extends ExceptionMapper<RemoteException> {
   DioExceptionMapper(this._errorResponseMapper);
@@ -15,7 +15,7 @@ class DioExceptionMapper extends ExceptionMapper<RemoteException> {
     if (exception is DioException) {
       switch (exception.type) {
         case DioExceptionType.cancel:
-          return const RemoteException(kind: RemoteExceptionKind.cancellation);
+          return RemoteException(kind: RemoteExceptionKind.cancellation);
         case DioExceptionType.connectionTimeout:
         case DioExceptionType.receiveTimeout:
         case DioExceptionType.sendTimeout:
@@ -28,7 +28,7 @@ class DioExceptionMapper extends ExceptionMapper<RemoteException> {
 
           /// server-defined error
           if (exception.response?.data != null) {
-            final serverError = exception.response!.data! is Map ? _errorResponseMapper.mapToEntity(exception.response!.data!) : ServerError(generalMessage: exception.response!.data!);
+            final serverError = exception.response!.data! is Map ? _errorResponseMapper.map(exception.response!.data!) : ServerError(generalMessage: exception.response!.data!);
 
             return RemoteException(
               kind: RemoteExceptionKind.serverDefined,

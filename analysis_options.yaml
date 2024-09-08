@@ -1,3 +1,21 @@
+# include: package:leancode_lint/analysis_options.yaml
+
+# # Optional lint rules configuration
+# custom_lint:
+#   rules:
+#     - use_design_system_item:
+#       AppButton:
+#         - instead_of: ElevatedButton
+#           from_package: flutter
+#       # AppText:
+#       #   - instead_of: Text
+#       #     from_package: flutter
+#       #   - instead_of: RichText
+#       #     from_package: flutter
+#       # AppScaffold:
+#       #   - instead_of: Scaffold
+#       #     from_package: flutter
+
 analyzer:
   plugins:
     # - dart_code_metrics

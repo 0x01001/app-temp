@@ -44,7 +44,7 @@ class AppGridState<T> extends ConsumerState<AppGrid<T>> {
   void _onScroll() {
     if (!_controller.hasClients || _loading) return;
 
-    final thresholdReached = _controller.position.extentAfter < UiConstants.endReachedThreshold;
+    final thresholdReached = _controller.position.extentAfter < Constant.endReachedThreshold;
 
     if (thresholdReached) {
       _fetchData();
@@ -61,7 +61,7 @@ class AppGridState<T> extends ConsumerState<AppGrid<T>> {
   Future<void> _fetchData({bool isLoadMore = false}) async {
     if (!isLoadMore) setState(() => _loading = true);
 
-    final limit = widget.itemsPerPage ?? UiConstants.itemsPerPage;
+    final limit = widget.itemsPerPage ?? Constant.itemsPerPage;
     final result = await widget.fetch?.call(page: _nextPage, limit: limit);
 
     setState(() {
@@ -101,8 +101,8 @@ class AppGridState<T> extends ConsumerState<AppGrid<T>> {
           sliver: SliverGrid(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               childAspectRatio: 2 / 3,
-              crossAxisSpacing: UiConstants.paddingItemsGrid,
-              mainAxisSpacing: UiConstants.paddingItemsGrid,
+              crossAxisSpacing: Constant.paddingItemsGrid,
+              mainAxisSpacing: Constant.paddingItemsGrid,
               crossAxisCount: 3,
             ),
             delegate: SliverChildBuilderDelegate(_buildColorItem, childCount: widget.listData.length),
@@ -126,8 +126,8 @@ class AppGridState<T> extends ConsumerState<AppGrid<T>> {
     //   showNewPageProgressIndicatorAsGridChild: false,
     //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
     //     childAspectRatio: 2 / 3,
-    //     crossAxisSpacing: UiConstants.paddingItemsGrid,
-    //     mainAxisSpacing: UiConstants.paddingItemsGrid,
+    //     crossAxisSpacing: Constants.paddingItemsGrid,
+    //     mainAxisSpacing: Constants.paddingItemsGrid,
     //     crossAxisCount: 3,
     //   ),
     //   builderDelegate: PagedChildBuilderDelegate(

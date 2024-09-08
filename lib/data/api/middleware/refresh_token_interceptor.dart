@@ -36,7 +36,7 @@ class RefreshTokenInterceptor extends BaseInterceptor {
   }
 
   void _putAccessToken(Map<String, dynamic> headers, String accessToken) {
-    headers[ServerConstants.basicAuthorization] = '${ServerConstants.bearer} $accessToken';
+    headers[Constant.basicAuthorization] = '${Constant.bearer} $accessToken';
   }
 
   void _onExpiredToken(RequestOptions options, ErrorInterceptorHandler handler) {
@@ -56,10 +56,10 @@ class RefreshTokenInterceptor extends BaseInterceptor {
     final refreshTokenResponse = await refreshTokenService.refreshToken(refreshToken);
     await Future.wait(
       [
-        appPreferences.saveAccessToken(refreshTokenResponse.data?.accessToken ?? ''),
+        appPreferences.saveAccessToken(refreshTokenResponse?.data?.accessToken ?? ''),
       ],
     );
-    return refreshTokenResponse.data?.accessToken ?? '';
+    return refreshTokenResponse?.data?.accessToken ?? '';
   }
 
   Future<void> _onRefreshTokenSuccess(String newToken) async {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 
 import '../../../shared/index.dart';
@@ -15,7 +16,7 @@ class BasicAuthInterceptor extends BaseInterceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    options.headers[ServerConstants.basicAuthorization] = _basicAuthenticationHeader();
+    options.headers[Constant.basicAuthorization] = _basicAuthenticationHeader();
 
     return super.onRequest(options, handler);
   }

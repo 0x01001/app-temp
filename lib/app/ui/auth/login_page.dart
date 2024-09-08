@@ -44,6 +44,7 @@ class _Form extends AppForm {
       key: formKey,
       child: Column(
         children: [
+          Center(child: Padding(padding: const EdgeInsets.symmetric(vertical: 50.0), child: Assets.images.logo.svg())),
           AppInput(field: FieldType.email, nextField: FieldType.password, labelText: S.current.email, keyboardType: TextInputType.emailAddress, onFocus: onFocus),
           const SizedBox(height: 15),
           AppInput(field: FieldType.password, labelText: S.current.password, keyboardType: TextInputType.visiblePassword, enableNextFocus: false, onFocus: onFocus),

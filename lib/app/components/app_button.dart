@@ -56,7 +56,7 @@ class AppButton extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               side: BorderSide(color: color ?? Theme.of(context).colorScheme.secondary, width: 1.0, style: BorderStyle.solid),
-              minimumSize: isExpand ? Size.fromHeight(height ?? UiConstants.defaultSizeButton) : null,
+              minimumSize: isExpand ? Size.fromHeight(height ?? Constant.defaultSizeButton) : null,
               padding: const EdgeInsets.all(0),
             ),
             onPressed: onTap,
@@ -85,7 +85,7 @@ class AppButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               backgroundColor: onPressed == null ? Theme.of(context).colorScheme.outlineVariant : backgroundColor ?? Theme.of(context).colorScheme.secondary,
-              minimumSize: isExpand ? Size.fromHeight(height ?? UiConstants.defaultSizeButton) : null,
+              minimumSize: isExpand ? Size.fromHeight(height ?? Constant.defaultSizeButton) : null,
             ),
             onPressed: onTap,
             child: Stack(
@@ -99,7 +99,7 @@ class AppButton extends StatelessWidget {
     }
 
     return SizedBox(
-      height: height ?? UiConstants.defaultSizeButton,
+      height: height ?? Constant.defaultSizeButton,
       child: _buildContent(),
     );
   }

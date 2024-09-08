@@ -22,7 +22,7 @@ class AppUtils {
 
   static void showLoading({bool? enableTimeout = true}) {
     EasyLoading.show();
-    if (enableTimeout == true) Future.delayed(const Duration(milliseconds: UiConstants.loadingTimeout), hideLoading);
+    if (enableTimeout == true) Future.delayed(const Duration(milliseconds: Constant.loadingTimeout), hideLoading);
   }
 
   static void hideLoading() {

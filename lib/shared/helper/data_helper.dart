@@ -7,8 +7,8 @@ class DataHelper {
 
   static String decrypt(String data) {
     try {
-      final key = Key.fromBase64(EnvConstants.secretkey);
-      final iv = IV.fromBase64(EnvConstants.secretIV);
+      final key = Key.fromBase64(Env.secretkey);
+      final iv = IV.fromBase64(Env.secretIV);
       final e = Encrypter(AES(key, mode: AESMode.cbc));
       final result = e.decrypt(Encrypted.fromBase64(data), iv: iv);
       Log.d('decrypt:\n$result');
@@ -21,8 +21,8 @@ class DataHelper {
 
   static String encrypt(String data) {
     try {
-      final key = Key.fromBase64(EnvConstants.secretkey);
-      final iv = IV.fromBase64(EnvConstants.secretIV);
+      final key = Key.fromBase64(Env.secretkey);
+      final iv = IV.fromBase64(Env.secretIV);
       final e = Encrypter(AES(key, mode: AESMode.cbc));
       final result = e.encrypt(data, iv: iv);
       Log.d('encrypt:\n${result.base64}');

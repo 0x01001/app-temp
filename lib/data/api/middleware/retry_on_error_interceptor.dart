@@ -17,7 +17,7 @@ class RetryOnErrorInterceptor extends BaseInterceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (!options.headers.containsKey(_retryHeaderKey)) {
-      options.headers[_retryCountKey] = ServerConstants.maxRetry;
+      options.headers[_retryCountKey] = Constant.maxRetry;
     }
     super.onRequest(options, handler);
   }
@@ -27,7 +27,7 @@ class RetryOnErrorInterceptor extends BaseInterceptor {
     assert(err.requestOptions.headers[_retryCountKey] != null);
     final retryCount = err.requestOptions.headers[_retryCountKey] as int;
     if (retryCount > 0 && _shouldRetry(err)) {
-      await Future<void>.delayed(ServerConstants.retryInterval);
+      await Future<void>.delayed(Constant.retryInterval);
       try {
         final response = await dio.fetch<dynamic>(
           err.requestOptions
@@ -44,5 +44,5 @@ class RetryOnErrorInterceptor extends BaseInterceptor {
     return super.onError(err, handler);
   }
 
-  bool _shouldRetry(DioException error) => error.type != DioExceptionType.cancel && error.type != DioExceptionType.badResponse;
+  bool _shouldRetry(DioException error) => error.type == DioExceptionType.connectionTimeout || error.type == DioExceptionType.receiveTimeout || error.type == DioExceptionType.connectionError || error.type == DioExceptionType.sendTimeout;
 }

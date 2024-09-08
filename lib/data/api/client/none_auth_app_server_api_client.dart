@@ -9,7 +9,7 @@ class NoneAuthAppServerApiClient extends RestApiClient {
   NoneAuthAppServerApiClient(HeaderInterceptor _headerInterceptor)
       : super(
           dio: DioBuilder.createDio(
-            options: BaseOptions(baseUrl: UrlConstants.appApiBaseUrl),
+            options: BaseOptions(baseUrl: Constant.appApiBaseUrl),
             interceptors: [
               _headerInterceptor,
             ],

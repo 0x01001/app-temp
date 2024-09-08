@@ -5,16 +5,16 @@ import 'base_interceptor.dart';
 
 class CustomLogInterceptor extends BaseInterceptor {
   CustomLogInterceptor({
-    this.enableLogRequestInfo = LogConfig.enableLogRequestInfo,
-    this.enableLogSuccessResponse = LogConfig.enableLogSuccessResponse,
-    this.enableLogErrorResponse = LogConfig.enableLogErrorResponse,
+    this.enableLogRequestInfo = Constant.enableLogRequestInfo,
+    this.enableLogSuccessResponse = Constant.enableLogSuccessResponse,
+    this.enableLogErrorResponse = Constant.enableLogErrorResponse,
   });
 
   final bool enableLogRequestInfo;
   final bool enableLogSuccessResponse;
   final bool enableLogErrorResponse;
 
-  static const _enableLogInterceptor = LogConfig.enableLogInterceptor;
+  static const _enableLogInterceptor = Constant.enableLogInterceptor;
 
   @override
   int get priority => BaseInterceptor.customLogPriority;

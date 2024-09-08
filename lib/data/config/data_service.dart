@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/index.dart';
+import '../../shared/index.dart';
 
 // import '../repository/source/database/generated/objectbox.g.dart' show getObjectBoxModel;
 
@@ -23,7 +24,7 @@ abstract class ServiceModule {
   @preResolve
   Future<Isar> getIsar() async {
     final document = await getApplicationDocumentsDirectory();
-    final isar = await Isar.open([PostEntitySchema], directory: document.path); // /data/user/0/com.flutter.app.dev/app_flutter/default.isar
+    final isar = await Isar.open([PostEntitySchema], directory: document.path, inspector: Env.flavor != Flavor.prod); // /data/user/0/com.flutter.app.dev/app_flutter/default.isar
     return isar;
   }
 

@@ -1,22 +1,29 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../shared/index.dart';
 import '../index.dart';
 
+final appNavigatorProvider = Provider<AppNavigator>((ref) => getIt.get<AppNavigator>());
+
+// @Riverpod(keepAlive: true)
+// AppNavigator appNavigator(AppNavigatorRef ref) => getIt.get<AppNavigator>();
+
 @LazySingleton()
 class AppNavigator {
-  AppNavigator(this._appRouter, this._appPopupInfoMapper);
+  AppNavigator(this._appRouter);
 
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final tabRoutes = const [HomeTab(), UITab(), APITab(), SettingTab()];
 
   TabsRouter? tabsRouter;
-
   final AppRouter _appRouter;
-  final BasePopupInfoMapper _appPopupInfoMapper;
-  final _popups = <AppPopupInfo>{};
+  final _popups = <String, Completer<dynamic>>{};
 
   StackRouter? get _currentTabRouter => tabsRouter?.stackRouterOfIndex(currentBottomTab);
 
@@ -37,6 +44,11 @@ class AppNavigator {
   }
 
   bool get canPop => _appRouter.canPop();
+  m.BuildContext get currentContext => _rootRouterContext;
+
+  String getCurrentRouteName({bool useRootNavigator = false}) => AutoRouter.of(useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext).current.name;
+
+  RouteData getCurrentRouteData({bool useRootNavigator = false}) => AutoRouter.of(useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext).current;
 
   void popUntilRootOfCurrentBottomTab() {
     if (tabsRouter == null) {
@@ -73,11 +85,11 @@ class AppNavigator {
   }
 
   Future<bool> pop<T extends Object?>({T? result, bool useRootNavigator = false}) {
-    if (LogConfig.enableNavigatorObserverLog) {
+    if (Constant.enableNavigatorObserverLog) {
       Log.d('pop: $canPop, with result = $result, useRootNav = $useRootNavigator');
     }
     if (canPop) {
-      return useRootNavigator ? _appRouter.pop<T>(result) : _currentTabRouterOrRootRouter.pop<T>(result);
+      return useRootNavigator ? _appRouter.maybePop<T>(result) : _currentTabRouterOrRootRouter.maybePop<T>(result);
     }
     return Future.value(false);
   }
@@ -110,30 +122,24 @@ class AppNavigator {
     return _appRouter.removeLast();
   }
 
-  Future<T?> showDialog<T extends Object?>(
-    AppPopupInfo appPopupInfo, {
-    bool barrierDismissible = true,
-    bool useSafeArea = true,
-    bool useRootNavigator = true,
-  }) {
-    if (_popups.contains(appPopupInfo)) {
-      Log.e('Dialog $appPopupInfo already shown');
-      return Future.value(null);
+  Future<T?> showDialog<T extends Object?>(AppPopup popup, {bool barrierDismissible = true, bool useSafeArea = false, bool useRootNavigator = true, bool canPop = true}) async {
+    if (_popups.containsKey(popup.id)) {
+      Log.d('Dialog $popup already shown');
+
+      return _popups[popup.id]!.future as Future<T?>;
     }
-    _popups.add(appPopupInfo);
-    ViewUtils.hideTopBarMessage();
+
+    _popups[popup.id] = Completer<T?>();
 
     return m.showDialog<T>(
       context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
-      builder: (context) => PopScope(
-        canPop: false,
+      builder: (context) => m.PopScope(
         onPopInvoked: (didPop) async {
-          if (didPop) return;
-          // Log.d('Dialog $appPopupInfo dismissed');
-          _popups.remove(appPopupInfo);
-          Navigator.of(context).pop();
+          Log.d('Dialog $popup dismissed');
+          _popups.remove(popup.id);
         },
-        child: _appPopupInfoMapper.map(appPopupInfo, this),
+        canPop: canPop,
+        child: popup.builder(context, this),
       ),
       useRootNavigator: useRootNavigator,
       barrierDismissible: barrierDismissible,
@@ -141,61 +147,87 @@ class AppNavigator {
     );
   }
 
-  Future<T?> showGeneralDialog<T extends Object?>(
-    AppPopupInfo appPopupInfo, {
-    Duration transitionDuration = DurationConstants.defaultGeneralDialogTransitionDuration,
-    m.Widget Function(m.BuildContext, m.Animation<double>, m.Animation<double>, m.Widget)? transitionBuilder,
-    m.Color barrierColor = const m.Color(0x80000000),
-    bool barrierDismissible = true,
-    bool useRootNavigator = true,
-  }) {
-    if (_popups.contains(appPopupInfo)) {
-      Log.e('Dialog $appPopupInfo already shown');
-      return Future.value(null);
-    }
-    _popups.add(appPopupInfo);
-    ViewUtils.hideTopBarMessage();
+  // Future<T?> showDialog<T extends Object?>(AppPopup appPopup, {bool barrierDismissible = true, bool useSafeArea = true, bool useRootNavigator = true}) {
+  // if (_popups.contains(appPopupInfo)) {
+  //   Log.e('Dialog $appPopupInfo already shown');
+  //   return Future.value(null);
+  // }
+  // _popups.add(appPopupInfo);
+  // ViewUtils.hideTopBarMessage();
 
-    return m.showGeneralDialog<T>(
-      context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
-      barrierColor: barrierColor,
-      useRootNavigator: useRootNavigator,
-      barrierDismissible: barrierDismissible,
-      pageBuilder: (m.BuildContext context, m.Animation<double> animation1, m.Animation<double> animation2) => m.PopScope(
-        canPop: false,
-        onPopInvoked: (didPop) async {
-          if (didPop) return;
-          // Log.d('Dialog $appPopupInfo dismissed');
-          _popups.remove(appPopupInfo);
-          Navigator.of(context).pop();
-        },
-        child: _appPopupInfoMapper.map(appPopupInfo, this),
-      ),
-      transitionBuilder: transitionBuilder,
-      transitionDuration: transitionDuration,
-    );
-  }
+  // return m.showDialog<T>(
+  //   context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
+  //   builder: (context) => PopScope(
+  //     canPop: false,
+  //     onPopInvoked: (didPop) async {
+  //       if (didPop) return;
+  //       // Log.d('Dialog $appPopupInfo dismissed');
+  //       _popups.remove(appPopupInfo);
+  //       Navigator.of(context).pop();
+  //     },
+  //     child: _appPopupInfoMapper.map(appPopupInfo, this),
+  //   ),
+  //   useRootNavigator: useRootNavigator,
+  //   barrierDismissible: barrierDismissible,
+  //   useSafeArea: useSafeArea,
+  // );
+  // }
 
-  Future<T?> showModalBottomSheet<T extends Object?>(
-    AppPopupInfo appPopupInfo, {
-    bool isScrollControlled = false,
-    bool useRootNavigator = false,
-    bool isDismissible = true,
-    bool enableDrag = true,
-    m.Color barrierColor = m.Colors.black54,
-    m.Color? backgroundColor,
-  }) {
-    return m.showModalBottomSheet<T>(
-      context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
-      builder: (_) => _appPopupInfoMapper.map(appPopupInfo, this),
-      isDismissible: isDismissible,
-      enableDrag: enableDrag,
-      useRootNavigator: useRootNavigator,
-      isScrollControlled: isScrollControlled,
-      backgroundColor: backgroundColor,
-      barrierColor: barrierColor,
-    );
-  }
+  // Future<T?> showGeneralDialog<T extends Object?>(
+  //   AppPopup appPopup, {
+  //   Duration transitionDuration = Constant.defaultGeneralDialogTransitionDuration,
+  //   m.Widget Function(m.BuildContext, m.Animation<double>, m.Animation<double>, m.Widget)? transitionBuilder,
+  //   m.Color barrierColor = const m.Color(0x80000000),
+  //   bool barrierDismissible = true,
+  //   bool useRootNavigator = true,
+  // }) {
+  //   // if (_popups.contains(appPopupInfo)) {
+  //   //   Log.e('Dialog $appPopupInfo already shown');
+  //   //   return Future.value(null);
+  //   // }
+  //   // _popups.add(appPopupInfo);
+  //   // ViewUtils.hideTopBarMessage();
+
+  //   // return m.showGeneralDialog<T>(
+  //   //   context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
+  //   //   barrierColor: barrierColor,
+  //   //   useRootNavigator: useRootNavigator,
+  //   //   barrierDismissible: barrierDismissible,
+  //   //   pageBuilder: (m.BuildContext context, m.Animation<double> animation1, m.Animation<double> animation2) => m.PopScope(
+  //   //     canPop: false,
+  //   //     onPopInvoked: (didPop) async {
+  //   //       if (didPop) return;
+  //   //       // Log.d('Dialog $appPopupInfo dismissed');
+  //   //       _popups.remove(appPopupInfo);
+  //   //       Navigator.of(context).pop();
+  //   //     },
+  //   //     child: _appPopupInfoMapper.map(appPopupInfo, this),
+  //   //   ),
+  //   //   transitionBuilder: transitionBuilder,
+  //   //   transitionDuration: transitionDuration,
+  //   // );
+  // }
+
+  // Future<T?> showModalBottomSheet<T extends Object?>(
+  //   AppPopup appPopup, {
+  //   bool isScrollControlled = false,
+  //   bool useRootNavigator = false,
+  //   bool isDismissible = true,
+  //   bool enableDrag = true,
+  //   m.Color barrierColor = m.Colors.black54,
+  //   m.Color? backgroundColor,
+  // }) {
+  //   return m.showModalBottomSheet<T>(
+  //     context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
+  //     builder: (_) => _appPopupInfoMapper.map(appPopupInfo, this),
+  //     isDismissible: isDismissible,
+  //     enableDrag: enableDrag,
+  //     useRootNavigator: useRootNavigator,
+  //     isScrollControlled: isScrollControlled,
+  //     backgroundColor: backgroundColor,
+  //     barrierColor: barrierColor,
+  //   );
+  // }
 
   void showErrorMessage(String message, {Duration? duration, SnackBarAction? action, bool? autoDismiss = true}) {
     // ViewUtils.showAppSnackBar(_rootRouterContext, message, duration: duration, action: action, autoDismiss: autoDismiss);
@@ -208,5 +240,14 @@ class AppNavigator {
 
   void hideCurrentSnackBar() {
     ViewUtils.hideAppSnackBar(_rootRouterContext);
+  }
+
+  void showSnackBar(AppPopup popup) {
+    final messengerState = m.ScaffoldMessenger.maybeOf(_rootRouterContext);
+    if (messengerState == null) {
+      return;
+    }
+    messengerState.hideCurrentSnackBar();
+    messengerState.showSnackBar(popup.builder(_rootRouterContext, this) as m.SnackBar);
   }
 }

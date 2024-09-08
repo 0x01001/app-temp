@@ -1,7 +1,7 @@
 ifeq ($(OS),Windows_NT)
-    BUILD_CMD=.\build_and_run_app.bat 
+    BUILD_CMD=.\tools\build_and_run_app.bat 
 else
-    BUILD_CMD=./build_and_run_app.sh 
+    BUILD_CMD=./tools/build_and_run_app.sh 
 endif
 
 update_app_icon:
@@ -57,77 +57,71 @@ gen:
 	dart run build_runner build --delete-conflicting-outputs
  	 
 run_dev:
-	cd tools && $(BUILD_CMD) dev run 
-
-run_qa:
-	cd tools && $(BUILD_CMD) qa run
-
+	$(BUILD_CMD) dev run 
+ 
 run_stg:
-	cd tools && $(BUILD_CMD) stg run
+	$(BUILD_CMD) stg run
 	
 run_prod:
-	cd tools && $(BUILD_CMD) prod run
+	$(BUILD_CMD) prod run
 
 build_dev_apk:
-	cd tools && $(BUILD_CMD) dev build apk
-
-build_qa_apk:
-	cd tools && $(BUILD_CMD) qa build apk
-
+	$(BUILD_CMD) dev build apk
+ 
 build_stg_apk:
-	cd tools && $(BUILD_CMD) stg build apk
+	$(BUILD_CMD) stg build apk
 
 build_prod_apk:
-	cd tools && $(BUILD_CMD) prod build apk
+	$(BUILD_CMD) prod build apk
 
 build_dev_bundle:
-	cd tools && $(BUILD_CMD) dev build appbundle
+	$(BUILD_CMD) dev build appbundle
 
 build_qa_bundle:
-	cd tools && $(BUILD_CMD) qa build appbundle
+	$(BUILD_CMD) qa build appbundle
 
 build_stg_bundle:
-	cd tools && $(BUILD_CMD) stg build appbundle
+	$(BUILD_CMD) stg build appbundle
 
 build_prod_bundle:
-	cd tools && $(BUILD_CMD) prod build appbundle
+	$(BUILD_CMD) prod build appbundle
 
 build_dev_ios:
-	cd tools && $(BUILD_CMD) dev build ios
+	$(BUILD_CMD) dev build ios
 
 build_qa_ios:
-	cd tools && $(BUILD_CMD) qa build ios
+	$(BUILD_CMD) qa build ios
 
 build_stg_ios:
-	cd tools && $(BUILD_CMD) stg build ios
+	$(BUILD_CMD) stg build ios
 
 build_prod_ios:
-	cd tools && $(BUILD_CMD) prod build ios
+	$(BUILD_CMD) prod build ios
 
 build_dev_ipa:
-	cd tools && $(BUILD_CMD) dev build ipa --export-options-plist=ios/export_options_dev.plist
+	$(BUILD_CMD) dev build ipa --export-options-plist=ios/export_options_dev.plist
 
 build_qa_ipa:
-	cd tools && $(BUILD_CMD) qa build ipa --export-options-plist=ios/export_options_dev.plist
+	$(BUILD_CMD) qa build ipa --export-options-plist=ios/export_options_dev.plist
 
 build_stg_ipa:
-	cd tools && $(BUILD_CMD) stg build ipa --export-options-plist=ios/export_options_pro.plist
+	$(BUILD_CMD) stg build ipa --export-options-plist=ios/export_options_pro.plist
 
 build_prod_ipa:
-	cd tools && $(BUILD_CMD) prod build ipa --export-options-plist=ios/export_options_pro.plist
+	$(BUILD_CMD) prod build ipa --export-options-plist=ios/export_options_pro.plist
 
-build_shorebird_dev_android:
-	cd tools && $(BUILD_CMD) dev shorebird release android
 # not working using "shorebird release android..." instead of "make build_shorebird_dev_android"
+build_shorebird_dev_android:
+	$(BUILD_CMD) dev shorebird release android
  
 patch_shorebird_dev_android:
-	cd tools && $(BUILD_CMD) dev shorebird patch android
+	$(BUILD_CMD) dev shorebird patch android
 
 build_shorebird_prod_android:
-	cd tools && $(BUILD_CMD) prod shorebird release android
+	$(BUILD_CMD) prod shorebird release android
  
 patch_shorebird_prod_android:
-	cd tools && $(BUILD_CMD) prod shorebird patch android
+	$(BUILD_CMD) prod shorebird patch android
 
 dart_fix:	
 	dart fix --apply

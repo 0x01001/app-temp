@@ -27,17 +27,11 @@ class AppFirebaseRemoteConfig {
       ));
 
       try {
-        await remoteConfig.activate();
-        // Only fetch after a delay to prevent an internal bug from occurring
-        // See https://github.com/FirebaseExtended/flutterfire/issues/6196
-        await Future<void>.delayed(const Duration(seconds: 1));
         Log.d('AppFirebaseRemoteConfig > fetchAndActivate() > start');
         final result = await remoteConfig.fetchAndActivate();
         Log.d('AppFirebaseRemoteConfig > fetchAndActivate() > done: $result');
       } catch (error) {
         if (error is FirebaseException && error.message == 'cancelled') {
-          // do nothing; this happens when fetchAndActivate() is called
-          // multiple times at once (before the other calls are finished)
           Log.e('AppFirebaseRemoteConfig > cancel...');
         } else {
           Log.e('AppFirebaseRemoteConfig > e: $error');

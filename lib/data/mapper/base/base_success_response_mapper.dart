@@ -1,31 +1,33 @@
 import '../../../shared/index.dart';
-import '../success_response/data_json_array_response_mapper.dart';
-import '../success_response/data_json_object_reponse_mapper.dart';
-import '../success_response/json_array_response_mapper.dart';
-import '../success_response/json_object_reponse_mapper.dart';
-import '../success_response/records_json_array_response_mapper.dart';
-import '../success_response/results_json_array_response_mapper.dart';
+import '../../index.dart';
 
-abstract class BaseSuccessResponseMapper<I, O> {
+abstract class BaseSuccessResponseMapper<I extends Object, O extends Object> {
   const BaseSuccessResponseMapper();
 
   factory BaseSuccessResponseMapper.fromType(SuccessResponseMapperType type) {
-    switch (type) {
-      case SuccessResponseMapperType.dataJsonObject:
-        return DataJsonObjectResponseMapper<I>() as BaseSuccessResponseMapper<I, O>;
-      case SuccessResponseMapperType.dataJsonArray:
-        return DataJsonArrayResponseMapper<I>() as BaseSuccessResponseMapper<I, O>;
-      case SuccessResponseMapperType.jsonObject:
-        return JsonObjectResponseMapper<I>() as BaseSuccessResponseMapper<I, O>;
-      case SuccessResponseMapperType.jsonArray:
-        return JsonArrayResponseMapper<I>() as BaseSuccessResponseMapper<I, O>;
-      case SuccessResponseMapperType.recordsJsonArray:
-        return RecordsJsonArrayResponseMapper<I>() as BaseSuccessResponseMapper<I, O>;
-      case SuccessResponseMapperType.resultsJsonArray:
-        return ResultsJsonArrayResponseMapper<I>() as BaseSuccessResponseMapper<I, O>;
+    return switch (type) {
+      SuccessResponseMapperType.dataJsonObject => DataJsonObjectResponseMapper<I>() as BaseSuccessResponseMapper<I, O>,
+      SuccessResponseMapperType.dataJsonArray => DataJsonArrayResponseMapper<I>() as BaseSuccessResponseMapper<I, O>,
+      SuccessResponseMapperType.jsonObject => JsonObjectResponseMapper<I>() as BaseSuccessResponseMapper<I, O>,
+      SuccessResponseMapperType.jsonArray => JsonArrayResponseMapper<I>() as BaseSuccessResponseMapper<I, O>,
+      SuccessResponseMapperType.recordsJsonArray => RecordsJsonArrayResponseMapper<I>() as BaseSuccessResponseMapper<I, O>,
+      SuccessResponseMapperType.resultsJsonArray => ResultsJsonArrayResponseMapper<I>() as BaseSuccessResponseMapper<I, O>,
+      SuccessResponseMapperType.plain => PlainResponseMapper<I>() as BaseSuccessResponseMapper<I, O>,
+    };
+  }
+
+  // ignore: avoid-dynamic
+  Future<O>? map({required dynamic response, Decoder<I>? decoder}) {
+    assert(response != null);
+    try {
+      return mapToDataModel(response: response, decoder: decoder);
+    } on RemoteException catch (_) {
+      rethrow;
+    } catch (e) {
+      throw RemoteException(kind: RemoteExceptionKind.decodeError, rootException: e);
     }
   }
 
   // ignore: avoid-dynamic
-  Future<O> map(dynamic response, Decoder<I>? decoder);
+  Future<O>? mapToDataModel({required dynamic response, Decoder<I>? decoder});
 }

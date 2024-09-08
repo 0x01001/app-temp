@@ -12,7 +12,7 @@ class AuthAppServerApiClient extends RestApiClient {
     RefreshTokenInterceptor _refreshTokenInterceptor,
   ) : super(
           dio: DioBuilder.createDio(
-            options: BaseOptions(baseUrl: UrlConstants.appApiBaseUrl),
+            options: BaseOptions(baseUrl: Constant.appApiBaseUrl),
             interceptors: [
               _headerInterceptor,
               _accessTokenInterceptor,

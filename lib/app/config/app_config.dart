@@ -19,9 +19,9 @@ class AppConfig extends Config {
     Log.d('App > config > start');
 
     await Firebase.initializeApp();
-    // getIt.get<AppFirebaseAnalytic>().init();
-    await getIt.get<LocalPushNotification>().init();
-    await getIt.get<AppFirebaseNotification>().init();
+    getIt.get<AppFirebaseAnalytics>().init();
+    // await getIt.get<AppLocalPushNotification>().init();
+    // await getIt.get<AppFirebaseNotification>().init();
     await getIt.get<AppFirebaseRemoteConfig>().init();
     await getIt.get<AppCodePush>().init();
 

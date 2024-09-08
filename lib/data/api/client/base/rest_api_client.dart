@@ -10,15 +10,15 @@ enum RestMethod { get, post, put, patch, delete }
 class RestApiClient {
   RestApiClient({
     required this.dio,
-    this.errorResponseMapperType = ServerConstants.defaultErrorResponseMapperType,
-    this.successResponseMapperType = ServerConstants.defaultSuccessResponseMapperType,
+    this.errorResponseMapperType = Constant.defaultErrorResponseMapperType,
+    this.successResponseMapperType = Constant.defaultSuccessResponseMapperType,
   });
 
   final SuccessResponseMapperType successResponseMapperType;
   final ErrorResponseMapperType errorResponseMapperType;
   final Dio dio;
 
-  Future<T> request<T, D>({
+  Future<T?> request<D extends Object, T extends Object>({
     required RestMethod method,
     required String path,
     String? url,
@@ -27,7 +27,6 @@ class RestApiClient {
     Decoder<D>? decoder,
     SuccessResponseMapperType? successResponseMapperType,
     ErrorResponseMapperType? errorResponseMapperType,
-    BaseErrorResponseMapper<dynamic>? errorResponseMapper,
     Map<String, dynamic>? headers,
     String? contentType,
     ResponseType? responseType,
@@ -49,16 +48,15 @@ class RestApiClient {
           receiveTimeout: receiveTimeout,
         ),
       );
-      if (responseType == ResponseType.plain) return response.data;
-      return await BaseSuccessResponseMapper<D, T>.fromType(successResponseMapperType ?? this.successResponseMapperType).map(response.data, decoder);
+      if (response.data == null) return null;
+      // if (responseType == ResponseType.plain) return response.data;
+      return BaseSuccessResponseMapper<D, T>.fromType(successResponseMapperType ?? this.successResponseMapperType).map(response: response.data, decoder: decoder);
     } catch (error) {
-      throw DioExceptionMapper(errorResponseMapper ?? BaseErrorResponseMapper.fromType(errorResponseMapperType ?? this.errorResponseMapperType)).map(error);
+      throw DioExceptionMapper(BaseErrorResponseMapper.fromType(errorResponseMapperType ?? this.errorResponseMapperType)).map(error);
     }
   }
 
-  Future<Response<T>> fetch<T>(RequestOptions requestOptions) {
-    return dio.fetch(requestOptions);
-  }
+  Future<Response<T>> fetch<T>(RequestOptions requestOptions) => dio.fetch<T>(requestOptions);
 
   Future<Response<dynamic>> _requestByMethod({
     required RestMethod method,

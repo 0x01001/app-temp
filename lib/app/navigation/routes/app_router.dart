@@ -1,8 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../shared/index.dart';
 import '../../index.dart';
 
 part 'app_router.gr.dart';
+
+final appRouterProvider = Provider<AppRouter>((ref) => getIt.get<AppRouter>());
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
@@ -19,7 +23,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(
       page: MainRoute.page,
       path: '/',
-      guards: [RouteGuard()],
+      guards: [getIt.get<RouteGuard>()],
       children: [
         RedirectRoute(path: '', redirectTo: 'home'),
         homeTab,

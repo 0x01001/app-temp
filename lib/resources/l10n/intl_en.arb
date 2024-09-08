@@ -59,5 +59,10 @@
   "source": "Source",
   "grantAppPermissionToAccessYourStorage": "Grant app permission to access your storage.",
   "appPermission": "App Permission",
-  "information": "Information"
+  "information": "Information", 
+  "userDoesNotExist": "User does not exist",
+  "invalidLoginCredentials": "Invalid login credentials",
+  "usernameAlreadyInUse": "Username already in use",
+  "requiresRecentLogin": "Requires recent login",
+  "forceLogout": "Session has expired, please log in again"
 }

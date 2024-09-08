@@ -143,7 +143,7 @@ class AppListView extends StatelessWidget {
     final Widget? accesssoryWidget = _getAccessoryWidget(itemData, context);
     final Widget? trailingWidget = accesssoryWidget ?? itemData.customTrailing;
     return Material(
-        color: itemData.cellColor ?? (AdaptiveTheme.of(context).mode.isDark ? themeData.colorScheme.background : Colors.white),
+        color: itemData.cellColor ?? (AdaptiveTheme.of(context).mode.isDark ? themeData.colorScheme.surface : Colors.white),
         child: InkWell(
           onTap: itemData.onTap,
           child: ListTile(
@@ -162,7 +162,7 @@ class AppListView extends StatelessWidget {
   Widget _buildButtonCell(AppItemData itemData, BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     return Material(
-      color: itemData.cellColor ?? (AdaptiveTheme.of(context).mode.isDark ? themeData.colorScheme.background : Colors.white),
+      color: itemData.cellColor ?? (AdaptiveTheme.of(context).mode.isDark ? themeData.colorScheme.surface : Colors.white),
       child: InkWell(
         onTap: itemData.onTap,
         child: SizedBox(
@@ -234,7 +234,7 @@ class AppListView extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         cell ?? const SizedBox.shrink(),
-        if (cell != null) Divider(color: themeData.dividerColor, height: UiConstants.borderHeight),
+        if (cell != null) Divider(color: themeData.dividerColor, height: Constant.borderHeight),
       ],
     );
   }
@@ -273,7 +273,7 @@ class AppListView extends StatelessWidget {
     final ThemeData themeData = Theme.of(context);
     final IndexedWidgetBuilder sepBuilder = separatorBuilder ??
         (BuildContext context, int index) {
-          return Divider(color: themeData.dividerColor, height: UiConstants.borderHeight);
+          return Divider(color: themeData.dividerColor, height: Constant.borderHeight);
         };
     final List<Widget> cells = _buildCells(context);
     return Container(

@@ -32,22 +32,23 @@ class HomePage extends HookConsumerWidget {
                   getIt.get<AppNavigator>().showSuccessMessager('message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123 message 123.');
                 },
               ),
-              TextButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showMaterialBanner(
-                    MaterialBanner(
-                      content: const Text('This is a MaterialBanner'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
-                          child: const Text('DISMISS'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                child: const Text('DISMISS'),
-              )
+              // TextButton(
+              //   onPressed: () {
+              //     // bug: https://github.com/flutter/flutter/issues/96216
+              //     ScaffoldMessenger.of(context).showMaterialBanner(
+              //       MaterialBanner(
+              //         content: const Text('This is a MaterialBanner'),
+              //         actions: <Widget>[
+              //           TextButton(
+              //             onPressed: () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+              //             child: const Text('DISMISS'),
+              //           ),
+              //         ],
+              //       ),
+              //     );
+              //   },
+              //   child: const Text('Test'),
+              // )
             ],
           ),
         ),

@@ -1,8 +1,11 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/index.dart';
 import '../../shared/index.dart';
 import '../index.dart';
+
+final appApiServiceProvider = Provider<AppApiService>((ref) => getIt.get<AppApiService>());
 
 @LazySingleton()
 class AppApiService {
@@ -15,7 +18,7 @@ class AppApiService {
   Future<AuthModel?> login(String email, String password) async {
     return _noneAuthAppServerApiClient.request(
       method: RestMethod.post,
-      path: 'accounts:signInWithPassword?key=${EnvConstants.apiKey}',
+      path: 'accounts:signInWithPassword?key=${Env.apiKey}',
       body: {'email': email, 'password': password, 'returnSecureToken': true},
       decoder: AuthModel.fromMap,
       successResponseMapperType: SuccessResponseMapperType.jsonObject,
@@ -26,11 +29,11 @@ class AppApiService {
     await _authAppServerApiClient.request(method: RestMethod.post, path: '/v1/auth/logout');
   }
 
-  Future<AuthModel> register({required String email, required String password}) async {
+  Future<AuthModel?> register({required String email, required String password}) async {
     return _noneAuthAppServerApiClient.request(
       method: RestMethod.post,
       // path: '/v1/auth/register',
-      path: 'accounts:signUp?key=${EnvConstants.apiKey}',
+      path: 'accounts:signUp?key=${Env.apiKey}',
       body: {
         // 'username': username,
         // 'gender': gender,
@@ -44,10 +47,10 @@ class AppApiService {
     );
   }
 
-  Future<AuthModel> checkEmail({required String email}) async {
+  Future<AuthModel?> checkEmail({required String email}) async {
     return _noneAuthAppServerApiClient.request(
       method: RestMethod.post,
-      path: 'accounts:createAuthUri?key=${EnvConstants.apiKey}',
+      path: 'accounts:createAuthUri?key=${Env.apiKey}',
       body: {'identifier': email, 'continueUri': 'http://localhost'},
       decoder: AuthModel.fromMap,
       successResponseMapperType: SuccessResponseMapperType.jsonObject,
@@ -75,25 +78,25 @@ class AppApiService {
     );
   }
 
-  Future<DataResponse<UserEntity>> getMe() async {
+  Future<DataResponse<UserEntity>?> getMe() async {
     return _noneAuthAppServerApiClient.request(method: RestMethod.get, path: '/v1/me', decoder: AuthModel.fromMap);
   }
 
-  Future<ResultsListResponse<UserEntity>> getUsers({int? page, int? limit}) {
+  Future<ResultsListResponse<UserEntity>?> getUsers({int? page, int? limit}) {
     return _randomUserApiClient.request(
       method: RestMethod.get,
       path: '',
-      queryParameters: {'page': page ?? UiConstants.initialPage, 'limit': limit ?? UiConstants.itemsPerPage},
+      queryParameters: {'page': page ?? Constant.initialPage, 'limit': limit ?? Constant.itemsPerPage},
       successResponseMapperType: SuccessResponseMapperType.resultsJsonArray,
       decoder: UserModel.fromMap,
     );
   }
 
-  Future<DataListResponse<PostModel>> getListPost({int? page, int? limit}) async {
+  Future<DataListResponse<PostModel>?> getListPost({int? page, int? limit}) async {
     return _authAppServerApiClient.request(
       method: RestMethod.get,
       path: 'post',
-      queryParameters: {'page': page ?? UiConstants.initialPage, 'limit': limit ?? UiConstants.itemsPerPage},
+      queryParameters: {'page': page ?? Constant.initialPage, 'limit': limit ?? Constant.itemsPerPage},
       successResponseMapperType: SuccessResponseMapperType.dataJsonArray,
       decoder: PostModel.fromMap,
     );

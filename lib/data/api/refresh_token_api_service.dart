@@ -9,13 +9,19 @@ class RefreshTokenApiService {
 
   final RefreshTokenApiClient _refreshTokenApiClient;
 
-  Future<DataResponse<RefreshTokenModel>> refreshToken(String refreshToken) async {
+  Future<DataResponse<RefreshTokenModel>?> refreshToken(String refreshToken) async {
     try {
-      final respone = await _refreshTokenApiClient.request(method: RestMethod.post, path: '/v1/auth/refresh', decoder: RefreshTokenModel.fromMap);
-      return respone;
+      return await _refreshTokenApiClient.request(
+        method: RestMethod.post,
+        path: '/v1/auth/refresh',
+        body: {
+          'refresh_token': refreshToken,
+        },
+        decoder: RefreshTokenModel.fromMap,
+      );
     } catch (e) {
       if (e is RemoteException && (e.kind == RemoteExceptionKind.serverDefined || e.kind == RemoteExceptionKind.serverUndefined)) {
-        throw const RemoteException(kind: RemoteExceptionKind.refreshTokenFailed);
+        throw RemoteException(kind: RemoteExceptionKind.refreshTokenFailed);
       }
       rethrow;
     }

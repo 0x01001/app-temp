@@ -23,8 +23,8 @@ class HeaderInterceptor extends BaseInterceptor {
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     final userAgentValue = userAgentClientHintsHeader();
-    options.headers[ServerConstants.userAgentKey] = userAgentValue;
-    options.headers[ServerConstants.appId] = EnvConstants.dummyAppId; //TODO: this is test api
+    options.headers[Constant.userAgentKey] = userAgentValue;
+    options.headers[Constant.appId] = Env.dummyAppId; //TODO: this is test api
 
     options.headers.addAll(_headers);
 

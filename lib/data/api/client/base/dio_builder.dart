@@ -13,10 +13,10 @@ class DioBuilder {
   }) {
     final dio = Dio(
       BaseOptions(
-        connectTimeout: options?.connectTimeout ?? ServerConstants.connectTimeout,
-        receiveTimeout: options?.receiveTimeout ?? ServerConstants.receiveTimeout,
-        sendTimeout: options?.sendTimeout ?? ServerConstants.sendTimeout,
-        baseUrl: options?.baseUrl ?? UrlConstants.appApiBaseUrl,
+        connectTimeout: options?.connectTimeout ?? Constant.connectTimeout,
+        receiveTimeout: options?.receiveTimeout ?? Constant.receiveTimeout,
+        sendTimeout: options?.sendTimeout ?? Constant.sendTimeout,
+        baseUrl: options?.baseUrl ?? Constant.appApiBaseUrl,
       ),
     );
 

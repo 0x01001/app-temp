@@ -14,14 +14,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
-  Log.d('firebaseMessagingBackgroundHandler: ${message.data}');
+  Log.d('[AppFirebaseNotification] onBackgroundMessage: title: ${message.notification?.title}\nbody: ${message.notification?.body}\ndata: ${message.data}');
   getIt.get<AppFirebaseNotification>().handleNotifi(message: message);
 }
 
 @LazySingleton()
 class AppFirebaseNotification {
   String? token;
-  late FirebaseMessaging messaging;
+  // late FirebaseMessaging messaging;
 
   void handleNotifi({RemoteMessage? message, String? notiType, int? contentId, bool isEventChallenge = false, dynamic model}) {
     // try {
@@ -34,17 +34,18 @@ class AppFirebaseNotification {
 
   Future<void> _firebaseMessagingOpenAppHandler(RemoteMessage message) async {
     // when tab on noti IOS is open and background, android in background
+    getIt.get<AppLocalPushNotification>().cancelAll();
     // DeepLinkHelper.getInstance().run(message.data['deeplink']);
   }
 
   Future<void> _firebaseOnMessagingHandler(RemoteMessage message) async {
     // when app IOS and android is open and recived noti
     Log.d('firebaseOnMessagingHandler: ${message.notification}');
-    getIt.get<LocalPushNotification>().notify(message);
+    getIt.get<AppLocalPushNotification>().notify(message);
   }
 
   Future<void> init() async {
-    // messaging = FirebaseMessaging.instance;
+    // messaging = FirebaseMessaging.instance;  // don't using that
     // messaging.subscribeToTopic('all');
 
     FirebaseMessaging.onMessage.listen(_firebaseOnMessagingHandler);
@@ -53,11 +54,16 @@ class AppFirebaseNotification {
 
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
-      announcement: true,
+      // announcement: true,
       badge: true,
-      carPlay: false,
-      criticalAlert: true,
-      provisional: true,
+      // carPlay: false,
+      // criticalAlert: true,
+      // provisional: true,
+      sound: true,
+    );
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
       sound: true,
     );
   }

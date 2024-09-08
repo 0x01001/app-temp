@@ -10,7 +10,7 @@ import '../index.dart';
 class Log {
   const Log._();
 
-  static const _enableLog = true; // LogConfig.enableGeneralLog;  //TODO: need uncomment
+  static const _enableLog = true; // Constaints.enableGeneralLog;  //TODO: need uncomment
 
   static void d(Object? message, {String? name, DateTime? time, int? colorCode}) {
     _log('$message', name: name ?? '', time: time, colorCode: colorCode ?? 36);
@@ -33,7 +33,7 @@ class Log {
   }
 
   static String prettyJson(Map<String, dynamic> json) {
-    if (!LogConfig.isPrettyJson) {
+    if (!Constant.isPrettyJson) {
       return json.toString();
     }
 

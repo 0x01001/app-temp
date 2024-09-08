@@ -33,6 +33,6 @@ class DeviceUtils {
   }
 
   static DeviceType _getDeviceType() {
-    return MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.first).size.shortestSide < UiConstants.maxMobileWidthForDeviceType ? DeviceType.mobile : DeviceType.tablet;
+    return MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.first).size.shortestSide < Constant.maxMobileWidthForDeviceType ? DeviceType.mobile : DeviceType.tablet;
   }
 }

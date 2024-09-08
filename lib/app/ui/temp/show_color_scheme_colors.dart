@@ -58,10 +58,10 @@ class ShowColorSchemeColors extends StatelessWidget {
             : '';
 
     final String backTooHigh = isDark
-        ? _isLight(theme.colorScheme.background)
+        ? _isLight(theme.colorScheme.surface)
             ? '\nTOO HIGH'
             : ''
-        : _isDark(theme.colorScheme.background)
+        : _isDark(theme.colorScheme.surface)
             ? '\nTOO HIGH'
             : '';
 
@@ -163,13 +163,13 @@ class ShowColorSchemeColors extends StatelessWidget {
               ),
               ColorCard(
                 label: 'Background$backTooHigh',
-                color: colorScheme.background,
-                textColor: colorScheme.onBackground,
+                color: colorScheme.surface,
+                textColor: colorScheme.onSurface,
               ),
               ColorCard(
                 label: 'on\nBackground',
-                color: colorScheme.onBackground,
-                textColor: colorScheme.background,
+                color: colorScheme.onSurface,
+                textColor: colorScheme.surface,
               ),
               ColorCard(
                 label: 'Surface$surfaceTooHigh',
@@ -183,13 +183,13 @@ class ShowColorSchemeColors extends StatelessWidget {
               ),
               ColorCard(
                 label: 'Surface\nVariant',
-                color: colorScheme.surfaceVariant,
+                color: colorScheme.surfaceContainerHighest,
                 textColor: colorScheme.onSurfaceVariant,
               ),
               ColorCard(
                 label: 'onSurface\nVariant',
                 color: colorScheme.onSurfaceVariant,
-                textColor: colorScheme.surfaceVariant,
+                textColor: colorScheme.surfaceContainerHighest,
               ),
               ColorCard(
                 label: 'Outline',

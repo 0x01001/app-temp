@@ -1,14 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:injectable/injectable.dart';
 
 import '../../../shared/index.dart';
-import '../base/base_success_response_mapper.dart';
+import '../../index.dart';
 
-@Injectable()
-class JsonArrayResponseMapper<T> extends BaseSuccessResponseMapper<T, List<T>> {
+class JsonArrayResponseMapper<T extends Object> extends BaseSuccessResponseMapper<T, List<T>> {
   @override
-  // ignore: avoid-dynamic
-  Future<List<T>> map(dynamic response, Decoder<T>? decoder) async {
+  Future<List<T>>? mapToDataModel({required dynamic response, Decoder<T>? decoder}) async {
     if (decoder != null && response is List) {
       final data = await compute((x) => x.map((jsonObject) => decoder(jsonObject)).toList(growable: false), response);
       return data;

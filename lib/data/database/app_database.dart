@@ -17,8 +17,8 @@ class AppDatabase {
   }
 
   Future<List<PostEntity>> getAll({String? text, int? limit, int? page, int? itemsPerPage}) async {
-    final _limit = (limit ?? itemsPerPage) ?? UiConstants.itemsPerPage;
-    final _offset = page ?? UiConstants.initialPage;
+    final _limit = (limit ?? itemsPerPage) ?? Constant.itemsPerPage;
+    final _offset = page ?? Constant.initialPage;
     Log.d('AppDatabase > getAll:  - $_limit - $_offset');
     final query = isar.postEntitys.filter().textContains(text ?? '', caseSensitive: false).sortByPublishDateDesc().offset(_offset).limit(_limit).findAll();
     return query;

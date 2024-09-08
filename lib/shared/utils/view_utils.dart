@@ -13,7 +13,7 @@ class ViewUtils {
     final messengerState = hideAppSnackBar(context);
     messengerState?.showSnackBar(SnackBar(
       content: AppText(message, lineHeight: 3),
-      duration: duration ?? DurationConstants.defaultSnackBarDuration,
+      duration: duration ?? Constant.defaultSnackBarDuration,
       backgroundColor: backgroundColor,
       action: action,
       behavior: SnackBarBehavior.floating,
@@ -23,7 +23,7 @@ class ViewUtils {
     ));
 
     if (autoDismiss == true && action != null) {
-      Future.delayed(DurationConstants.defaultSnackBarDuration, () {
+      Future.delayed(Constant.defaultSnackBarDuration, () {
         hideAppSnackBar(context);
       });
     }
@@ -39,46 +39,46 @@ class ViewUtils {
   }
 
   static void showTopBarMessage(BuildContext context, String message, {Duration? duration, Color? backgroundColor, Widget? icon}) {
-    // _flushbar = Flushbar(
-    //   positionOffset: kToolbarHeight + AppSize.topSafeAreaPadding,
-    //   margin: const EdgeInsets.all(15),
-    //   borderRadius: BorderRadius.circular(8),
-    //   flushbarPosition: FlushbarPosition.TOP,
-    //   message: message,
-    //   duration: duration ?? DurationConstants.defaultTopBarDuration,
-    //   backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.surfaceVariant,
-    //   messageColor: Theme.of(context).colorScheme.inverseSurface,
-    //   icon: icon,
-    //   shouldIconPulse: false,
-    //   animationDuration: const Duration(milliseconds: 300),
-    // )..show(context);
-    ScaffoldMessenger.of(context).showMaterialBanner(
-      MaterialBanner(
-        content: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            if (icon != null) icon,
-            AppText(message, type: TextType.title),
-          ],
-        ),
-        actions: [],
-        //   [TextButton(
-        //     onPressed: () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
-        //     child: const Text('DISMISS'),
-        //   ),
-        // ],
-      ),
-    );
-    Future.delayed(
-      duration ?? DurationConstants.defaultTopBarDuration,
-      () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
-    );
+    _flushbar = Flushbar(
+      positionOffset: kToolbarHeight + AppSize.topSafeAreaPadding,
+      margin: const EdgeInsets.all(15),
+      borderRadius: BorderRadius.circular(8),
+      flushbarPosition: FlushbarPosition.TOP,
+      message: message,
+      duration: duration ?? Constant.defaultTopBarDuration,
+      backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+      messageColor: Theme.of(context).colorScheme.inverseSurface,
+      icon: icon,
+      shouldIconPulse: false,
+      animationDuration: const Duration(milliseconds: 300),
+    )..show(context);
+    // ScaffoldMessenger.of(context).showMaterialBanner(
+    //   MaterialBanner(
+    //     content: Row(
+    //       mainAxisSize: MainAxisSize.max,
+    //       children: [
+    //         if (icon != null) icon,
+    //         AppText(message, type: TextType.title),
+    //       ],
+    //     ),
+    //     actions: [],
+    //     //   [TextButton(
+    //     //     onPressed: () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+    //     //     child: const Text('DISMISS'),
+    //     //   ),
+    //     // ],
+    //   ),
+    // );
+    // Future.delayed(
+    //   duration ?? DurationConstants.defaultTopBarDuration,
+    //   () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+    // );
   }
 
   static void hideTopBarMessage() {
-    // _flushbar?.dismiss();
-    final context = AppSize.buildContext;
-    ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+    _flushbar?.dismiss();
+    // final context = AppSize.buildContext;
+    // ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
   }
 
   static void hideKeyboard(BuildContext context) {

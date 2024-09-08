@@ -81,43 +81,6 @@ class SettingPage extends ConsumerWidget {
         shrinkWrap: true,
         sections: _buildList(),
       ),
-
-      // ListView.separated(
-      //   shrinkWrap: true,
-      //   itemBuilder: (BuildContext context, int index) {
-      //     return cells[index];
-      //   },
-      //   separatorBuilder: (BuildContext context, int index) {
-      //     return Divider(color: Theme.of(context).extension<CustomTheme>()?.brandColor, height: 1);
-      //   },
-      //   itemCount: 3,
-      // ),
-
-      // Column(
-      //   children: [
-      //     //TODO: change to option system, dark, light
-      //     AnimatedSwitcher(
-      //       duration: const Duration(seconds: 1),
-      //       child: SwitchListTile.adaptive(
-      //         // visualDensity: const VisualDensity(vertical: -3),
-      //         contentPadding: const EdgeInsets.all(0),
-      //         title: Transform.translate(offset: Offset(-15, 0), child: AppText(S.current.darkTheme, type: TextType.content)),
-      //         value: AdaptiveTheme.of(context).mode.isDark,
-      //         onChanged: onChanged,
-      //         secondary: const Icon(Icons.lightbulb_outline),
-      //       ),
-      //     ),
-      //     SwitchListTile.adaptive(
-      //       // visualDensity: const VisualDensity(vertical: -3),
-      //       contentPadding: const EdgeInsets.all(0),
-      //       title: Transform.translate(offset: Offset(-15, 0), child: AppText(S.current.japanese, type: TextType.content)),
-      //       value: _appProvider.value?.languageCode == LocaleConstants.ja,
-      //       onChanged: (val) => ref.read(appProvider.notifier).setLanguage(val ? LocaleConstants.ja : LocaleConstants.en),
-      //       secondary: const Icon(Icons.language_outlined),
-      //     ),
-      //     AppButton(S.current.logout, backgroundColor: Colors.redAccent, color: Colors.white, onPressed: onPressLogout),
-      //   ],
-      // ),
     );
   }
 }

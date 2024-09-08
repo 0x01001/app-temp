@@ -13,7 +13,7 @@ class ListViewLoader extends StatelessWidget {
       // physics: const NeverScrollableScrollPhysics(),
       // shrinkWrap: true,
       scrollDirection: Axis.horizontal,
-      itemCount: UiConstants.shimmerItemCount,
+      itemCount: Constant.shimmerItemCount,
       itemBuilder: (context, index) => const Padding(
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: ShimmerLoading(

@@ -67,11 +67,11 @@ pubspec_overrides.yaml
 .fvm/
 *.mdb
 *.jks
-*.jks.*
-config/*.env
+*.jks.* 
 google-services.json
 GoogleService-Info.plist
 remote_config_template_app_3.json
 android/app/signingConfigs
 .fvmrc
 .fvm
+config/*.json
