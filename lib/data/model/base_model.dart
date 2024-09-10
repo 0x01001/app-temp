@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
-abstract class BaseEntity extends Equatable {
+abstract class BaseModel extends Equatable {
   final int? id;
   final String? status;
   final String? createdBy;
   final String? updatedBy;
   final String? createdTime;
   final String? lastModifiedTime;
-  const BaseEntity({
+  const BaseModel({
     this.id,
     this.status,
     this.createdBy,
@@ -18,7 +18,7 @@ abstract class BaseEntity extends Equatable {
 
   @override
   String toString() {
-    return 'BaseEntity(id: $id, status: $status, createdBy: $createdBy, updatedBy: $updatedBy, createdTime: $createdTime, lastModifiedTime: $lastModifiedTime)';
+    return 'BaseModel(id: $id, status: $status, createdBy: $createdBy, updatedBy: $updatedBy, createdTime: $createdTime, lastModifiedTime: $lastModifiedTime)';
   }
 
   @override

@@ -11,9 +11,7 @@ import '../../index.dart';
 
 class MainState extends BaseState {}
 
-final mainProvider = StateNotifierProvider.autoDispose<MainProvider, AppState<MainState>>(
-  (ref) => MainProvider(ref),
-);
+final mainProvider = StateNotifierProvider.autoDispose<MainProvider, AppState<MainState>>((ref) => MainProvider(ref));
 
 class MainProvider extends BaseProvider<MainState> {
   MainProvider(this._ref) : super(AppState(data: MainState()));
@@ -26,17 +24,30 @@ class MainProvider extends BaseProvider<MainState> {
   StreamSubscription<String>? onTokenRefreshSubscription;
   @visibleForTesting
   StreamSubscription<FirebaseUserModel>? currentUserSubscription;
+  @visibleForTesting
+  StreamSubscription<bool>? connectSubscription;
 
   void _updateCurrentUser(FirebaseUserModel user) => _ref.update<FirebaseUserModel>(currentUserProvider, (_) => user);
 
   FutureOr<void> init() async {
+    subscriptionConnectivity();
     setInitialCurrentUserState();
     listenToCurrentUser();
-    await _ref.localPushNotification.init();
-    await _ref.permissionHelper.requestNotificationPermission();
     listenOnDeviceTokenRefresh();
     listenOnMessageOpenedApp();
+    _ref.analytics.init();
+    await _ref.localPush.init();
+    await _ref.firebaseNotification.init();
+    await getIt.get<AppFirebaseRemoteConfig>().init();
+    await getIt.get<AppCodePush>().init();
     await getInitialMessage();
+  }
+
+  void subscriptionConnectivity() {
+    connectSubscription?.cancel();
+    connectSubscription = _ref.connectivity.onConnectivityChanged.listen((event) {
+      getIt.get<AppInfo>().isConnected = event;
+    });
   }
 
   void setInitialCurrentUserState() {
@@ -61,7 +72,7 @@ class MainProvider extends BaseProvider<MainState> {
 
   void listenOnDeviceTokenRefresh() {
     onTokenRefreshSubscription?.cancel();
-    onTokenRefreshSubscription = _ref.firebaseMessagingService.onTokenRefresh.listen((event) async {
+    onTokenRefreshSubscription = _ref.firebaseNotification.onTokenRefresh.listen((event) async {
       if (event.isNotEmpty) {
         await _ref.appPreferences.saveDeviceToken(event);
       }
@@ -70,10 +81,10 @@ class MainProvider extends BaseProvider<MainState> {
 
   void listenOnMessageOpenedApp() {
     onMessageOpenedAppSubscription?.cancel();
-    onMessageOpenedAppSubscription = _ref.firebaseMessagingService.onMessageOpenedApp.listen(
+    onMessageOpenedAppSubscription = _ref.firebaseNotification.onMessageOpenedApp.listen(
       (event) async {
-        await _ref.localPushNotification.cancelAll();
-        await goToChatPage(_ref.remoteMessageAppNotificationMapper.mapToLocal(event));
+        await _ref.localPush.cancelAll();
+        // await goToChatPage(_ref.remoteMessageAppNotificationMapper.mapToLocal(event));
       },
     );
   }
@@ -81,40 +92,42 @@ class MainProvider extends BaseProvider<MainState> {
   Future<void> getInitialMessage() async {
     await runSafe(
       action: () async {
-        final initialMessage = await _ref.firebaseMessagingService.initialMessage;
-        await goToChatPage(_ref.remoteMessageAppNotificationMapper.mapToLocal(initialMessage));
+        final initialMessage = await _ref.firebaseNotification.initialMessage;
+        // await goToChatPage(_ref.remoteMessageAppNotificationMapper.mapToLocal(initialMessage));
       },
       handleLoading: false,
     );
   }
 
-  @visibleForTesting
-  Future<void> goToChatPage(AppNotification appNotification) async {
-    final conversationId = appNotification.conversationId;
-    if (conversationId.isEmpty) {
-      return;
-    }
+  // @visibleForTesting
+  // Future<void> goToChatPage(AppNotification appNotification) async {
+  //   final conversationId = appNotification.conversationId;
+  //   if (conversationId.isEmpty) {
+  //     return;
+  //   }
 
-    if (_ref.nav.getCurrentRouteName() == ChatRoute.name) {
-      final routeData = _ref.nav.getCurrentRouteData();
-      final arg = routeData.args as ChatRouteArgs;
-      if (arg.conversation.id != conversationId) {
-        await _ref.nav.pop();
-        await _ref.nav.push(ChatRoute(conversation: FirebaseConversationData(id: conversationId)));
-      }
-    } else {
-      await _ref.nav.push(ChatRoute(conversation: FirebaseConversationData(id: appNotification.conversationId)));
-    }
-  }
+  //   if (_ref.nav.getCurrentRouteName() == ChatRoute.name) {
+  //     final routeData = _ref.nav.getCurrentRouteData();
+  //     final arg = routeData.args as ChatRouteArgs;
+  //     if (arg.conversation.id != conversationId) {
+  //       await _ref.nav.pop();
+  //       await _ref.nav.push(ChatRoute(conversation: FirebaseConversationModel(id: conversationId)));
+  //     }
+  //   } else {
+  //     await _ref.nav.push(ChatRoute(conversation: FirebaseConversationModel(id: appNotification.conversationId)));
+  //   }
+  // }
 
   @override
   void dispose() {
     onMessageOpenedAppSubscription?.cancel();
     onTokenRefreshSubscription?.cancel();
     currentUserSubscription?.cancel();
+    connectSubscription?.cancel();
     onMessageOpenedAppSubscription = null;
     onTokenRefreshSubscription = null;
     currentUserSubscription = null;
+    connectSubscription = null;
     super.dispose();
   }
 }

@@ -19,10 +19,7 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
 
   @override
   Widget render(BuildContext context, WidgetRef ref) {
-    // ref.watch(appProvider.select((value) => value.value?.languageCode)); // for change language of bottom tab
     final _navigator = getIt.get<AppNavigator>();
-    // final _bottomBarKey = GlobalKey();
-    // final _showFab = MediaQuery.viewInsetsOf(context).bottom == 0.0; // MediaQuery.of(context).viewInsets.bottom == 0.0;
     final _showBottomNav = ref.watch(showBottomNavProvider);
     final _selectedIndex = useState(0);
 
@@ -78,27 +75,6 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
                   tabsRouter.setActiveIndex(index);
                 },
               ),
-              // BottomNavigationBar(
-              //   key: _bottomBarKey,
-              //   currentIndex: tabsRouter.activeIndex,
-              //   onTap: (index) {
-              //     if (index == tabsRouter.activeIndex) {
-              //       _navigator.popUntilRootOfCurrentBottomTab();
-              //     }
-              //     // check press on middle button tab
-              //     if (index == 1) {
-              //       onPress();
-              //     } else {
-              //       tabsRouter.setActiveIndex(index);
-              //     }
-              //   },
-              //   showSelectedLabels: true,
-              //   showUnselectedLabels: true,
-              //   type: BottomNavigationBarType.fixed,
-              //   items: BottomTab.values.map((tab) => BottomNavigationBarItem(label: tab.title, icon: tab.icon, activeIcon: tab.activeIcon)).toList(),
-              //   selectedLabelStyle: context.labelSmall,
-              //   unselectedLabelStyle: context.labelSmall,
-              // ),
             ),
           ),
         );

@@ -6,9 +6,9 @@ import '../../data/index.dart';
 extension WidgetRefExt on WidgetRef {
   AppNavigator get nav => read(appNavigatorProvider);
   ExceptionHandler get exception => read(exceptionHandlerProvider);
-  // AnalyticsHelper get analyticsHelper => read(analyticsHelperProvider);
+  AppFirebaseAnalytics get analytics => read(appFirebaseAnalyticsProvider);
   AppFirebaseCrashlytics get crashlytics => read(appFirebaseCrashlyticsProvider);
-  // ConnectivityHelper get connectivityHelper => read(connectivityHelperProvider);
+  AppConnectivity get connectivity => read(appConnectivityProvider);
 
   T update<T>(StateProvider<T> provider, T Function(T) cb) {
     return read(provider.notifier).update(cb);
@@ -31,21 +31,21 @@ extension RefExt on Ref {
   // firebase
   FirebaseFirestoreService get firebaseFirestoreService => read(firebaseFirestoreServiceProvider);
   FirebaseAuthService get firebaseAuthService => read(firebaseAuthServiceProvider);
-  FirebaseMessagingService get firebaseMessagingService => read(firebaseMessagingServiceProvider);
+  AppFirebaseNotification get firebaseNotification => read(appFirebaseNotificationProvider);
 
   // // mapper
   // MessageDataMapper messageDataMapper(String conversationId) => read(messageDataMapperProvider(conversationId));
   // RemoteMessageAppNotificationMapper get remoteMessageAppNotificationMapper => read(remoteMessageAppNotificationMapperProvider);
 
   // helper
-  // AnalyticsHelper get analyticsHelper => read(analyticsHelperProvider);
-  // ConnectivityHelper get connectivityHelper => read(connectivityHelperProvider);
+  AppFirebaseAnalytics get analytics => read(appFirebaseAnalyticsProvider);
   AppFirebaseCrashlytics get crashlytics => read(appFirebaseCrashlyticsProvider);
   // DeepLinkHelper get deepLinkHelper => read(deepLinkHelperProvider);
   // DeviceHelper get deviceHelper => read(deviceHelperProvider);
-  AppLocalPushNotification get localPushNotification => read(appLocalPushNotificationProvider);
+  AppLocalPushNotification get localPush => read(appLocalPushNotificationProvider);
   // PackageHelper get packageHelper => read(packageHelperProvider);
   // SharedViewModel get sharedViewModel => read(sharedViewModelProvider);
+  AppConnectivity get connectivity => read(appConnectivityProvider);
 
   T update<T>(StateProvider<T> provider, T Function(T) cb) {
     return read(provider.notifier).update(cb);

@@ -1,4 +1,3 @@
-import '../../../shared/index.dart';
 import '../../index.dart';
 
 class FirebaseStorageErrorResponseMapper extends BaseErrorResponseMapper<Map<String, dynamic>> {

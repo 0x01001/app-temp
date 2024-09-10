@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 
 import '../../shared/index.dart';
-import '../index.dart';
 
 class AppConfig extends Config {
   factory AppConfig.getInstance() {
@@ -19,11 +19,11 @@ class AppConfig extends Config {
     Log.d('App > config > start');
 
     await Firebase.initializeApp();
-    getIt.get<AppFirebaseAnalytics>().init();
-    // await getIt.get<AppLocalPushNotification>().init();
-    // await getIt.get<AppFirebaseNotification>().init();
-    await getIt.get<AppFirebaseRemoteConfig>().init();
-    await getIt.get<AppCodePush>().init();
+    // await SystemChrome.setPreferredOrientations(
+    //   getIt.get<DeviceHelper>().deviceType == DeviceType.mobile ? Constant.mobileOrientation : Constant.tabletOrientation,
+    // );
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    SystemChrome.setSystemUIOverlayStyle(Constant.systemUiOverlay);
 
     Log.d('App > config > end');
   }

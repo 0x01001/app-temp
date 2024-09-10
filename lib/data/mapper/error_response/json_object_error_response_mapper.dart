@@ -1,4 +1,3 @@
-import '../../../shared/index.dart';
 import '../../index.dart';
 
 class JsonObjectErrorResponseMapper extends BaseErrorResponseMapper<Map<String, dynamic>> {

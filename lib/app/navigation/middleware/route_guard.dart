@@ -13,7 +13,7 @@ class RouteGuard extends AutoRouteGuard {
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
-    Log.d('onNavigation: ${appPreferences.isLoggedIn} - ${router.current.name}');
+    Log.d('[APP] onNavigation: ${appPreferences.isLoggedIn} - ${router.current.name}');
     if (appPreferences.isLoggedIn) {
       resolver.next(true);
     } else {

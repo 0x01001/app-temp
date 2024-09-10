@@ -4,7 +4,6 @@ export 'config/config.dart';
 export 'config/shared_config.dart';
 export 'di/di.dart';
 export 'exception/app_exception.dart';
-export 'exception/app_exception_wrapper.dart';
 export 'exception/app_firebase_auth_exception.dart';
 export 'exception/app_uncaught_exception.dart';
 export 'exception/remote_exception.dart';

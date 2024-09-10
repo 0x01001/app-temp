@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../shared/index.dart';
 import '../../components/app_list.dart';
 import '../../index.dart';
-import '../auth/provider/provider.dart';
 
 @RoutePage()
 class SettingPage extends ConsumerWidget {
@@ -19,13 +18,13 @@ class SettingPage extends ConsumerWidget {
     // final _appProvider = ref.watch(appProvider);
 
     Future<void> onPressLogout() async {
-      final result = await getIt.get<AppNavigator>().showDialog(AppPopupInfo.confirmDialog(
-            title: 'Confirm',
-            message: 'Are you sure you want to log out?',
-            onPressedOk: () async {
-              await ref.read(authProvider.notifier).logout();
-              await getIt.get<AppNavigator>().replace(const LoginRoute());
-            },
+      final result = await getIt.get<AppNavigator>().showDialog(AppPopup.confirmDialog(
+            'Confirm',
+            // message: 'Are you sure you want to log out?',
+            // onPressedOk: () async {
+            //   await ref.read(authProvider.notifier).logout();
+            //   await getIt.get<AppNavigator>().replace(const LoginRoute());
+            // },
           ));
       Log.d('on close popup..: $result');
     }

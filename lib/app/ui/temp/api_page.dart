@@ -12,7 +12,7 @@ class APIPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     useEffect(() {
-      ref.read(tempProvider.notifier).loadData();
+      // ref.read(tempProvider.notifier).loadData();
       return null;
     }, []);
 
@@ -23,7 +23,7 @@ class APIPage extends HookConsumerWidget {
         child: AppButton(
           'Test',
           onPressed: () {
-            ref.read(tempProvider.notifier).loadDataSafe();
+            // ref.read(tempProvider.notifier).loadDataSafe();
           },
         ),
       ),

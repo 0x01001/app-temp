@@ -8,11 +8,14 @@ import '../../../shared/index.dart';
 import '../../index.dart';
 
 @RoutePage()
-class HomePage extends HookConsumerWidget {
+class HomePage extends BasePage<HomeState, AutoDisposeStateNotifierProvider<HomeProvider, AppState<HomeState>>> {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  AutoDisposeStateNotifierProvider<HomeProvider, AppState<HomeState>> get provider => homeProvider;
+
+  @override
+  Widget render(BuildContext context, WidgetRef ref) {
     Log.d('HomePage > build');
 
     return AppScaffold(

@@ -6,15 +6,15 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../shared/index.dart';
-import '../../domain/index.dart';
+import '../../data/index.dart';
 
 @LazySingleton()
 class AppFirebaseRemoteConfig {
   AppFirebaseRemoteConfig(this._appInfo);
 
   final AppInfo _appInfo;
-  ConfigEntity? _configModel;
-  ConfigEntity? get config => _configModel;
+  ConfigModel? _configModel;
+  ConfigModel? get config => _configModel;
   // StreamSubscription<RemoteConfigUpdate>? _streamSubscription;
 
   Future<void> init() async {
@@ -67,7 +67,7 @@ class AppFirebaseRemoteConfig {
       //   }, result);
       // }
 
-      _configModel = ConfigEntity(
+      _configModel = ConfigModel(
         // scheme: SchemeModel.fromMap(
         //   {
         //     ...(scheme == '' ? {} : jsonDecode(scheme)),

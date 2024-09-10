@@ -7,6 +7,8 @@ import '../index.dart';
 class AppInfo {
   PackageInfo? _packageInfo;
 
+  bool? isConnected;
+
   String get appName => _packageInfo?.appName ?? '';
   String get applicationId => _packageInfo?.packageName ?? '';
   String get versionCode => _packageInfo?.buildNumber ?? ''; //1.0.0_x

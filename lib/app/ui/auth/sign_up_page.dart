@@ -7,14 +7,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
-import 'provider/provider.dart';
 
 @RoutePage()
-class SignUpPage extends HookConsumerWidget {
+class SignUpPage extends BasePage<AuthState, AutoDisposeStateNotifierProvider<AuthProvider, AppState<AuthState>>> {
   const SignUpPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  AutoDisposeStateNotifierProvider<AuthProvider, AppState<AuthState>> get provider => authProvider;
+
+  @override
+  Widget render(BuildContext context, WidgetRef ref) {
     return AppScaffold(
       hideKeyboardWhenTouchOutside: true,
       appBar: AppTopBar(text: S.current.signUp),

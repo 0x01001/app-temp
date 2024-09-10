@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:injectable/injectable.dart';
 
 // import 'package:injectable/injectable.dart';
@@ -18,10 +19,33 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   getIt.get<AppFirebaseNotification>().handleNotifi(message: message);
 }
 
+final appFirebaseNotificationProvider = Provider((ref) => getIt.get<AppFirebaseNotification>());
+
 @LazySingleton()
 class AppFirebaseNotification {
-  String? token;
+  // String? token;
   // late FirebaseMessaging messaging;
+  final _messaging = FirebaseMessaging.instance;
+
+  Stream<String> get onTokenRefresh => _messaging.onTokenRefresh;
+
+  Future<String?> get deviceToken => _messaging.getToken();
+
+  Stream<RemoteMessage> get onMessage => FirebaseMessaging.onMessage;
+
+  Stream<RemoteMessage> get onMessageOpenedApp => FirebaseMessaging.onMessageOpenedApp;
+
+  Future<RemoteMessage?> get initialMessage => _messaging.getInitialMessage();
+
+  Future<void> subscribeToTopic(String topic) async {
+    Log.d('Subscribing to topic: $topic');
+    await _messaging.subscribeToTopic(topic);
+  }
+
+  Future<void> unsubscribeFromTopic(String topic) async {
+    Log.d('Unsubscribing from topic: $topic');
+    await _messaging.unsubscribeFromTopic(topic);
+  }
 
   void handleNotifi({RemoteMessage? message, String? notiType, int? contentId, bool isEventChallenge = false, dynamic model}) {
     // try {
@@ -32,11 +56,10 @@ class AppFirebaseNotification {
     // }
   }
 
-  Future<void> _firebaseMessagingOpenAppHandler(RemoteMessage message) async {
-    // when tab on noti IOS is open and background, android in background
-    getIt.get<AppLocalPushNotification>().cancelAll();
-    // DeepLinkHelper.getInstance().run(message.data['deeplink']);
-  }
+  // Future<void> _firebaseMessagingOpenAppHandler(RemoteMessage message) async {
+  //   // when tab on noti IOS is open and background, android in background
+  //   // DeepLinkHelper.getInstance().run(message.data['deeplink']);
+  // }
 
   Future<void> _firebaseOnMessagingHandler(RemoteMessage message) async {
     // when app IOS and android is open and recived noti
@@ -49,7 +72,7 @@ class AppFirebaseNotification {
     // messaging.subscribeToTopic('all');
 
     FirebaseMessaging.onMessage.listen(_firebaseOnMessagingHandler);
-    FirebaseMessaging.onMessageOpenedApp.listen(_firebaseMessagingOpenAppHandler);
+    // FirebaseMessaging.onMessageOpenedApp.listen(_firebaseMessagingOpenAppHandler);
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     await FirebaseMessaging.instance.requestPermission(

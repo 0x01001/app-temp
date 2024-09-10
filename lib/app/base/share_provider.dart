@@ -3,6 +3,67 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../data/index.dart';
 import '../../shared/index.dart';
 
+final shareProvider = Provider((_ref) => ShareProvider(_ref));
+
+class ShareProvider {
+  ShareProvider(this._ref);
+
+  final Ref _ref;
+
+  Future<String> get deviceToken async {
+    final deviceToken = await _ref.firebaseNotification.deviceToken;
+    if (deviceToken != null) {
+      await _ref.appPreferences.saveDeviceToken(deviceToken);
+    }
+
+    return deviceToken ?? '';
+  }
+
+  // Future<void> forceLogout() async {
+  //   try {
+  //     await _ref.appPreferences.clearCurrentUserData();
+  //     _ref.update<FirebaseUserData>(currentUserProvider, (state) => const FirebaseUserData());
+  //     await _ref.nav.replaceAll([const LoginRoute()]);
+  //   } catch (e) {
+  //     await _ref.nav.replaceAll([const LoginRoute()]);
+  //   }
+  // }
+
+  // Future<void> logout() async {
+  //   try {
+  //     final deviceToken = await this.deviceToken;
+  //     final userId = _ref.appPreferences.userId;
+  //     await _ref.firebaseFirestoreService.updateCurrentUser(userId: userId, data: {
+  //       FirebaseUserData.keyDeviceIds: [],
+  //       FirebaseUserData.keyDeviceTokens: FieldValue.arrayRemove([deviceToken]),
+  //     });
+  //     await _ref.appPreferences.clearCurrentUserData();
+  //     await _ref.firebaseAuthService.signOut();
+  //     _ref.update<FirebaseUserData>(currentUserProvider, (state) => const FirebaseUserData());
+  //     await _ref.nav.replaceAll([const LoginRoute()]);
+  //   } catch (e) {
+  //     await _ref.nav.replaceAll([const LoginRoute()]);
+  //   }
+  // }
+
+  // List<FirebaseConversationUserData> getRenamedMembers({required List<FirebaseConversationUserData> members, required String conversationId}) {
+  //   return members
+  //       .map((e) => e.copyWith(
+  //             email: _ref.appPreferences.getUserNickname(
+  //                   conversationId: conversationId,
+  //                   memberId: e.userId,
+  //                 ) ??
+  //                 e.email,
+  //           ))
+  //       .toList();
+  // }
+
+  // Future<void> deleteConversation(FirebaseConversationData conversation) async {
+  //   await _ref.firebaseFirestoreService.deleteConversation(conversation.id);
+  //   await _ref.appDatabase.removeMessagesByConversationId(conversation.id);
+  // }
+}
+
 final languageCodeProvider = StateProvider<LanguageCode>(
   (ref) {
     ref.listenSelf((previous, next) {
@@ -43,71 +104,3 @@ final currentUserProvider = StateProvider<FirebaseUserModel>(
     return FirebaseUserModel();
   },
 );
-
-
-// final appProvider = Provider((_ref) => App(_ref));
-
-// class AppProvider {
-//   AppProvider(this._ref);
-
-//   final Ref _ref;
-
-  // @override
-  // Future<AppEntity> build() {
-  //   final subscription = appRepository.subscriptionConnectivity(); //#1
-  //   ref.onDispose(() async {
-  //     subscription.cancel();
-  //     Log.d('App > dispose!!!');
-  //   });
-  //   return init();
-  // }
-
-  // Future<AppEntity> init() async {
-  //   // bool? isDarkMode = appRepository.isDarkMode;
-  //   // if (isDarkMode == null) {
-  //   //   final brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
-  //   //   isDarkMode = brightness == Brightness.dark;
-  //   // }
-  //   final model = AppEntity(languageCode: appRepository.languageCode);
-  //   Log.d('AppProvider > build: ${model.toString()}');
-  //   return model;
-  // }
-
-  // Future<dynamic> addOrUpdate(AppEntity data) async {
-  //   await update((previous) async {
-  //     if (previous.languageCode != data.languageCode) {
-  //       await appRepository.saveLanguageCode(data.languageCode ?? Constants.defaultLocale);
-  //     }
-  //     // if (previous.isDarkMode != data.isDarkMode) {
-  //     //   await appRepository.saveIsDarkMode(data.isDarkMode ?? UiConstants.defaultDarkMode);
-  //     // }
-  //     return data;
-  //   });
-  // }
-
-  // Future<dynamic> setDarkMode(bool? val) async {
-  //   if (!state.hasValue) return;
-  //   await addOrUpdate(state.value!.copyWith(isDarkMode: val));
-  // }
-
-  // Future<dynamic> setLanguage(String val) async {
-  //   if (!state.hasValue) return;
-  //   // await S.load(Locale(val));
-  //   await addOrUpdate(state.value!.copyWith(languageCode: val));
-  // }
-// }
-
-/// uncomment if not use #1
-// @riverpod
-// Stream<bool> connect(ConnectRef ref) {
-//   return getIt.get<AppRepository>().onConnectivityChanged;
-// }
-
-// @riverpod
-// class ShowBottomNav extends _$ShowBottomNav {
-//   @override
-//   bool build() => true;
-//   void change() => state = !state;
-//   void hide() => state = false;
-//   void show() => state = true;
-// }

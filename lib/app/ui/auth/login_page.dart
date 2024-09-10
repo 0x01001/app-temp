@@ -7,14 +7,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
-import 'provider/provider.dart';
 
 @RoutePage()
-class LoginPage extends HookConsumerWidget {
+class LoginPage extends BasePage<AuthState, AutoDisposeStateNotifierProvider<AuthProvider, AppState<AuthState>>> {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  AutoDisposeStateNotifierProvider<AuthProvider, AppState<AuthState>> get provider => authProvider;
+
+  @override
+  Widget render(BuildContext context, WidgetRef ref) {
     return AppScaffold(
       hideKeyboardWhenTouchOutside: true,
       body: SingleChildScrollView(
@@ -33,7 +35,7 @@ class _Form extends AppForm {
       if (data != null) {
         final result = await ref.read(authProvider.notifier).login(data[FieldType.email.name], data[FieldType.password.name]);
         if (result == true) {
-          getIt.get<AppNavigator>().replace(const MainRoute());
+          ref.nav.replace(const MainRoute());
         } else {
           formKey.currentState?.fields[FieldType.password.name]?.didChange('');
         }

@@ -4,6 +4,9 @@ else
     BUILD_CMD=./tools/build_and_run_app.sh 
 endif
 
+TEST_DART_DEFINE_LIGHT_MODE_AND_JA=--dart-define=IS_DARK_MODE=false --dart-define=LOCALE=ja
+TEST_DART_DEFINE_DARK_MODE_AND_EN=--dart-define=IS_DARK_MODE=true --dart-define=LOCALE=en
+
 update_app_icon:
 	dart run flutter_launcher_icons -f config/app-icon.yaml 
 
@@ -36,16 +39,6 @@ gen_lang:
 
 gen_model:
 	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/data/repository/model/*.dart"
-gen_entity:
-	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/domain/entity/*.dart"	
-gen_di:
-	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/app/di/*.dart"	
-gen_data:
-	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/data/*.dart"		
-gen_domain:
-	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/domain/*.dart"		
-gen_shared:
-	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/shared/*.dart"	
 gen_app:
 	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/app/*.dart"			
 gen_all:
@@ -125,3 +118,48 @@ patch_shorebird_prod_android:
 
 dart_fix:	
 	dart fix --apply
+
+cov_full:
+	flutter test --coverage
+	lcov --remove coverage/lcov.info \
+	'*/*.g.dart' \
+	'**/generated/*' \
+	-o coverage/lcov.info &
+	genhtml coverage/lcov.info -o coverage/html
+	open coverage/html/index.html
+
+cov:
+	flutter test --coverage
+	lcov --remove coverage/lcov.info \
+	'lib/main.dart' \
+	'lib/app_initializer.dart' \
+	'lib/app/my_app.dart' \
+	'lib/app/index.dart' \
+	'lib/app/utils/riverpod_logger.dart' \
+	'lib/app/base/base_page.dart' \
+	'lib/app/navigation' \
+	'lib/app/components' \
+	'lib/data/api/client/*_client.dart' \
+	'lib/data/api/*_service.dart' \
+	'lib/data/api/middleware/custom_log_interceptor.dart' \
+	'lib/data/api/middleware/base_interceptor.dart' \
+	'lib/data/api/exception_mapper/exception_mapper.dart' \
+	'lib/data/database' \
+	'lib/data/model/*_model.dart' \
+	'lib/data/model/firebase' \
+	'lib/data/mapper/base/base_data_mapper.dart' \
+	'lib/shared/exception/app_exception.dart' \
+	'lib/shared/exception/exception_handler.dart' \
+	'lib/shared/helper' \
+	'lib/shared/utils/log_utils.dart' \
+	'lib/shared/utils/file_util.dart' \
+	'lib/shared/extensions/ref_ext.dart' \
+	'lib/shared/utils/view_util.dart' \
+	'lib/shared/di/di.dart' \
+	'lib/shared/di/di.config.dart' \
+	'lib/resources' \
+	'*/*.g.dart' \
+	'**/generated/*' \
+	-o coverage/lcov.info &
+	genhtml coverage/lcov.info -o coverage/html
+	open coverage/html/index.html

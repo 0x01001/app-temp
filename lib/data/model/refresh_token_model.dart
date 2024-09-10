@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import '../../domain/index.dart';
+import '../index.dart';
 
-class RefreshTokenModel extends BaseEntity {
+class RefreshTokenModel extends BaseModel {
   final String? accessToken;
 
   const RefreshTokenModel({
@@ -67,7 +67,7 @@ class RefreshTokenModel extends BaseEntity {
 
   @override
   String toString() {
-    return 'RefreshTokenData(accessToken: $accessToken, id: $id, status: $status, createdBy: $createdBy, updatedBy: $updatedBy, createdTime: $createdTime, lastModifiedTime: $lastModifiedTime)';
+    return 'RefreshTokenModel(accessToken: $accessToken, id: $id, status: $status, createdBy: $createdBy, updatedBy: $updatedBy, createdTime: $createdTime, lastModifiedTime: $lastModifiedTime)';
   }
 
   @override

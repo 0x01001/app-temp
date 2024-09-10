@@ -1,6 +1,5 @@
 import 'package:dartx/dartx.dart';
 
-import '../../../shared/index.dart';
 import '../../index.dart';
 
 class TwitterErrorResponseMapper extends BaseErrorResponseMapper<Map<String, dynamic>> {

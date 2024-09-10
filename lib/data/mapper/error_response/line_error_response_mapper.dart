@@ -1,4 +1,3 @@
-import '../../../shared/index.dart';
 import '../../index.dart';
 
 class LineErrorResponseMapper extends BaseErrorResponseMapper<Map<String, dynamic>> {

@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import '../../domain/index.dart';
+import '../index.dart';
 
-class NotificationModel extends BaseEntity {
+class NotificationModel extends BaseModel {
   final String? notificationId;
   final String? image;
   final String? title;
@@ -89,7 +89,7 @@ class NotificationModel extends BaseEntity {
 
   @override
   String toString() {
-    return 'NotificationData(id: $id, status: $status, createdBy: $createdBy, updatedBy: $updatedBy, createdTime: $createdTime, lastModifiedTime: $lastModifiedTime, notificationId: $notificationId, image: $image, title: $title, message: $message, notificationType: $notificationType)';
+    return 'NotificationModel(id: $id, status: $status, createdBy: $createdBy, updatedBy: $updatedBy, createdTime: $createdTime, lastModifiedTime: $lastModifiedTime, notificationId: $notificationId, image: $image, title: $title, message: $message, notificationType: $notificationType)';
   }
 
   @override

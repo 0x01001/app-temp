@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 
-import '../../domain/index.dart';
+import '../index.dart';
 
-class AuthModel extends BaseEntity {
+class AuthModel extends BaseModel {
   final String? uid;
   final String? idToken;
   final String? phoneNumber;
@@ -113,7 +113,7 @@ class AuthModel extends BaseEntity {
 
   @override
   String toString() {
-    return 'AuthResponseData(id: $id, status: $status, createdBy: $createdBy, updatedBy: $updatedBy, createdTime: $createdTime, lastModifiedTime: $lastModifiedTime, uid: $uid, idToken: $idToken, phoneNumber: $phoneNumber, refreshToken: $refreshToken, expiresIn: $expiresIn, email: $email, displayName: $displayName, accessToken: $accessToken, registered: $registered)';
+    return 'AuthModel(id: $id, status: $status, createdBy: $createdBy, updatedBy: $updatedBy, createdTime: $createdTime, lastModifiedTime: $lastModifiedTime, uid: $uid, idToken: $idToken, phoneNumber: $phoneNumber, refreshToken: $refreshToken, expiresIn: $expiresIn, email: $email, displayName: $displayName, accessToken: $accessToken, registered: $registered)';
   }
 
   @override
