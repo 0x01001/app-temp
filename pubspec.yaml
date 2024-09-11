@@ -3,8 +3,7 @@ description: A new Flutter project.
 publish_to: "none"
 version: 1.0.0+19
 environment:
-  sdk: ">=3.0.5 <4.0.0"
-  # flutter: ">=1.18.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependency_overrides:
   analyzer: 6.5.0
@@ -114,7 +113,7 @@ dev_dependencies:
   riverpod_lint: 2.3.10
   custom_lint: 0.6.4
   custom_lint_builder: 0.6.4
-  flutter_gen_runner: 5.4.0
+  flutter_gen_runner: 5.7.0
   flutter_launcher_icons: 0.13.1
   flutter_lints: 4.0.0
   flutter_native_splash: 2.3.10
@@ -130,29 +129,25 @@ dev_dependencies:
 # Config generate when build
 flutter_gen:
   output: lib/resources/generated
+  line_lenght: 160
   null_safety: true
 
   integrations:
     flutter_svg: true
+    # flare_flutter: true
 
   assets:
     enabled: true
 
   fonts:
     enabled: true
-  # colors:
-  #   enabled: true
-  #   inputs:
-  #     - assets/color/colors.xml
 
 flutter:
   uses-material-design: true
-  generate: false
+  # generate: false
   assets:
     - assets/images/
     - shorebird.yaml
-    # - assets/jsons/
-
   fonts:
     - family: Roboto
       fonts:

@@ -42,12 +42,12 @@ gen_model:
 gen_app:
 	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/app/*.dart"			
 gen_all:
-	dart run build_runner build --delete-conflicting-outputs
+	dart run build_runner build --delete-conflicting-outputs --verbose
   
 gen:
 	dart run tools/gen_env.dart
 	dart run intl_utils:generate
-	dart run build_runner build --delete-conflicting-outputs
+	dart run build_runner build --delete-conflicting-outputs --verbose
  	 
 run_dev:
 	$(BUILD_CMD) dev run 
