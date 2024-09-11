@@ -31,7 +31,6 @@ export 'api/server/server_error_detail.dart';
 export 'config/data_config.dart';
 export 'database/app_database.dart';
 export 'database/app_preferences.dart';
-export 'graphql/generated/pokedex_graphql.dart';
 export 'mapper/base/base_data_mapper.dart';
 export 'mapper/base/base_error_response_mapper.dart';
 export 'mapper/base/base_success_response_mapper.dart';

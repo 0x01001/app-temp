@@ -75,3 +75,5 @@ android/app/signingConfigs
 .fvmrc
 .fvm
 config/*.json
+# exception to the rule
+!config/.keep

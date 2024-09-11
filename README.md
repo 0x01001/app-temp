@@ -1,12 +1,12 @@
-# Flutter Riverpod - Clean Architecture
+# Flutter Riverpod - MVVM Architecture
 
-Flutter project using clean architecture and riverpod pattern.
+Flutter project using MVVM architecture and riverpod pattern.
 
 ![Architecture](config/project_architecture.png?raw=true)
 
 ## Features
 
-1. Architecture: Clean Architecture
+1. Architecture: MVVM Architecture
 1. State management: [flutter_riverpod](https://pub.dev/packages/flutter_riverpod)
 1. Navigation: [auto_route](https://pub.dev/packages/auto_route)
 1. DI: [get_it](https://pub.dev/packages/get_it), [injectable](https://pub.dev/packages/injectable)
