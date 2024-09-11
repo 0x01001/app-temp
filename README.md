@@ -32,9 +32,9 @@ Flutter project using clean architecture and riverpod pattern.
 
 ### Requirements
 
-- Dart: 3.3.2
-- Flutter SDK: 3.19.4
-- CocoaPods: 1.12.0
+- Dart: 3.4.0
+- Flutter SDK: 3.22.0
+- CocoaPods: 1.15.2
 
 ### Install
 

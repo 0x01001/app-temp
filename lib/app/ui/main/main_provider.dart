@@ -30,8 +30,8 @@ class MainProvider extends BaseProvider<MainState> {
   void _updateCurrentUser(FirebaseUserModel user) => _ref.update<FirebaseUserModel>(currentUserProvider, (_) => user);
 
   FutureOr<void> init() async {
-    subscriptionConnectivity();
     setInitialCurrentUserState();
+    listenConnectivity();
     listenToCurrentUser();
     listenOnDeviceTokenRefresh();
     listenOnMessageOpenedApp();
@@ -43,15 +43,15 @@ class MainProvider extends BaseProvider<MainState> {
     await getInitialMessage();
   }
 
-  void subscriptionConnectivity() {
+  void setInitialCurrentUserState() {
+    _updateCurrentUser(FirebaseUserModel(id: _ref.appPreferences.userId, email: _ref.appPreferences.email));
+  }
+
+  void listenConnectivity() {
     connectSubscription?.cancel();
     connectSubscription = _ref.connectivity.onConnectivityChanged.listen((event) {
       getIt.get<AppInfo>().isConnected = event;
     });
-  }
-
-  void setInitialCurrentUserState() {
-    _updateCurrentUser(FirebaseUserModel(id: _ref.appPreferences.userId, email: _ref.appPreferences.email));
   }
 
   void listenToCurrentUser() {

@@ -12,19 +12,7 @@
                 "--dart-define",
                 "FLAVOR=dev"
             ]
-        },
-        {
-            "name": "Debug Qa",
-            "request": "launch",
-            "type": "dart",
-            "program": "lib/main.dart",
-            "toolArgs": [
-                "--flavor",
-                "qa",
-                "--dart-define",
-                "FLAVOR=qa"
-            ]
-        },
+        }, 
         {
             "name": "Debug Staging",
             "request": "launch",
@@ -61,20 +49,7 @@
                 "--dart-define",
                 "FLAVOR=dev"
             ]
-        },
-        {
-            "name": "Profile Qa",
-            "request": "launch",
-            "type": "dart",
-            "program": "lib/main.dart",
-            "flutterMode": "profile",
-            "toolArgs": [
-                "--flavor",
-                "qa",
-                "--dart-define",
-                "FLAVOR=qa"
-            ]
-        },
+        }, 
         {
             "name": "Profile Staging",
             "request": "launch",
@@ -113,20 +88,7 @@
                 "--dart-define",
                 "FLAVOR=dev"
             ]
-        },
-        {
-            "name": "Release Qa",
-            "request": "launch",
-            "type": "dart",
-            "program": "lib/main.dart",
-            "toolArgs": [
-                "--flavor",
-                "qa",
-                "--release",
-                "--dart-define",
-                "FLAVOR=qa"
-            ]
-        },
+        }, 
         {
             "name": "Release Staging",
             "request": "launch",

@@ -54,6 +54,8 @@ export 'model/base/records_response.dart';
 export 'model/base/results_response.dart';
 export 'model/base_model.dart';
 export 'model/config_model.dart';
+export 'model/database/local_message_data.dart';
+export 'model/database/local_reply_message_data.dart';
 export 'model/firebase/firebase_conversation_model.dart';
 export 'model/firebase/firebase_conversation_user_model.dart';
 export 'model/firebase/firebase_message_model.dart';

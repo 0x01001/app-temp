@@ -15,7 +15,7 @@ class AppFirebaseAnalytics {
     Log.w('FirebaseAnalytics is supported: ${await FirebaseAnalytics.instance.isSupported()}');
   }
 
-  Future<void> _logAppOpen({AnalyticsCallOptions? options, Map<String, dynamic>? parameters}) async {
+  Future<void> _logAppOpen({AnalyticsCallOptions? options, Map<String, Object>? parameters}) async {
     Log.w('[App-Analytics] App opennnnnnnnnnnnn');
     await FirebaseAnalytics.instance.logAppOpen(callOptions: options, parameters: parameters);
   }
@@ -25,17 +25,17 @@ class AppFirebaseAnalytics {
     await FirebaseAnalytics.instance.logScreenView(screenName: screenName, screenClass: className ?? 'App');
   }
 
-  Future<void> logEvent(String eventName, {Map<String, dynamic>? parameters}) async {
+  Future<void> logEvent(String eventName, {Map<String, Object>? parameters}) async {
     Log.w('[App-Analytics] $eventName');
     await FirebaseAnalytics.instance.logEvent(name: eventName, parameters: parameters);
   }
 
-  Future<void> logLogin({String? loginMethod, Map<String, Object?>? parameters, AnalyticsCallOptions? callOptions}) async {
+  Future<void> logLogin({String? loginMethod, Map<String, Object>? parameters, AnalyticsCallOptions? callOptions}) async {
     Log.w('[App-Analytics] $loginMethod');
     await FirebaseAnalytics.instance.logLogin(loginMethod: loginMethod, parameters: parameters, callOptions: callOptions);
   }
 
-  Future<void> logSignUp(String signUpMethod, {Map<String, dynamic>? parameters}) async {
+  Future<void> logSignUp(String signUpMethod, {Map<String, Object>? parameters}) async {
     Log.w('[App-Analytics] $signUpMethod');
     await FirebaseAnalytics.instance.logSignUp(signUpMethod: signUpMethod, parameters: parameters);
   }
