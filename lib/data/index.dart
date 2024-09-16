@@ -64,7 +64,6 @@ export 'model/firebase/message_status.dart';
 export 'model/firebase/message_type.dart';
 export 'model/notification_model.dart';
 export 'model/refresh_token_model.dart';
-// export 'repository/model/generated/pokedex_graphql.graphql.dart';
 export 'repository/app_repository_impl.dart';
 export 'repository/post_repository_impl.dart';
 export 'repository/user_repository_impl.dart';

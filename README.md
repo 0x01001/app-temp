@@ -63,7 +63,6 @@ export PATH="$PATH:~/.pub-cache/bin"
   - [bitbucket-pipelines.yml](bitbucket-pipelines.yml)
   - [ci.yaml](.github/workflows/ci.yaml)
   - [cd_dev.yaml](.github/workflows/cd_dev.yaml)
-  - [cd_qa.yaml](.github/workflows/cd_qa.yaml)
   - [cd_stg.yaml](.github/workflows/cd_stg.yaml)
   - [cd_prod.yaml](.github/workflows/cd_prod.yaml)
 
