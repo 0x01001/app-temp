@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../resources/index.dart';
+import '../../shared/helper/constant.dart';
 import '../index.dart';
 
 class AppInput extends BaseInput {
@@ -11,6 +12,7 @@ class AppInput extends BaseInput {
     required super.field,
     this.hintText,
     this.suffixIcon,
+    this.prefixIcon,
     this.controller,
     this.onChanged,
     this.keyboardType,
@@ -24,6 +26,7 @@ class AppInput extends BaseInput {
     this.nextField,
     this.enableLoading = false,
     this.enableNextFocus = true,
+    this.borderRadius,
     super.key,
   });
 
@@ -36,9 +39,11 @@ class AppInput extends BaseInput {
   final TextInputType? keyboardType;
   final TextEditingController? controller;
   final int? maxLines;
+  final double? borderRadius;
   final String? errorText;
   final String? value;
   final Widget? suffixIcon;
+  final Widget? prefixIcon;
   final String? hintText;
   final String? labelText;
   final Future<void> Function(BaseInput)? onFocus;
@@ -50,7 +55,9 @@ class AppInput extends BaseInput {
     final _isShowLoading = useState(false);
     final _isShowIcon = useState(false);
     final _focusNode = useFocusNode();
-    debugPrint('build: $field');
+    const _borderRadiusSize = 10.0;
+    final _border = OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? _borderRadiusSize)), borderSide: const BorderSide(width: 0));
+    // debugPrint('build: $field');
 
     Future<void> callback() async {
       debugPrint('onFocus: $field - ${_focusNode.hasFocus} - ${_controller.text}');
@@ -65,7 +72,7 @@ class AppInput extends BaseInput {
     }
 
     useEffect(() {
-      debugPrint('focusNodes: ${field} - ${_focusNode.hasFocus}');
+      // debugPrint('focusNodes: ${field} - ${_focusNode.hasFocus}');
       _focusNode.addListener(callback);
       return;
     }, [_focusNode]);
@@ -107,28 +114,31 @@ class AppInput extends BaseInput {
         // onEditingComplete: enableNextFocus ? () => FocusScope.of(context).nextFocus() : null, // bug render
         onSubmitted: onSubmitted, // ?? (_) => FocusScope.of(context).unfocus(), // (val) => nextField != null ? onTextFieldSubmitted(field, nextField) : focusNodes.value[field]?.unfocus(),
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(8, 12, suffixIcon != null || _buildSuffixIcon() != null ? 0 : 8, 12),
-          border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            borderSide: BorderSide(width: 0),
-          ),
+          contentPadding: EdgeInsets.fromLTRB(8, 16, suffixIcon != null || _buildSuffixIcon() != null ? 0 : 8, 16),
+          border: _border,
+          enabledBorder: _border,
+          focusedBorder: _border.copyWith(borderSide: BorderSide(color: context.colors.primary)),
+          disabledBorder: _border,
           labelText: hintText ?? labelText,
+          labelStyle: context.bodySmall?.copyWith(color: context.theme.extension<CustomTheme>()?.disabled),
           floatingLabelBehavior: FloatingLabelBehavior.never,
           alignLabelWithHint: true,
           isCollapsed: true,
           isDense: true,
           suffixIcon: suffixIcon ?? _buildSuffixIcon(),
-          suffixIconConstraints: const BoxConstraints.expand(width: 45, height: 45),
+          suffixIconConstraints: const BoxConstraints.expand(width: Constant.defaultSizeTextInput, height: Constant.defaultSizeTextInput),
           errorStyle: context.labelMedium?.copyWith(color: Colors.red),
           errorMaxLines: 3,
           errorText: errorText != null && errorText != '' ? errorText : null,
+          errorBorder: _border.copyWith(borderSide: const BorderSide(color: Colors.red)),
+          focusedErrorBorder: _border.copyWith(borderSide: const BorderSide(color: Colors.red)),
+          prefixIconConstraints: BoxConstraints.expand(width: prefixIcon != null ? 48 : 12, height: prefixIcon != null ? 48 : 12),
+          prefixIcon: Align(widthFactor: 1.0, heightFactor: 1.0, child: prefixIcon),
         ),
         keyboardType: keyboardType ?? TextInputType.text,
         autovalidateMode: AutovalidateMode.disabled,
         obscureText: _isShowText.value,
         maxLines: maxLines ?? 1,
-        // onTapOutside: (_) => _focusNode.unfocus(),
       );
     }
 

@@ -13,7 +13,7 @@ class ShareProvider {
   Future<String> get deviceToken async {
     final deviceToken = await _ref.firebaseNotification.deviceToken;
     if (deviceToken != null) {
-      await _ref.appPreferences.saveDeviceToken(deviceToken);
+      await _ref.preferences.saveDeviceToken(deviceToken);
     }
 
     return deviceToken ?? '';
@@ -67,10 +67,10 @@ class ShareProvider {
 final languageCodeProvider = StateProvider<LanguageCode>(
   (ref) {
     ref.listenSelf((previous, next) {
-      ref.appPreferences.saveLanguageCode(next.value);
+      ref.preferences.saveLanguageCode(next.value);
     });
 
-    return LanguageCode.fromValue(ref.appPreferences.languageCode);
+    return LanguageCode.fromValue(ref.preferences.languageCode);
   },
 );
 

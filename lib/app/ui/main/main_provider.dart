@@ -44,7 +44,7 @@ class MainProvider extends BaseProvider<MainState> {
   }
 
   void setInitialCurrentUserState() {
-    _updateCurrentUser(FirebaseUserModel(id: _ref.appPreferences.userId, email: _ref.appPreferences.email));
+    _updateCurrentUser(FirebaseUserModel(id: _ref.preferences.userId, email: _ref.preferences.email));
   }
 
   void listenConnectivity() {
@@ -56,12 +56,12 @@ class MainProvider extends BaseProvider<MainState> {
 
   void listenToCurrentUser() {
     currentUserSubscription?.cancel();
-    final userId = _ref.appPreferences.userId;
+    final userId = _ref.preferences.userId;
     currentUserSubscription = _ref.firebaseFirestoreService.getUserDetailStream(userId).listen((user) async {
       // user deleted - force logout
       if (user.id?.isEmpty == true) {
         await _ref.nav.showDialog(AppPopup.forceLogout(S.current.forceLogout));
-        await _ref.appPreferences.clearCurrentUserData();
+        await _ref.preferences.clearCurrentUserData();
         _updateCurrentUser(FirebaseUserModel());
         await _ref.nav.replaceAll([const LoginRoute()]);
       } else {
@@ -74,7 +74,7 @@ class MainProvider extends BaseProvider<MainState> {
     onTokenRefreshSubscription?.cancel();
     onTokenRefreshSubscription = _ref.firebaseNotification.onTokenRefresh.listen((event) async {
       if (event.isNotEmpty) {
-        await _ref.appPreferences.saveDeviceToken(event);
+        await _ref.preferences.saveDeviceToken(event);
       }
     });
   }

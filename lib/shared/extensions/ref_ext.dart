@@ -21,7 +21,7 @@ extension RefExt on Ref {
   ExceptionHandler get exception => read(exceptionHandlerProvider);
 
   // local
-  AppPreferences get appPreferences => read(appPreferencesProvider);
+  AppPreferences get preferences => read(appPreferencesProvider);
   // AppDatabase get appDatabase => read(appDatabaseProvider);
 
   // api

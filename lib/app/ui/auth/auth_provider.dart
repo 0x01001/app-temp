@@ -52,8 +52,8 @@ class AuthProvider extends BaseProvider<AuthState> {
     Log.d('_saveTokenAndUser: ${data.toJson()}');
     return Future.wait([
       // _ref.appPreferences.saveCurrentUser(data),
-      if (!data.accessToken.isNullOrEmpty) _ref.appPreferences.saveAccessToken(data.accessToken!),
-      if (!data.refreshToken.isNullOrEmpty) _ref.appPreferences.saveRefreshToken(data.refreshToken!),
+      if (!data.accessToken.isNullOrEmpty) _ref.preferences.saveAccessToken(data.accessToken!),
+      if (!data.refreshToken.isNullOrEmpty) _ref.preferences.saveRefreshToken(data.refreshToken!),
     ]);
   }
 }

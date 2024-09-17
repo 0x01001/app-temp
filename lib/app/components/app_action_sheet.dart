@@ -141,12 +141,12 @@ class AppActionSheet extends StatelessWidget {
 
     children.add(_buildCancelButton());
 
-    final Orientation orientation = MediaQuery.of(context).orientation;
+    final Orientation orientation = MediaQuery.orientationOf(context);
     double preferWidth;
     if (orientation == Orientation.portrait) {
-      preferWidth = MediaQuery.of(context).size.width - margin.horizontal;
+      preferWidth = MediaQuery.sizeOf(context).width - margin.horizontal;
     } else {
-      preferWidth = MediaQuery.of(context).size.height - margin.horizontal;
+      preferWidth = MediaQuery.sizeOf(context).height - margin.horizontal;
     }
 
     return SafeArea(

@@ -3,9 +3,6 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 
 class AppSize {
-  static const double screenWidthInDesign = 414.0;
-  static const double screenHeightInDesign = 896.0;
-  static late MediaQueryData _mediaQueryData;
   static late double screenWidth;
   static late double screenHeight;
   static late double defaultSize;
@@ -21,15 +18,14 @@ class AppSize {
 
   static void init(BuildContext context) {
     // buildContext = context;
-    _mediaQueryData = MediaQuery.of(context);
-    screenWidth = _mediaQueryData.size.width;
-    screenHeight = _mediaQueryData.size.height;
+    screenWidth = MediaQuery.sizeOf(context).width;
+    screenHeight = MediaQuery.sizeOf(context).height;
     sizeRatio = screenWidth / screenHeight;
-    orientation = _mediaQueryData.orientation;
-    devicePixelRatio = _mediaQueryData.devicePixelRatio;
+    orientation = MediaQuery.orientationOf(context);
+    devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
 
-    topSafeAreaPadding = _mediaQueryData.padding.top;
-    bottomSafeAreaPadding = (Platform.isIOS && screenHeight >= 812.0 && _mediaQueryData.padding.bottom == 0) ? 34.0 : _mediaQueryData.padding.bottom;
+    topSafeAreaPadding = MediaQuery.paddingOf(context).top;
+    bottomSafeAreaPadding = (Platform.isIOS && screenHeight >= 812.0 && MediaQuery.paddingOf(context).bottom == 0) ? 34.0 : MediaQuery.paddingOf(context).bottom;
 
     if (Platform.isIOS) {
       screenPaddingTop = topSafeAreaPadding;

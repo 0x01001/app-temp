@@ -82,6 +82,8 @@ class AppImage extends HookConsumerWidget {
           imageUrl: url,
           width: width,
           height: height,
+          memCacheHeight: height?.toInt(),
+          memCacheWidth: width?.toInt(),
           fit: fit ?? BoxFit.cover,
           color: color,
           errorWidget: (_, __, ___) {

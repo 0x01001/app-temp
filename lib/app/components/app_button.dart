@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/index.dart';
 import '../../shared/index.dart';
 import '../index.dart';
 
@@ -54,8 +55,8 @@ class AppButton extends StatelessWidget {
         case ButtonType.outline:
           return OutlinedButton(
             style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              side: BorderSide(color: color ?? Theme.of(context).colorScheme.secondary, width: 1.0, style: BorderStyle.solid),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              side: BorderSide(color: color ?? context.colors.primary, width: 1.0, style: BorderStyle.solid),
               minimumSize: isExpand ? Size.fromHeight(height ?? Constant.defaultSizeButton) : null,
               padding: const EdgeInsets.all(0),
             ),
@@ -76,22 +77,22 @@ class AppButton extends StatelessWidget {
             onTap: onTap,
             child: Padding(
               padding: paddingButtonLink ?? const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
-              child: AppText(value, color: color ?? Theme.of(context).colorScheme.secondary, isBold: isBold, type: TextType.content, decoration: isUnderline == true ? TextDecoration.underline : TextDecoration.none),
+              child: AppText(value, color: color ?? context.colors.primary, isBold: isBold, type: TextType.content, decoration: isUnderline == true ? TextDecoration.underline : TextDecoration.none),
             ),
           );
 
         default:
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              backgroundColor: onPressed == null ? Theme.of(context).colorScheme.outlineVariant : backgroundColor ?? Theme.of(context).colorScheme.secondary,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              backgroundColor: onPressed == null ? context.theme.extension<CustomTheme>()?.disabled : backgroundColor ?? context.colors.primary,
               minimumSize: isExpand ? Size.fromHeight(height ?? Constant.defaultSizeButton) : null,
             ),
             onPressed: onTap,
             child: Stack(
               children: <Widget>[
                 leftIcon != null ? Align(alignment: Alignment.centerLeft, child: SizedBox(width: 20, child: leftIcon)) : const SizedBox.shrink(),
-                Align(alignment: Alignment.center, child: AppText(value, isBold: isBold, color: color ?? Theme.of(context).colorScheme.onPrimary, type: TextType.title)),
+                Align(alignment: Alignment.center, child: AppText(value, isBold: isBold, color: color ?? context.colors.onPrimary, type: TextType.text)),
               ],
             ),
           );
