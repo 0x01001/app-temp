@@ -4,16 +4,13 @@ import 'package:intl/intl.dart';
 
 import '../index.dart';
 
-const double screenWidthInDesign = 375.0;
-const double screenHeightInDesign = 812.0;
-
 extension ExtendedNumber on num {
   double get toScreenSize {
-    return (this / screenWidthInDesign) * AppSize.screenWidth;
+    return (this / Constant.designDeviceWidth) * AppSize.screenWidth;
   }
 
   double get toScreenWidthHeight {
-    const double designRatio = screenWidthInDesign / screenHeightInDesign; // iphone 12 pro max
+    const double designRatio = Constant.designDeviceWidth / Constant.designDeviceHeight; // iphone 12 pro max
     return (this * designRatio) / AppSize.sizeRatio;
   }
 

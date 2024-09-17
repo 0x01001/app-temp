@@ -28,6 +28,9 @@ patch_version:
 clean:
 	flutter clean 
 
+pod:
+	cd ios && pod install && cd ..
+
 get:
 	flutter pub get
  
@@ -42,6 +45,7 @@ gen_model:
 gen_app:
 	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/app/*.dart"			
 gen_all:
+	dart run build_runner clean
 	dart run build_runner build --delete-conflicting-outputs --verbose
   
 gen:

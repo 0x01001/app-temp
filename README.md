@@ -2,8 +2,6 @@
 
 Flutter project using MVVM architecture and riverpod pattern.
 
-![Architecture](config/project_architecture.png?raw=true)
-
 ## Features
 
 1. Architecture: MVVM Architecture
@@ -16,9 +14,7 @@ Flutter project using MVVM architecture and riverpod pattern.
 1. Shared Preferences: [encrypted_shared_preferences](https://pub.dev/packages/encrypted_shared_preferences)
 1. Data class: [freezed](https://pub.dev/packages/freezed)
 1. Lint: [dart_code_metrics](https://pub.dev/packages/dart_code_metrics), [flutter_lints](https://pub.dev/packages/flutter_lints)
-1. CI/CD: Github Actions, Bitbucket Pipelines
-1. Unit Test: [mocktail](https://pub.dev/packages/mocktail)
-1. Paging: [infinite_scroll_pagination](https://pub.dev/packages/infinite_scroll_pagination)
+1. CI/CD: Github Actions
 1. Utils: [rxdart](https://pub.dev/packages/rxdart), [dartx](https://pub.dev/packages/dartx), [async](https://pub.dev/packages/async)
 1. Assets generator: [flutter_gen_runner](https://pub.dev/packages/flutter_gen_runner), [flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons), [flutter_native_splash](https://pub.dev/packages/flutter_native_splash)
 1. Shimmer loading effect

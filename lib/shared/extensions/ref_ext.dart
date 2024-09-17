@@ -44,8 +44,10 @@ extension RefExt on Ref {
   // DeviceHelper get deviceHelper => read(deviceHelperProvider);
   AppLocalPushNotification get localPush => read(appLocalPushNotificationProvider);
   // PackageHelper get packageHelper => read(packageHelperProvider);
-  // SharedViewModel get sharedViewModel => read(sharedViewModelProvider);
   AppConnectivity get connectivity => read(appConnectivityProvider);
+
+  // provider
+  ShareProvider get share => read(shareProvider);
 
   T update<T>(StateProvider<T> provider, T Function(T) cb) {
     return read(provider.notifier).update(cb);

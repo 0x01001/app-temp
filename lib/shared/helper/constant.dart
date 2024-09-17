@@ -166,7 +166,7 @@ class Constant {
   static const logOnBlocTransition = false;
 
   /// navigator observer
-  static const enableNavigatorObserverLog = true;
+  static const enableNavigatorObserverLog = kDebugMode;
 
   /// disposeBag
   static const enableDisposeBagLog = false;

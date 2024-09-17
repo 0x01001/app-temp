@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../resources/index.dart';
 import '../../shared/index.dart';
 import '../index.dart';
 
@@ -29,7 +30,7 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     // final safeArea = SafeArea(child: AppConnect(child: body));
     final scaffold = Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: backgroundColor ?? context.theme.extension<CustomTheme>()?.background,
       body: Shimmer(child: useSafeArea ? SafeArea(child: body) : body),
       appBar: appBar,
       drawer: drawer,

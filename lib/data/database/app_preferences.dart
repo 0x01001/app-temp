@@ -25,7 +25,7 @@ class AppPreferences {
   static const keyEmail = 'email';
   static const keyPassword = 'password';
   static const keyDeviceToken = 'deviceToken';
-  // static const keyIsLoggedIn = 'isLoggedIn';
+  static const keyIsFirstLogin = 'isFirstLogin';
 
   // keys should not be removed when logout
   static const keyIsDarkMode = 'isDarkMode';
@@ -42,21 +42,20 @@ class AppPreferences {
 
   String get languageCode => _sharedPreference.getString(keyLanguageCode) ?? Constant.defaultLocale;
 
-  // bool get isFirstLogin => _sharedPreference.getBool(keyIsFirstLogin) ?? true;
+  bool get isFirstLogin => _sharedPreference.getBool(keyIsFirstLogin) ?? true;
 
   // bool get isFirstLaunchApp => _sharedPreference.getBool(keyIsFirstLaunchApp) ?? true;
 
-  Future<String> get accessToken async {
-    return await _secureStorage.read(key: keyAccessToken) ?? '';
+  String get accessToken {
+    return _sharedPreference.getString(keyAccessToken) ?? '';
   }
 
-  Future<String> get refreshToken async {
-    return await _secureStorage.read(key: keyRefreshToken) ?? '';
+  String get refreshToken {
+    return _sharedPreference.getString(keyRefreshToken) ?? '';
   }
 
   bool get isLoggedIn {
-    final token = _sharedPreference.getString(keyAccessToken) ?? '';
-    return token.isNotEmpty;
+    return accessToken.isNotEmpty;
   }
 
   // AuthModel? get currentUser {
@@ -73,20 +72,20 @@ class AppPreferences {
     return _sharedPreference.setString(keyLanguageCode, languageCode);
   }
 
-  // Future<bool> saveIsFirstLogin(bool isFirstLogin) {
-  //   return _sharedPreference.setBool(keyIsFirstLogin, isFirstLogin);
-  // }
+  Future<bool> saveIsFirstLogin(bool isFirstLogin) {
+    return _sharedPreference.setBool(keyIsFirstLogin, isFirstLogin);
+  }
 
   // Future<bool> saveIsFirsLaunchApp(bool isFirstLaunchApp) {
   //   return _sharedPreference.setBool(keyIsFirstLaunchApp, isFirstLaunchApp);
   // }
 
-  Future<void> saveAccessToken(String token) async {
-    await _secureStorage.write(key: keyAccessToken, value: token);
+  Future<bool> saveAccessToken(String token) async {
+    return _sharedPreference.setString(keyAccessToken, token);
   }
 
-  Future<void> saveRefreshToken(String token) async {
-    await _secureStorage.write(key: keyRefreshToken, value: token);
+  Future<bool> saveRefreshToken(String token) async {
+    return _sharedPreference.setString(keyRefreshToken, token);
   }
 
   // Future<bool> saveCurrentUser(AuthModel data) {

@@ -56,7 +56,10 @@ class AppInput extends BaseInput {
     final _isShowIcon = useState(false);
     final _focusNode = useFocusNode();
     const _borderRadiusSize = 10.0;
-    final _border = OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? _borderRadiusSize)), borderSide: const BorderSide(width: 0));
+    final _border = OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? _borderRadiusSize)),
+      borderSide: BorderSide(width: 0, color: context.theme.extension<CustomTheme>()?.borderButton ?? const Color(0xFF000000)),
+    );
     // debugPrint('build: $field');
 
     Future<void> callback() async {

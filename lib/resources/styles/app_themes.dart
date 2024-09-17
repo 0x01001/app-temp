@@ -82,18 +82,22 @@ final VisualDensity _visualDensity = FlexColorScheme.comfortablePlatformDensity;
 final TargetPlatform _platform = defaultTargetPlatform;
 
 class CustomTheme extends ThemeExtension<CustomTheme> {
-  const CustomTheme({this.backgroundPopup, this.disabled, this.secondaryText, this.linkText});
+  const CustomTheme({this.backgroundPopup, this.disabled, this.secondaryText, this.linkText, this.borderButton, this.background});
   final Color? backgroundPopup;
   final Color? disabled;
   final Color? secondaryText;
   final Color? linkText;
+  final Color? borderButton;
+  final Color? background;
 
   @override
-  CustomTheme copyWith({Color? backgroundPopup, Color? disabled, Color? secondaryText, Color? linkText}) => CustomTheme(
+  CustomTheme copyWith({Color? backgroundPopup, Color? disabled, Color? secondaryText, Color? linkText, Color? borderButton, Color? background}) => CustomTheme(
         backgroundPopup: backgroundPopup ?? this.backgroundPopup,
         disabled: disabled ?? this.disabled,
         secondaryText: secondaryText ?? this.secondaryText,
         linkText: linkText ?? this.linkText,
+        borderButton: borderButton ?? this.borderButton,
+        background: background ?? this.background,
       );
 
   @override
@@ -106,6 +110,8 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
       disabled: Color.lerp(disabled, other.disabled, t),
       secondaryText: Color.lerp(secondaryText, other.secondaryText, t),
       linkText: Color.lerp(linkText, other.linkText, t),
+      borderButton: Color.lerp(borderButton, other.borderButton, t),
+      background: Color.lerp(background, other.background, t),
     );
   }
 }
@@ -115,6 +121,8 @@ const CustomTheme lightTheme = CustomTheme(
   disabled: Color(0xffB2B7C7),
   secondaryText: Color(0xff545454),
   linkText: Color(0xff042122),
+  borderButton: Color(0xffE6EBFF),
+  background: Color(0xffFCFDFC),
 );
 
 const CustomTheme darkTheme = CustomTheme(
@@ -122,6 +130,8 @@ const CustomTheme darkTheme = CustomTheme(
   disabled: Color(0xffB2B7C7),
   secondaryText: Color(0xff545454),
   linkText: Color(0xff042122),
+  borderButton: Color(0xffE6EBFF),
+  background: Color(0xff2b384b),
 );
 
 bool useMaterial3 = true;

@@ -6,7 +6,6 @@ import 'shared/index.dart';
 class AppInitializer {
   static Future<void> init() async {
     Env.init();
-    // di.getIt.registerSingleton<AppRouter>(AppRouter());
     await di.configureInjection();
     await SharedConfig.getInstance().init();
     await DataConfig.getInstance().init();

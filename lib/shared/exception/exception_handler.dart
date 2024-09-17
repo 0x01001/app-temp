@@ -35,10 +35,7 @@ class ExceptionHandler {
         );
         break;
       case AppExceptionAction.showDialogForceLogout:
-        await _showErrorDialog(
-          message: appException.message,
-          forceLogout: true,
-        );
+        await _showErrorDialog(message: appException.message, forceLogout: true);
         break;
       case AppExceptionAction.doNothing:
         break;
@@ -50,9 +47,7 @@ class ExceptionHandler {
   }
 
   Future<void> _showErrorDialog({required String message, bool forceLogout = false}) async {
-    // await _ref.nav.showDialog(
-    //   AppPopup.errorDialog(message),
-    // );
+    await _ref.nav.showDialog(AppPopup.errorDialog(message));
     if (forceLogout) {
       try {
         // await _ref.sharedViewModel.forceLogout();

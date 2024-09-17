@@ -6,6 +6,9 @@ targets:
       - $package$
       # - lib/data/graphql/**
     builders:
+      flutter_gen_runner|flutter_gen:
+        options:
+          enabled: true
       # auto_route_generator:
       #   import: "package:auto_route_generator/builder.dart"
       #   runs_before: ["auto_route_generator:autoRouterBuilder"]
