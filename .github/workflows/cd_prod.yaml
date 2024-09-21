@@ -6,21 +6,21 @@ on:
 
 env:
   JAVA_VERSION: "12.x"
-  FLUTTER_VERSION: "3.10.5"
+  FLUTTER_VERSION: "3.22.0"
   TESTER_GROUPS: "testers"
 
   # Android
   PROPERTIES_PATH: "./app/android/local.properties"
   KEY_STORE_NAME: "key.jks"
   KEY_STORE_PATH: "./app/android/key.jks"
-  ANDROID_APP_ID: "MyApp"
-  APK_PATH: "build/app/outputs/flutter-apk/app-production-release.apk"
+  ANDROID_APP_ID: "TODO"
+  APK_PATH: "app/build/app/outputs/flutter-apk/app-production-release.apk"
   APK_FILE_NAME: "app-production-release.apk"
 
   # iOS
-  IOS_APP_ID: "MyApp"
+  IOS_APP_ID: "TODO"
   # File name is same with $APP_DISPLAY_NAME in .xcconfig file
-  IPA_PATH: "build/ios/ipa/Production.ipa"
+  IPA_PATH: "app/build/ios/ipa/Production.ipa"
   IPA_FILE_NAME: "Production.ipa"
 
   # secrets
@@ -84,10 +84,7 @@ jobs:
       - name: Add pub cache to PATH
         run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
 
-      - name: pub get app
-        run: flutter pub get
-
-      - name: Run build_runner
+      - name: Run pub get and gen files
         run: make gen
 
       - name: Build IPA
@@ -120,6 +117,7 @@ jobs:
           echo keystore.keyAlias=\${{secrets.KEY_ALIAS}} >> ${{env.PROPERTIES_PATH}}
           echo keystore.storeFile=../${{env.KEY_STORE_NAME}} >> ${{env.PROPERTIES_PATH}}
       # Decoding base64 key into a file
+      # Encoding using following command: cat key.jks | base64
       - run: echo "${{secrets.KEY_STORE}}" | base64 --decode > ${{env.KEY_STORE_PATH}}
 
       - uses: actions/setup-java@v1
@@ -135,7 +133,7 @@ jobs:
       - name: Add pub cache to PATH
         run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
 
-      - name: Run build_runner
+      - name: Run pub get and gen files
         run: make gen
 
       - name: Build APK

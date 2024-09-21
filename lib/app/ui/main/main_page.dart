@@ -19,7 +19,6 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
 
   @override
   Widget render(BuildContext context, WidgetRef ref) {
-    final _navigator = getIt.get<AppNavigator>();
     final _showBottomNav = ref.watch(showBottomNavProvider);
     final _selectedIndex = useState(0);
 
@@ -34,9 +33,9 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
     );
 
     return AutoTabsScaffold(
-      routes: _navigator.tabRoutes,
+      routes: ref.nav.tabRoutes,
       bottomNavigationBuilder: (_, tabsRouter) {
-        _navigator.tabsRouter = tabsRouter;
+        ref.nav.tabsRouter = tabsRouter;
         return SafeArea(
           child: AnimatedContainer(
             duration: 300.ms,

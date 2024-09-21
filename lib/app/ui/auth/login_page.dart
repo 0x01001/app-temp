@@ -61,7 +61,7 @@ class _Form extends AppForm {
                   TextSpan(
                     text: S.current.signUp,
                     style: context.bodyMedium?.copyWith(color: Colors.blue),
-                    recognizer: TapGestureRecognizer()..onTap = () => getIt.get<AppNavigator>().push(const SignUpRoute()),
+                    recognizer: TapGestureRecognizer()..onTap = () => ref.nav.push(const SignUpRoute()),
                   ),
                 ],
               ),

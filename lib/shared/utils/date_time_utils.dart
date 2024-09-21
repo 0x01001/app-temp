@@ -34,11 +34,7 @@ class DateTimeUtils {
   static DateTime startTimeOfDate() {
     final now = DateTime.now();
 
-    return DateTime(
-      now.year,
-      now.month,
-      now.day,
-    );
+    return DateTime(now.year, now.month, now.day);
   }
 
   static DateTime? toDateTime(String dateTimeString, {bool isUtc = false}) {

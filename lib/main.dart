@@ -9,7 +9,7 @@ import 'app/index.dart';
 import 'app_initializer.dart';
 import 'shared/index.dart';
 
-void main() => runZonedGuarded(_runMyApp, _reportError);
+Future<void> main() async => runZonedGuarded(_runMyApp, _reportError);
 
 Future<void> _runMyApp() async {
   WidgetsFlutterBinding.ensureInitialized();

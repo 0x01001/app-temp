@@ -26,10 +26,10 @@ patch_version:
 	cider bump patch --keep-build
  
 clean:
-	flutter clean 
+	flutter clean && rm -rf pubspec.lock
 
 pod:
-	cd ios && pod install && cd ..
+	cd ios && rm -rf Pods && rm Podfile.lock && pod install --repo-update && cd ..
 
 get:
 	flutter pub get
@@ -41,17 +41,18 @@ gen_lang:
 	dart run intl_utils:generate
 
 gen_model:
-	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/data/repository/model/*.dart"
+	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/data/model/*.dart"
 gen_app:
 	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/app/*.dart"			
 gen_all:
 	dart run build_runner clean
 	dart run build_runner build --delete-conflicting-outputs --verbose
   
-gen:
-	dart run tools/gen_env.dart
-	dart run intl_utils:generate
-	dart run build_runner build --delete-conflicting-outputs --verbose
+gen:  
+	make get
+	make gen_env
+	make gen_lang
+	make gen_all
  	 
 run_dev:
 	$(BUILD_CMD) dev run 
@@ -74,8 +75,6 @@ build_prod_apk:
 build_dev_bundle:
 	$(BUILD_CMD) dev build appbundle
 
-build_qa_bundle:
-	$(BUILD_CMD) qa build appbundle
 
 build_stg_bundle:
 	$(BUILD_CMD) stg build appbundle
@@ -86,20 +85,14 @@ build_prod_bundle:
 build_dev_ios:
 	$(BUILD_CMD) dev build ios
 
-build_qa_ios:
-	$(BUILD_CMD) qa build ios
-
 build_stg_ios:
 	$(BUILD_CMD) stg build ios
 
 build_prod_ios:
 	$(BUILD_CMD) prod build ios
-
+ 
 build_dev_ipa:
 	$(BUILD_CMD) dev build ipa --export-options-plist=ios/export_options_dev.plist
-
-build_qa_ipa:
-	$(BUILD_CMD) qa build ipa --export-options-plist=ios/export_options_dev.plist
 
 build_stg_ipa:
 	$(BUILD_CMD) stg build ipa --export-options-plist=ios/export_options_pro.plist
@@ -119,6 +112,25 @@ build_shorebird_prod_android:
  
 patch_shorebird_prod_android:
 	$(BUILD_CMD) prod shorebird patch android
+
+# It is used in CI/CD, so if you rename it, you need to update the CI/CD script
+check_pubs:
+	dart run tools/check_pubspecs.dart
+
+custom_lint:
+	dart run custom_lint
+
+analyze:
+	flutter analyze --no-pub --suppress-analytics
+
+# dart_code_metrics:
+# 	$(METRICS_CMD)
+
+# It is used in CI/CD, so if you rename it, you need to update the CI/CD script
+lint:
+	make custom_lint
+	make analyze
+	# make dart_code_metrics
 
 dart_fix:	
 	dart fix --apply
@@ -167,3 +179,9 @@ cov:
 	-o coverage/lcov.info &
 	genhtml coverage/lcov.info -o coverage/html
 	open coverage/html/index.html
+
+t1_test:
+	flutter drive \
+	--driver=test/integration_test/test_driver/integration_driver.dart \
+	--target test/integration_test/t1_login_failed.dart \
+	--flavor dev --debug --dart-define-from-file=config/dev.json

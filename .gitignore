@@ -68,6 +68,7 @@ pubspec_overrides.yaml
 *.mdb
 *.jks
 *.jks.* 
+**/*.keystore
 google-services.json
 GoogleService-Info.plist 
 android/app/signingConfigs

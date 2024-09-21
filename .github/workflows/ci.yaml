@@ -6,12 +6,11 @@ on:
 
 env:
   JAVA_VERSION: "12.x"
-  FLUTTER_VERSION: "3.13.1"
-  MELOS_VERSION: "3.1.0"
+  FLUTTER_VERSION: "3.22.0"
 
 jobs:
   UT_format_lint_notify:
-    name: Check format, lint and UT
+    name: Check format, lint and tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,44 +30,14 @@ jobs:
       - name: Run pub get and gen files
         run: make gen
 
+      - name: Run check_pubspecs
+        run: make check_pubs
+
       - name: Run Tests
         run: make test
 
-      - name: Check format
-        run: make format
-
-      - name: Run custom lint
-        run: make custom_lint
-
-      - name: Run analyze
-        run: make analyze
-
-      - name: Run dart_code_metrics
-        run: make dart_code_metrics
-
-      # - name: Check lint app
-      #   uses: dart-code-checker/dart-code-metrics-action@v2
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     relative_path: 'app'
-
-      # - name: Check lint data
-      #   uses: dart-code-checker/dart-code-metrics-action@v2
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     relative_path: 'data'
-
-      # - name: Check lint domain
-      #   uses: dart-code-checker/dart-code-metrics-action@v2
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     relative_path: 'domain'
-
-      # - name: Check lint shared
-      #   uses: dart-code-checker/dart-code-metrics-action@v2
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     relative_path: 'shared'
+      - name: Run lint
+        run: make lint
 
       # - uses: mechiru/chatwork@v2
       #   with:

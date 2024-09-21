@@ -34,7 +34,6 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 34
@@ -62,10 +61,17 @@ android {
 
     signingConfigs {
         release {
-           keyAlias localProperties['keyAlias']
-           keyPassword localProperties['keyPassword']
-           storeFile localProperties['storeFile'] ? file(localProperties['storeFile']) : null
-           storePassword localProperties['storePassword']
+	   		if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
+                storeFile file(System.getenv()["CM_KEYSTORE_PATH"])
+                storePassword System.getenv()["CM_KEYSTORE_PASSWORD"]
+                keyAlias System.getenv()["CM_KEY_ALIAS"]
+                keyPassword System.getenv()["CM_KEYSTORE_PASSWORD"]
+            } else {
+			   keyAlias localProperties['keyAlias']
+			   keyPassword localProperties['keyPassword']
+			   storeFile localProperties['storeFile'] ? file(localProperties['storeFile']) : null
+			   storePassword localProperties['storePassword']
+			}
         }
         debug {
             storeFile file("debug.keystore")
@@ -159,3 +165,6 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" 
 }
+
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'

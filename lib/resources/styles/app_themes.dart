@@ -5,13 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 final FlexSchemeColor _schemeLight = FlexSchemeColor.from(
   primary: const Color(0xFF0C7E84),
-  secondary: const Color(0xFF09565A), // const Color(0xff404e8c), //const Color(0xFF006B54),
+  secondary: const Color(0xFF09565A), // const Color(0xFF404e8c), //const Color(0xFF006B54),
   brightness: Brightness.light,
 );
 
 final FlexSchemeColor _schemeDark = FlexSchemeColor.from(
   primary: const Color(0xFF4E597D),
-  secondary: const Color(0xFF90c4f9), // const Color(0xff404e8c),
+  secondary: const Color(0xFF90c4f9), // const Color(0xFF404e8c),
   brightness: Brightness.dark,
 );
 
@@ -118,20 +118,20 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
 
 const CustomTheme lightTheme = CustomTheme(
   backgroundPopup: Colors.white,
-  disabled: Color(0xffB2B7C7),
-  secondaryText: Color(0xff545454),
-  linkText: Color(0xff042122),
-  borderButton: Color(0xffE6EBFF),
-  background: Color(0xffFCFDFC),
+  disabled: Color(0xFFB2B7C7),
+  secondaryText: Color(0xFF545454),
+  linkText: Color(0xFF042122),
+  borderButton: Color(0xFFE6EBFF),
+  background: Color(0xFFFCFDFC),
 );
 
 const CustomTheme darkTheme = CustomTheme(
   backgroundPopup: Color.fromARGB(255, 34, 34, 34),
-  disabled: Color(0xffB2B7C7),
-  secondaryText: Color(0xff545454),
-  linkText: Color(0xff042122),
-  borderButton: Color(0xffE6EBFF),
-  background: Color(0xff2b384b),
+  disabled: Color(0xFFB2B7C7),
+  secondaryText: Color(0xFF545454),
+  linkText: Color(0xFF042122),
+  borderButton: Color(0xFFE6EBFF),
+  background: Color(0xFF2b384b),
 );
 
 bool useMaterial3 = true;

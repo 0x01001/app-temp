@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../index.dart';
 
-extension ExtendedNumber on num {
+extension NumberExtensions on num {
   double get toScreenSize {
     return (this / Constant.designDeviceWidth) * AppSize.screenWidth;
   }
@@ -33,25 +33,7 @@ extension ExtendedNumber on num {
   String get fromMetToKilometShowingInRace {
     return (((this as double?) ?? 0.0) / 1000).toStringAsFixed(2);
   }
-}
 
-extension MapToNum on Map<dynamic, dynamic> {
-  int? toIntSafety(String key) {
-    if ((this[key] is String) == true) {
-      return int.tryParse(this[key]);
-    }
-    return (this[key] as num?)?.toInt();
-  }
-
-  double? toDoubleSafety(String key) {
-    if ((this[key] is String) == true) {
-      return double.tryParse(this[key]);
-    }
-    return (this[key] as num?)?.toDouble();
-  }
-}
-
-extension IntervalNumber on num {
   // get duration by seconds
   Duration get s {
     return Duration(seconds: toInt());
@@ -60,5 +42,61 @@ extension IntervalNumber on num {
   // get duration by miliseconds
   Duration get ms {
     return Duration(milliseconds: toInt());
+  }
+
+  num plus(num other) {
+    return this + other;
+  }
+
+  num minus(num other) {
+    return this - other;
+  }
+
+  num times(num other) {
+    return this * other;
+  }
+
+  num div(num other) {
+    return this / other;
+  }
+}
+
+extension IntExtensions on int {
+  int plus(int other) {
+    return this + other;
+  }
+
+  int minus(int other) {
+    return this - other;
+  }
+
+  int times(int other) {
+    return this * other;
+  }
+
+  double div(int other) {
+    return this / other;
+  }
+
+  int truncateDiv(int other) {
+    return this ~/ other;
+  }
+}
+
+extension DoubleExtensions on double {
+  double plus(double other) {
+    return this + other;
+  }
+
+  double minus(double other) {
+    return this - other;
+  }
+
+  double times(double other) {
+    return this * other;
+  }
+
+  double div(double other) {
+    return this / other;
   }
 }

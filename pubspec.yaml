@@ -18,6 +18,8 @@ dependencies:
   dartx: ^1.2.0
   flutter:
     sdk: flutter
+  integration_test:
+    sdk: flutter
   flutter_riverpod: ^2.5.1
   hooks_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
@@ -103,6 +105,7 @@ dependencies:
   flutter_linkify: 6.0.0
   device_preview: 1.2.0
   country_pickers: 3.0.0 #fix: country_pickers-2.0.0 Error: The getter 'subtitle1' isn't defined for the class 'TextTheme'.
+  clock: 1.1.1
 
 dev_dependencies:
   auto_route_generator: ^8.0.0
@@ -125,6 +128,7 @@ dev_dependencies:
   json_serializable: ^6.7.1
   isar_generator: ^3.1.0+1
   # leancode_lint: ^13.0.0
+  golden_toolkit: 0.15.0
 
 # Config generate when build
 flutter_gen:

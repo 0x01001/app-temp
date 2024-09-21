@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../shared/index.dart';
 import '../index.dart';
 
 abstract class BasePage<T extends BaseState, P extends ProviderListenable<AppState<T>>> extends HookConsumerWidget {
@@ -14,7 +15,7 @@ abstract class BasePage<T extends BaseState, P extends ProviderListenable<AppSta
       provider.select((value) => value.appException),
       (previous, next) async {
         if (previous != next && next != null) {
-          await ref.read(exceptionHandlerProvider).handleException(next);
+          await ref.exception.handleException(next);
         }
       },
     );
