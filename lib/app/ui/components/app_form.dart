@@ -5,8 +5,8 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../resources/index.dart';
-import '../index.dart';
+import '../../../resources/index.dart';
+import '../../index.dart';
 
 enum FieldType {
   email,

@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 // Translucent, very light gray that is painted on top of the blurred backdrop
 // as the action sheet's background color.
-// TODO(LongCatIsLooong): https://github.com/flutter/flutter/issues/39272. Use
+// (LongCatIsLooong): https://github.com/flutter/flutter/issues/39272. Use
 // System Materials once we have them.
 // Extracted from https://developer.apple.com/design/resources/.
 const Color _kBackgroundColor = CupertinoDynamicColor.withBrightness(
@@ -14,10 +14,10 @@ const Color _kBackgroundColor = CupertinoDynamicColor.withBrightness(
   darkColor: Color(0xC7252525),
 );
 
-const Color _kCancelPressedColor = CupertinoDynamicColor.withBrightness(
-  color: Color(0xFFECECEC),
-  darkColor: Color(0xFF49494B),
-);
+// const Color _kCancelPressedColor = CupertinoDynamicColor.withBrightness(
+//   color: Color(0xFFECECEC),
+//   darkColor: Color(0xFF49494B),
+// );
 
 const double _kEdgeHorizontalPadding = 8.0;
 const double _kEdgeVerticalPadding = 10.0;
@@ -42,11 +42,11 @@ class AppActionSheet extends StatelessWidget {
     this.style = AppActionSheetStyle.roundedCard,
   });
 
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final Widget child;
 
   /// Customized border radius, both two styles use this value first.
-  final BorderRadius borderRadius;
+  final BorderRadius? borderRadius;
 
   /// The style of the action sheet, currently support
   /// [AppActionSheetStyle.roundedCard] & [AppActionSheetStyle.filled].

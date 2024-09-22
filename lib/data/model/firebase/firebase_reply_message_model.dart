@@ -57,7 +57,6 @@ class FirebaseReplyMessageModel {
       };
 }
 
-
 // const json = '''
 // {
 //   "reply_to_message_id": "1",
@@ -66,5 +65,4 @@ class FirebaseReplyMessageModel {
 //   "reply_by_user_id": "2",
 //   "reply_to_user_id": "1"
 // }
-// ''';
-
+// '''

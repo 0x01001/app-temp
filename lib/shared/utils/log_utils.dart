@@ -10,7 +10,7 @@ import '../index.dart';
 class Log {
   const Log._();
 
-  static const _enableLog = true; // Constaints.enableGeneralLog;  //TODO: need uncomment
+  static const _enableLog = true; // Constant.enableGeneralLog; //TODO: need uncomment before go live
 
   static void d(Object? message, {String? name, DateTime? time, int? colorCode}) {
     _log('$message', name: name ?? '', time: time, colorCode: colorCode ?? 36);

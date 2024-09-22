@@ -33,7 +33,7 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
     );
 
     return AutoTabsScaffold(
-      routes: ref.nav.tabRoutes,
+      routes: ref.nav.listRoutes,
       bottomNavigationBuilder: (_, tabsRouter) {
         ref.nav.tabsRouter = tabsRouter;
         return SafeArea(

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 
 import '../../shared/index.dart';
@@ -18,7 +17,6 @@ class AppConfig extends Config {
   Future<void> config() async {
     Log.d('App > config > start');
 
-    await Firebase.initializeApp();
     // await SystemChrome.setPreferredOrientations(
     //   getIt.get<DeviceHelper>().deviceType == DeviceType.mobile ? Constant.mobileOrientation : Constant.tabletOrientation,
     // );

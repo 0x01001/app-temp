@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../resources/index.dart';
-import '../../index.dart';
+import '../../../../resources/index.dart';
+import '../../../index.dart';
 
 enum PopupType {
   android,

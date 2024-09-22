@@ -20,14 +20,11 @@ class DioBuilder {
       ),
     );
 
-    final sortedInterceptors = [
-      ...ApiClientDefaultSetting.requiredInterceptors(dio),
-      ...interceptors,
-    ].sortedByDescending((element) {
-      return element is BaseInterceptor ? element.priority : -1;
+    final list = [CustomLogInterceptor(), ConnectivityInterceptor(), RetryOnErrorInterceptor(dio), ...interceptors].sortedByDescending((x) {
+      return x is BaseInterceptor ? x.priority : -1;
     });
 
-    dio.interceptors.addAll(sortedInterceptors);
+    dio.interceptors.addAll(list);
 
     return dio;
   }

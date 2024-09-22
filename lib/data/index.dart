@@ -2,7 +2,6 @@
 
 export 'api/app_api_service.dart';
 export 'api/client/auth_app_server_api_client.dart';
-export 'api/client/base/api_client_default_settings.dart';
 export 'api/client/base/dio_builder.dart';
 export 'api/client/base/graphql_api_client.dart';
 export 'api/client/base/rest_api_client.dart';

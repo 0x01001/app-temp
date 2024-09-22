@@ -87,7 +87,7 @@ class AppFirebaseRemoteConfig {
       );
       Log.d('AppFirebaseRemoteConfig > init: ${_configModel.toString()}');
       if (isForceUpdate == true) {
-        //TODO: not implement
+        // TODO(dev): go to login screen
       }
     } catch (e) {
       Log.e('AppFirebaseRemoteConfig > e: $e');

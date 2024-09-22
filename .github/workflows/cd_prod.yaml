@@ -85,7 +85,7 @@ jobs:
         run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
 
       - name: Run pub get and gen files
-        run: make gen
+        run: make init
 
       - name: Build IPA
         run: make build_prod_ipa
@@ -134,7 +134,7 @@ jobs:
         run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
 
       - name: Run pub get and gen files
-        run: make gen
+        run: make init
 
       - name: Build APK
         run: make build_prod_apk

@@ -190,7 +190,7 @@ class Constant {
   static const enableLogUseCaseError = kDebugMode;
 
   /// device preview
-  static const enableDevicePreview = kDebugMode;
+  static const enableDevicePreview = false;
 
   /// format
   static const uiDateDmy = 'dd/MM/yyyy';

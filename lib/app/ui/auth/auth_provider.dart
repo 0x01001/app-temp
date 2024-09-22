@@ -52,8 +52,13 @@ class AuthProvider extends BaseProvider<AuthState> {
     Log.d('_saveTokenAndUser: ${data.toJson()}');
     return Future.wait([
       // _ref.appPreferences.saveCurrentUser(data),
+      _ref.preferences.saveIsLoggedIn(true),
       if (!data.accessToken.isNullOrEmpty) _ref.preferences.saveAccessToken(data.accessToken!),
       if (!data.refreshToken.isNullOrEmpty) _ref.preferences.saveRefreshToken(data.refreshToken!),
+      // _ref.firebaseFirestore.updateCurrentUser(userId: userId, data: {
+      //   FirebaseUserModel.keyDeviceIds: [deviceId],
+      //   FirebaseUserModel.keyDeviceTokens: FieldValue.arrayUnion([deviceToken]),
+      // }),
     ]);
   }
 }

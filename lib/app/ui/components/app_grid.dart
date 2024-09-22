@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../shared/index.dart';
-import '../index.dart';
+import '../../../shared/index.dart';
+import '../../index.dart';
 
 typedef GridFetcher<T> = Future<List<T>> Function({int? page, int? limit})?;
 typedef GridWidgetBuilder<T> = Widget Function(BuildContext context, T item, int index);

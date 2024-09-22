@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
 
 import '../../../app/index.dart';
 import '../../../shared/index.dart';
 import 'base_interceptor.dart';
 
-@Injectable()
 class ConnectivityInterceptor extends BaseInterceptor {
   @override
   int get priority => BaseInterceptor.connectivityPriority;

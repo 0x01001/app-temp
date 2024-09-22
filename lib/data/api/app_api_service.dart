@@ -8,11 +8,11 @@ final appApiServiceProvider = Provider<AppApiService>((ref) => getIt.get<AppApiS
 
 @LazySingleton()
 class AppApiService {
-  AppApiService(this._noneAuthAppServerApiClient, this._authAppServerApiClient, this._randomUserApiClient);
+  AppApiService(this._noneAuthAppServerApiClient, this._authAppServerApiClient);
 
   final NoneAuthAppServerApiClient _noneAuthAppServerApiClient;
   final AuthAppServerApiClient _authAppServerApiClient;
-  final RandomUserApiClient _randomUserApiClient;
+  // final RandomUserApiClient _randomUserApiClient;
 
   Future<AuthModel?> login(String email, String password) async {
     return _noneAuthAppServerApiClient.request(

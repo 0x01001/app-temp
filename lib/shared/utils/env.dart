@@ -11,6 +11,8 @@ class Env {
   static String secretkey = const String.fromEnvironment('SECRET_KEY');
   static String secretIV = const String.fromEnvironment('SECRET_IV');
   static String dummyAppId = const String.fromEnvironment('DUMMY_APP_ID');
+  static String appBasicAuthName = const String.fromEnvironment('APP_BASIC_AUTH_NAME');
+  static String appBasicAuthPassword = const String.fromEnvironment('APP_BASIC_AUTH_PASSWORD');
 
   static void init() {
     Log.d('FLAVOR: $flavor');
@@ -18,5 +20,7 @@ class Env {
     Log.d('SECRET_KEY: $secretkey');
     Log.d('SECRET_IV: $secretIV');
     Log.d('DUMMY_APP_ID: $dummyAppId');
+    Log.d('APP_BASIC_AUTH_NAME: $appBasicAuthName');
+    Log.d('APP_BASIC_AUTH_PASSWORD: $appBasicAuthPassword');
   }
 }

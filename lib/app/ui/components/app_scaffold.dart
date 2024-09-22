@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/index.dart';
-import '../../shared/index.dart';
-import '../index.dart';
+import '../../../resources/index.dart';
+import '../../../shared/index.dart';
+import '../../index.dart';
 
 class AppScaffold extends StatelessWidget {
   const AppScaffold({

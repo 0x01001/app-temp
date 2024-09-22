@@ -1,7 +1,8 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../shared/index.dart';
+import '../../../shared/index.dart';
+import '../../index.dart';
 
 enum AppListCellType { normal, button, customization }
 
@@ -91,14 +92,8 @@ class AppItemData {
   final Widget? customizeContent;
 }
 
-class AppListView extends StatelessWidget {
-  const AppListView({
-    required this.sections,
-    super.key,
-    this.shrinkWrap,
-    this.padding,
-    this.separatorBuilder,
-  }) : assert(sections.length > 0);
+class AppListView extends ConsumerWidget {
+  const AppListView({required this.sections, super.key, this.shrinkWrap, this.padding, this.separatorBuilder}) : assert(sections.length > 0);
 
   final bool? shrinkWrap;
   final EdgeInsetsGeometry? padding;
@@ -136,14 +131,15 @@ class AppListView extends StatelessWidget {
     );
   }
 
-  Widget _buildItemCell(AppItemData itemData, BuildContext context) {
+  Widget _buildItemCell(AppItemData itemData, BuildContext context, WidgetRef ref) {
+    final _isDarkMode = ref.watch(isDarkModeProvider) ?? false;
     final ThemeData themeData = Theme.of(context);
     final titleText = itemData.title == null ? null : Text(itemData.title ?? '', style: itemData.titleStyle);
     final subtitleText = itemData.subtitle == null ? null : Text(itemData.subtitle ?? '', style: itemData.subtitleStyle);
     final Widget? accesssoryWidget = _getAccessoryWidget(itemData, context);
     final Widget? trailingWidget = accesssoryWidget ?? itemData.customTrailing;
     return Material(
-        color: itemData.cellColor ?? (AdaptiveTheme.of(context).mode.isDark ? themeData.colorScheme.surface : Colors.white),
+        color: itemData.cellColor ?? (_isDarkMode ? themeData.colorScheme.surface : Colors.white),
         child: InkWell(
           onTap: itemData.onTap,
           child: ListTile(
@@ -159,10 +155,11 @@ class AppListView extends StatelessWidget {
         ));
   }
 
-  Widget _buildButtonCell(AppItemData itemData, BuildContext context) {
+  Widget _buildButtonCell(AppItemData itemData, BuildContext context, WidgetRef ref) {
+    final _isDarkMode = ref.watch(isDarkModeProvider) ?? false;
     final ThemeData themeData = Theme.of(context);
     return Material(
-      color: itemData.cellColor ?? (AdaptiveTheme.of(context).mode.isDark ? themeData.colorScheme.surface : Colors.white),
+      color: itemData.cellColor ?? (_isDarkMode ? themeData.colorScheme.surface : Colors.white),
       child: InkWell(
         onTap: itemData.onTap,
         child: SizedBox(
@@ -239,7 +236,7 @@ class AppListView extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildCells(BuildContext context) {
+  List<Widget> _buildCells(BuildContext context, WidgetRef ref) {
     final List<Widget> cellList = [];
     for (AppSectionData sectionData in sections) {
       // add header
@@ -249,9 +246,9 @@ class AppListView extends StatelessWidget {
       for (AppItemData itemData in sectionData.itemList ?? []) {
         Widget? itemCell;
         if (itemData.cellType == AppListCellType.normal) {
-          itemCell = _buildItemCell(itemData, context);
+          itemCell = _buildItemCell(itemData, context, ref);
         } else if (itemData.cellType == AppListCellType.button) {
-          itemCell = _buildButtonCell(itemData, context);
+          itemCell = _buildButtonCell(itemData, context, ref);
         } else {
           // customization
           itemCell = itemData.customizeContent;
@@ -269,13 +266,13 @@ class AppListView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData themeData = Theme.of(context);
     final IndexedWidgetBuilder sepBuilder = separatorBuilder ??
         (BuildContext context, int index) {
           return Divider(color: themeData.dividerColor, height: Constant.borderHeight);
         };
-    final List<Widget> cells = _buildCells(context);
+    final List<Widget> cells = _buildCells(context, ref);
     return Container(
       color: kStaticBackgroundColor,
       child: ListView.separated(

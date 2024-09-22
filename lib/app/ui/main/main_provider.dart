@@ -57,7 +57,7 @@ class MainProvider extends BaseProvider<MainState> {
   void listenToCurrentUser() {
     currentUserSubscription?.cancel();
     final userId = _ref.preferences.userId;
-    currentUserSubscription = _ref.firebaseFirestoreService.getUserDetailStream(userId).listen((user) async {
+    currentUserSubscription = _ref.firebaseFirestore.getUserDetailStream(userId).listen((user) async {
       // user deleted - force logout
       if (user.id?.isEmpty == true) {
         await _ref.nav.showDialog(AppPopup.forceLogout(S.current.forceLogout));

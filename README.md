@@ -48,15 +48,46 @@ export PATH="$PATH:~/.pub-cache/bin"
 ### Config and run app
 
 - cd to root folder of project
-- Run `make gen`
-- Run `make run_dev`
-- Run & Enjoy!
+- Run `make init`
+- Run app via VSCode or using command `make run_dev`
+- Enjoy!
+
+### Secrets configuration
+
+- Define secret constants in [env.dart](lib/shared/utils/env.dart) and JSON files in folder [config](config) including:
+  - config/dev.json
+  - config/stg.json
+  - config/prod.json
+
+For example:
+
+```
+{
+  "FLAVOR": "dev",
+  "APP_BASIC_AUTH_NAME": "admin",
+  "APP_BASIC_AUTH_PASSWORD": "admin"
+}
+```
+
+### Setup Fastlane (optional)
+
+- Create files `.env.default` in [ios/fastlane](ios/fastlane) and [android/fastlane](android/fastlane)
+- Paste this into files `.env.default`
+
+```
+SLACK_URL = "https://hooks.slack.com/services/xxx"
+APP_CENTER_TOKEN = "xxx"
+APPLE_TOKEN = "xxx"
+FIREBASE_TOKEN = "1//xxx"
+```
+
+- Update config values in [ios/Fastfile](ios/fastlane/Fastfile) and [android/Fastfile](android/fastlane/Fastfile)
 
 ## Upgrade Flutter
 
 - Update Flutter version in:
   - [README.md](#requirements)
-  - [bitbucket-pipelines.yml](bitbucket-pipelines.yml)
+  - [codemagic.yaml](codemagic.yaml)
   - [ci.yaml](.github/workflows/ci.yaml)
   - [cd_dev.yaml](.github/workflows/cd_dev.yaml)
   - [cd_stg.yaml](.github/workflows/cd_stg.yaml)

@@ -5,7 +5,7 @@ import '../../index.dart';
 
 class AppNavigatorObserver extends NavigatorObserver {
   AppNavigatorObserver();
-  static const _enableLog = Constant.enableNavigatorObserverLog;
+  // static const _enableLog = Constant.enableNavigatorObserverLog;
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {

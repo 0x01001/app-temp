@@ -28,7 +28,7 @@ jobs:
         run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
 
       - name: Run pub get and gen files
-        run: make gen
+        run: make init
 
       - name: Run check_pubspecs
         run: make check_pubs

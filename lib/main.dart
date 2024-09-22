@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
@@ -13,14 +13,11 @@ Future<void> main() async => runZonedGuarded(_runMyApp, _reportError);
 
 Future<void> _runMyApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await AppInitializer.init();
   FlutterError.onError = _onError;
   FlutterError.demangleStackTrace = _demangleStackTrace;
-  runApp(ProviderScope(
-    observers: [RiverpodLogger()],
-    child: MyApp(savedThemeMode: await AdaptiveTheme.getThemeMode()),
-  ));
-  // AppUtils.configLoading();
+  runApp(ProviderScope(observers: [RiverpodLogger()], child: const MyApp()));
 }
 
 Future<void> _onError(FlutterErrorDetails details) async {

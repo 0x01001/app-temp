@@ -44,15 +44,15 @@ gen_model:
 	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/data/model/*.dart"
 gen_app:
 	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/app/*.dart"			
-gen_all:
+gen:
 	dart run build_runner clean
 	dart run build_runner build --delete-conflicting-outputs --verbose
   
-gen:  
+init:  
 	make get
 	make gen_env
 	make gen_lang
-	make gen_all
+	make gen
  	 
 run_dev:
 	$(BUILD_CMD) dev run 

@@ -1,4 +1,3 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +11,7 @@ import '../shared/index.dart';
 import 'index.dart';
 
 class MyApp extends HookConsumerWidget {
-  const MyApp({super.key, this.savedThemeMode});
-  final AdaptiveThemeMode? savedThemeMode;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,30 +35,24 @@ class MyApp extends HookConsumerWidget {
       designSize: const Size(Constant.designDeviceWidth, Constant.designDeviceHeight),
       builder: (context, _) => Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          final isDarkTheme = ref.watch(isDarkModeProvider);
           final languageCode = ref.watch(languageCodeProvider);
+          Log.d('MyApp > build languageCode: $languageCode - $isDarkTheme');
           AppSize.init(context);
-          // Log.d('MyApp > ScreenUtilInit: ${ScreenUtil().scaleWidth} - ${ScreenUtil().scaleHeight} - ${ScreenUtil().screenWidth} - ${ScreenUtil().screenHeight} - $lightDynamic - $darkDynamic');
+          final themeMode = isDarkTheme == null
+              ? ThemeMode.system
+              : isDarkTheme
+                  ? ThemeMode.dark
+                  : ThemeMode.light;
 
-          return AdaptiveTheme(
-            light: AppTheme.light,
-            dark: AppTheme.dark,
-            initial: savedThemeMode ?? AdaptiveThemeMode.system,
-            builder: (theme, darkTheme) => MaterialApp.router(
-              // routerConfig: _appRouter.config(
-              //   navigatorObservers: () => [AppNavigatorObserver()],
-              // ),
-              debugShowCheckedModeBanner: false,
+          return DevicePreview(
+            enabled: Constant.enableDevicePreview,
+            builder: (_) => MaterialApp.router(
               builder: (context, child) {
-                // return MediaQuery(
-                //   data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
-                //   child: child != null ? FlutterEasyLoading(child: child) : const SizedBox.shrink(),
-                // );
                 final widget = MediaQuery.withNoTextScaling(child: child ?? const SizedBox.shrink());
                 return Constant.enableDevicePreview ? DevicePreview.appBuilder(context, widget) : widget;
               },
-              // routerDelegate: AutoRouterDelegate(_appRouter, navigatorObservers: () => [AppNavigatorObserver()]),
               routerDelegate: _appRouter.delegate(
-                // initialRoutes: [const MainRoute()].toList(growable: false),
                 deepLinkBuilder: (deepLink) {
                   final route = _appPreferences.isLoggedIn ? const MainRoute() : const LoginRoute();
                   return DeepLink([route]);
@@ -70,9 +62,11 @@ class MyApp extends HookConsumerWidget {
               routeInformationParser: _appRouter.defaultRouteParser(),
               title: Constant.materialAppTitle,
               // color: Constants.taskMenuMaterialAppColor,
-              // themeMode: AdaptiveTheme.of(context).mode.isDark ? ThemeMode.dark : ThemeMode.light,
-              theme: theme,
-              darkTheme: darkTheme,
+              themeMode: themeMode,
+              theme: AppTheme.light,
+              darkTheme: AppTheme.dark,
+              debugShowCheckedModeBanner: false,
+              // useInheritedMediaQuery: true,
               localeResolutionCallback: (Locale? locale, Iterable<Locale> supportedLocales) => supportedLocales.contains(locale) ? locale : const Locale(Constant.defaultLocale),
               locale: Constant.enableDevicePreview ? DevicePreview.locale(context) : Locale(languageCode.localeCode),
               supportedLocales: S.delegate.supportedLocales,

@@ -1,5 +1,4 @@
 import 'package:auto_route/annotations.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -53,19 +52,16 @@ class _Form extends AppForm {
           const SizedBox(height: 20),
           AppButton(S.current.login, onPressed: onSubmit),
           const SizedBox(height: 20),
-          Center(
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(text: 'Don\'t have an account? ', style: context.bodyMedium),
-                  TextSpan(
-                    text: S.current.signUp,
-                    style: context.bodyMedium?.copyWith(color: Colors.blue),
-                    recognizer: TapGestureRecognizer()..onTap = () => ref.nav.push(const SignUpRoute()),
-                  ),
-                ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const AppText('Don\'t have an account? '),
+              GestureDetector(
+                onTap: () => ref.nav.push(const SignUpRoute()),
+                behavior: HitTestBehavior.opaque,
+                child: AppText(S.current.signUp, color: Colors.blue),
               ),
-            ),
+            ],
           ),
         ],
       ),

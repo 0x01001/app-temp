@@ -25,39 +25,21 @@ class AppPreferences {
   static const keyEmail = 'email';
   static const keyPassword = 'password';
   static const keyDeviceToken = 'deviceToken';
-  static const keyIsFirstLogin = 'isFirstLogin';
+  static const keyIsLoggedIn = 'isLoggedIn';
 
   // keys should not be removed when logout
   static const keyIsDarkMode = 'isDarkMode';
   static const keyLanguageCode = 'languageCode';
   static const keyNickName = 'nickName';
+  static const keyIsFirstLaunchApp = 'isFirstLaunchApp';
 
-  bool get isDarkMode {
-    return _sharedPreference.getBool(keyIsDarkMode) ?? false;
-  }
-
-  String get deviceToken {
-    return _sharedPreference.getString(keyDeviceToken) ?? '';
-  }
-
+  bool? get isDarkMode => _sharedPreference.getBool(keyIsDarkMode);
+  String get deviceToken => _sharedPreference.getString(keyDeviceToken) ?? '';
   String get languageCode => _sharedPreference.getString(keyLanguageCode) ?? Constant.defaultLocale;
-
-  bool get isFirstLogin => _sharedPreference.getBool(keyIsFirstLogin) ?? true;
-
-  // bool get isFirstLaunchApp => _sharedPreference.getBool(keyIsFirstLaunchApp) ?? true;
-
-  String get accessToken {
-    return _sharedPreference.getString(keyAccessToken) ?? '';
-  }
-
-  String get refreshToken {
-    return _sharedPreference.getString(keyRefreshToken) ?? '';
-  }
-
-  bool get isLoggedIn {
-    return accessToken.isNotEmpty;
-  }
-
+  bool get isFirstLaunchApp => _sharedPreference.getBool(keyIsFirstLaunchApp) ?? false;
+  Future<String?> get accessToken async => _secureStorage.read(key: keyAccessToken);
+  Future<String?> get refreshToken async => _secureStorage.read(key: keyRefreshToken);
+  bool get isLoggedIn => _sharedPreference.getBool(keyIsLoggedIn) ?? false;
   // AuthModel? get currentUser {
   //   final user = _sharedPreference.getString(keyCurrentUser);
   //   if (user == null) return null;
@@ -72,20 +54,20 @@ class AppPreferences {
     return _sharedPreference.setString(keyLanguageCode, languageCode);
   }
 
-  Future<bool> saveIsFirstLogin(bool isFirstLogin) {
-    return _sharedPreference.setBool(keyIsFirstLogin, isFirstLogin);
+  Future<bool> saveIsFirsLaunchApp(bool isFirstLaunchApp) {
+    return _sharedPreference.setBool(keyIsFirstLaunchApp, isFirstLaunchApp);
   }
 
-  // Future<bool> saveIsFirsLaunchApp(bool isFirstLaunchApp) {
-  //   return _sharedPreference.setBool(keyIsFirstLaunchApp, isFirstLaunchApp);
-  // }
-
-  Future<bool> saveAccessToken(String token) async {
-    return _sharedPreference.setString(keyAccessToken, token);
+  Future<void> saveIsLoggedIn(bool isLoggedIn) async {
+    await _sharedPreference.setBool(keyIsLoggedIn, isLoggedIn);
   }
 
-  Future<bool> saveRefreshToken(String token) async {
-    return _sharedPreference.setString(keyRefreshToken, token);
+  Future<void> saveAccessToken(String token) async {
+    return _secureStorage.write(key: keyAccessToken, value: token);
+  }
+
+  Future<void> saveRefreshToken(String token) async {
+    return _secureStorage.write(key: keyRefreshToken, value: token);
   }
 
   // Future<bool> saveCurrentUser(AuthModel data) {
@@ -96,20 +78,22 @@ class AppPreferences {
     return _sharedPreference.setString(keyDeviceToken, token);
   }
 
+  String get userId => _sharedPreference.getString(keyUserId) ?? '';
+
+  String get email => _sharedPreference.getString(keyEmail) ?? '';
+
+  Future<String?> get password async => _secureStorage.read(key: keyPassword);
+
   Future<bool> saveUserId(String userId) {
     return _sharedPreference.setString(keyUserId, userId);
-  }
-
-  String get userId {
-    return _sharedPreference.getString(keyUserId) ?? '';
   }
 
   Future<bool> saveEmail(String email) {
     return _sharedPreference.setString(keyEmail, email);
   }
 
-  String get email {
-    return _sharedPreference.getString(keyEmail) ?? '';
+  Future<void> savePassword(String password) {
+    return _secureStorage.write(key: keyPassword, value: password);
   }
 
   Future<void> clearCurrentUserData() async {
@@ -121,7 +105,7 @@ class AppPreferences {
         _sharedPreference.remove(keyUserId),
         _sharedPreference.remove(keyEmail),
         _sharedPreference.remove(keyPassword),
-        // _sharedPreference.remove(keyIsLoggedIn),
+        _sharedPreference.remove(keyIsLoggedIn),
       ],
     );
   }

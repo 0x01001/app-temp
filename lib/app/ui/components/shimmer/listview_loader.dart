@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../shared/index.dart';
-import '../../index.dart';
+import '../../../../shared/index.dart';
+import '../../../index.dart';
 
 /// Because [PagedListView] does not expose the [itemCount] property, itemCount = 0 on the first load and thus the Shimmer loading effect can not work. We need to create a fake ListView for the first load.
 class ListViewLoader extends StatelessWidget {

@@ -74,15 +74,18 @@ final languageCodeProvider = StateProvider<LanguageCode>(
   },
 );
 
-// final isDarkModeProvider = StateProvider<bool>(
-//   (ref) {
-//     ref.listenSelf((previous, next) {
-//       ref.appPreferences.saveIsDarkMode(next);
-//     });
-
-//     return ref.appPreferences.isDarkMode;
-//   },
-// );
+final isDarkModeProvider = StateProvider<bool?>(
+  (ref) {
+    ref.listenSelf((previous, next) {
+      Log.d('isDarkModeProvider > listenSelf: $previous - $next');
+      if (next != previous) {
+        ref.preferences.saveIsDarkMode(next ?? false);
+      }
+    });
+    Log.d('isDarkModeProvider > build: ${ref.preferences.isDarkMode}');
+    return ref.preferences.isDarkMode;
+  },
+);
 
 class ShowBottomNav extends StateNotifier<bool> {
   ShowBottomNav() : super(true); // Initial state is true

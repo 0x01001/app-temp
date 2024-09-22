@@ -19,7 +19,7 @@ class AppNavigator {
   AppNavigator(this._appRouter);
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final tabRoutes = const [HomeTab(), UITab(), APITab(), SettingTab()];
+  final listRoutes = const [HomeTab(), UITab(), APITab(), SettingTab()];
 
   TabsRouter? tabsRouter;
   final AppRouter _appRouter;

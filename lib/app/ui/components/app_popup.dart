@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../resources/index.dart';
-import '../../shared/index.dart';
-import '../index.dart';
+import '../../../resources/index.dart';
+import '../../../shared/index.dart';
+import '../../index.dart';
 
 class AppPopup {
   const AppPopup._({required this.builder, required this.id});

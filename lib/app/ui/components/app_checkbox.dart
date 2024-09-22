@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../index.dart';
+import '../../index.dart';
 
 class AppCheckBox extends HookWidget {
   const AppCheckBox({this.title, this.value, this.onChanged, super.key});

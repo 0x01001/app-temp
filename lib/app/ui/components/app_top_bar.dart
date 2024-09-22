@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../resources/index.dart';
-import '../../shared/index.dart';
-import '../index.dart';
+import '../../../resources/index.dart';
+import '../../../shared/index.dart';
+import '../../index.dart';
 
 class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   AppTopBar({
@@ -35,9 +35,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
     this.systemOverlayStyle,
     this.leadingIconColor,
     this.leading,
-  }) : preferredSize = Size.fromHeight(
-          height ?? 56,
-        );
+  }) : preferredSize = Size.fromHeight(height ?? 56);
 
   final String? text;
   final VoidCallback? onTitlePressed;
@@ -118,7 +116,11 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildIcon(SvgGenImage svg) {
-    return svg.svg(color: leadingIconColor, width: 10, height: 10);
+    return svg.svg(
+      colorFilter: ColorFilter.mode(leadingIconColor ?? Colors.transparent, BlendMode.srcIn),
+      width: 10,
+      height: 10,
+    );
   }
 }
 

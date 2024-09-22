@@ -41,11 +41,11 @@ final FlexTones _flexTonesDark = FlexTones.material(Brightness.dark);
 
 final String? _fontFamily = GoogleFonts.notoSans().fontFamily;
 
-const TextTheme _textTheme = TextTheme(
-  displayMedium: TextStyle(fontSize: 41),
-  displaySmall: TextStyle(fontSize: 36),
-  labelSmall: TextStyle(fontSize: 11, letterSpacing: 0.5),
-);
+// const TextTheme _textTheme = TextTheme(
+//   displayMedium: TextStyle(fontSize: 41),
+//   displaySmall: TextStyle(fontSize: 36),
+//   labelSmall: TextStyle(fontSize: 11, letterSpacing: 0.5),
+// );
 
 const FlexSurfaceMode _surfaceMode = FlexSurfaceMode.highBackgroundLowScaffold;
 

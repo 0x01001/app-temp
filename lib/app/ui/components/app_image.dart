@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../index.dart';
 
 class AppImage extends HookConsumerWidget {
   final String url;
@@ -20,8 +21,7 @@ class AppImage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final _isDarkMode = ref.watch(appProvider.select((x) => x.value?.isDarkMode));
-    final _isDarkMode = AdaptiveTheme.of(context).mode.isDark;
+    final _isDarkMode = ref.watch(isDarkModeProvider);
 
     final _emptyWidget = SizedBox(
       width: width,

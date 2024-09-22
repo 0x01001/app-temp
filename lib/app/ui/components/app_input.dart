@@ -3,9 +3,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../resources/index.dart';
-import '../../shared/index.dart';
-import '../index.dart';
+import '../../../resources/index.dart';
+import '../../../shared/index.dart';
+import '../../index.dart';
 
 class AppInput extends BaseInput {
   const AppInput({
@@ -74,11 +74,11 @@ class AppInput extends BaseInput {
       }
     }
 
-    useEffect(() {
-      // debugPrint('focusNodes: ${field} - ${_focusNode.hasFocus}');
-      _focusNode.addListener(callback);
-      return;
-    }, [_focusNode]);
+    // useEffect(() {
+    //   // debugPrint('focusNodes: ${field} - ${_focusNode.hasFocus}');
+    //   _focusNode.addListener(callback);
+    //   return;
+    // }, [_focusNode]);
 
     void onTextChanged(String? val) {
       _isShowIcon.value = val?.trim().isNotEmpty ?? false;

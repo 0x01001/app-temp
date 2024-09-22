@@ -18,7 +18,7 @@ class AppLocalPushNotification {
   static const _channelId = 'com.flutter.app';
   static const _channelName = 'channel_name';
   static const _channelDescription = 'Incoming call notifications';
-  static const _androidDefaultIcon = 'ic_stat_ic_notification';
+  static const _androidDefaultIcon = 'ic_app_notification';
   static const _bitCount = 31;
 
   int get _randomNotificationId => Random().nextInt(pow(2, _bitCount).toInt() - 1);

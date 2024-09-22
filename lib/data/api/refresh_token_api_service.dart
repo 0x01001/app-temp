@@ -9,7 +9,7 @@ class RefreshTokenApiService {
 
   final RefreshTokenApiClient _refreshTokenApiClient;
 
-  Future<DataResponse<RefreshTokenModel>?> refreshToken(String refreshToken) async {
+  Future<DataResponse<RefreshTokenModel>?> refreshToken(String? refreshToken) async {
     try {
       return await _refreshTokenApiClient.request(
         method: RestMethod.post,

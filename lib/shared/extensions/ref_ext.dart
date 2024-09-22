@@ -28,8 +28,8 @@ extension RefExt on Ref {
   AppApiService get api => read(appApiServiceProvider);
 
   // firebase
-  FirebaseFirestoreService get firebaseFirestoreService => read(firebaseFirestoreServiceProvider);
-  FirebaseAuthService get firebaseAuthService => read(firebaseAuthServiceProvider);
+  FirebaseFirestoreService get firebaseFirestore => read(firebaseFirestoreServiceProvider);
+  FirebaseAuthService get firebaseAuth => read(firebaseAuthServiceProvider);
   AppFirebaseNotification get firebaseNotification => read(appFirebaseNotificationProvider);
 
   // // mapper

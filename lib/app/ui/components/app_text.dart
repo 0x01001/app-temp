@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../resources/index.dart';
+import '../../../resources/index.dart';
 
 enum TextType { header, title, content, text }
 
