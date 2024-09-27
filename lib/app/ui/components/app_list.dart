@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
@@ -112,14 +113,13 @@ class AppListView extends ConsumerWidget {
   }
 
   Widget _buildSectionHeader(AppSectionData sectionData, BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
     final isRtl = Directionality.of(context) == TextDirection.rtl;
     final Widget? titleWidget = sectionData.headerTitle == null
         ? null
         : Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[Text(sectionData.headerTitle ?? '', style: sectionData.headerTitleStyle ?? TextStyle(color: Colors.grey, fontSize: themeData.textTheme.titleMedium?.fontSize))],
+            children: <Widget>[Text(sectionData.headerTitle ?? '', style: sectionData.headerTitleStyle ?? TextStyle(color: Colors.grey, fontSize: context.theme.textTheme.titleMedium?.fontSize))],
           );
     final EdgeInsetsGeometry padding = sectionData.headerTitleIntent != null ? (isRtl ? EdgeInsets.only(right: sectionData.headerTitleIntent ?? 0) : EdgeInsets.only(left: sectionData.headerTitleIntent ?? 0)) : EdgeInsets.zero;
     final headerHeight = sectionData.headerHeight ?? (sectionData.headerTitle != null ? kStaticHeaderHeight : kStaticHeaderHeightNormal);
@@ -133,7 +133,7 @@ class AppListView extends ConsumerWidget {
 
   Widget _buildItemCell(AppItemData itemData, BuildContext context, WidgetRef ref) {
     final _isDarkMode = ref.watch(isDarkModeProvider) ?? false;
-    final ThemeData themeData = Theme.of(context);
+    final ThemeData themeData = context.theme;
     final titleText = itemData.title == null ? null : Text(itemData.title ?? '', style: itemData.titleStyle);
     final subtitleText = itemData.subtitle == null ? null : Text(itemData.subtitle ?? '', style: itemData.subtitleStyle);
     final Widget? accesssoryWidget = _getAccessoryWidget(itemData, context);
@@ -157,9 +157,8 @@ class AppListView extends ConsumerWidget {
 
   Widget _buildButtonCell(AppItemData itemData, BuildContext context, WidgetRef ref) {
     final _isDarkMode = ref.watch(isDarkModeProvider) ?? false;
-    final ThemeData themeData = Theme.of(context);
     return Material(
-      color: itemData.cellColor ?? (_isDarkMode ? themeData.colorScheme.surface : Colors.white),
+      color: itemData.cellColor ?? (_isDarkMode ? context.theme.colorScheme.surface : Colors.white),
       child: InkWell(
         onTap: itemData.onTap,
         child: SizedBox(
@@ -171,7 +170,7 @@ class AppListView extends ConsumerWidget {
                 child: Text(
                   itemData.buttonTitle ?? '',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: itemData.buttonTitleColor, fontSize: themeData.textTheme.bodyMedium?.fontSize, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: itemData.buttonTitleColor, fontSize: context.theme.textTheme.bodyMedium?.fontSize, fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -182,7 +181,6 @@ class AppListView extends ConsumerWidget {
   }
 
   Widget? _getAccessoryWidget(AppItemData itemData, BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
     switch (itemData.accessoryType) {
       case AppListCellAccessoryType.checkmark:
         return const Row(
@@ -201,7 +199,7 @@ class AppListView extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(itemData.accessoryString ?? '', style: TextStyle(color: Colors.grey, fontSize: themeData.textTheme.bodyMedium?.fontSize)),
+                Text(itemData.accessoryString ?? '', style: TextStyle(color: Colors.grey, fontSize: context.theme.textTheme.bodyMedium?.fontSize)),
                 icon,
               ],
             );
@@ -212,7 +210,7 @@ class AppListView extends ConsumerWidget {
         return Switch(
           value: itemData.accItemValue ?? false,
           onChanged: itemData.onChanged,
-          activeTrackColor: themeData.colorScheme.secondary,
+          activeTrackColor: context.theme.colorScheme.secondary,
         );
       case AppListCellAccessoryType.checkBox:
         return Checkbox(
@@ -226,12 +224,11 @@ class AppListView extends ConsumerWidget {
   }
 
   Widget _appendCellSeparator(Widget? cell, BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         cell ?? const SizedBox.shrink(),
-        if (cell != null) Divider(color: themeData.dividerColor, height: Constant.borderHeight),
+        if (cell != null) Divider(color: context.theme.dividerColor, height: Constant.borderHeight),
       ],
     );
   }
@@ -267,10 +264,9 @@ class AppListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ThemeData themeData = Theme.of(context);
     final IndexedWidgetBuilder sepBuilder = separatorBuilder ??
         (BuildContext context, int index) {
-          return Divider(color: themeData.dividerColor, height: Constant.borderHeight);
+          return Divider(color: context.theme.dividerColor, height: Constant.borderHeight);
         };
     final List<Widget> cells = _buildCells(context, ref);
     return Container(

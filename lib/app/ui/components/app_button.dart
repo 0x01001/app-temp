@@ -55,7 +55,7 @@ class AppButton extends StatelessWidget {
         case ButtonType.outline:
           return OutlinedButton(
             style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? Constant.defaultBorderRadiusButton)),
               side: BorderSide(color: color ?? context.colors.primary, width: 1.0, style: BorderStyle.solid),
               minimumSize: isExpand ? Size.fromHeight(height ?? Constant.defaultSizeButton) : null,
               padding: const EdgeInsets.all(0),
@@ -84,7 +84,7 @@ class AppButton extends StatelessWidget {
         default:
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? Constant.defaultBorderRadiusButton)),
               backgroundColor: onPressed == null ? context.theme.extension<CustomTheme>()?.disabled : backgroundColor ?? context.colors.primary,
               minimumSize: isExpand ? Size.fromHeight(height ?? Constant.defaultSizeButton) : null,
             ),

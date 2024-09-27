@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../index.dart';
@@ -59,16 +60,15 @@ class Constant {
   ];
 
   /// status bar color
-  static const systemUiOverlay = SystemUiOverlayStyle(
-    statusBarBrightness: Brightness.light,
-    statusBarColor: Color.fromARGB(255, 255, 255, 255),
-  );
+  static const systemUiOverlay = SystemUiOverlayStyle(statusBarBrightness: Brightness.light, statusBarColor: Colors.transparent);
 
   static const textFieldTextStyleHeight = 1.3;
 
   static const defaultDarkMode = false;
   static const defaultSizeButton = 45.0;
   static const defaultSizeTextInput = 45.0;
+  static const defaultBorderRadiusButton = 5.0;
+  static const defaultBorderRadiusTextInput = 5.0;
 
   // device
   static const designDeviceWidth = 375.0;
@@ -82,7 +82,7 @@ class Constant {
   // paging
   static const initialPage = 0;
   static const itemsPerPage = 10;
-  static const defaultInvisibleItemsThreshold = 3;
+  static const invisibleItemsThreshold = 3;
   static const maxItemsPerRow = 3;
   static const paddingItemsGrid = 10.0;
   static const endReachedThreshold = 200.0;
@@ -212,8 +212,6 @@ class Constant {
   // remote
   static const androidVersion = 'android_version';
   static const iOSVersion = 'ios_version';
-  // using firebase SDK
-  static bool isEnable = true;
 
   /// duration
   static const defaultListGridTransitionDuration = Duration(milliseconds: 500);

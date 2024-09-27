@@ -66,7 +66,7 @@ class MyApp extends HookConsumerWidget {
               theme: AppTheme.light,
               darkTheme: AppTheme.dark,
               debugShowCheckedModeBanner: false,
-              // useInheritedMediaQuery: true,
+              // useInheritedMediaQuery: true,  // `useInheritedMediaQuery` property set to `true` in order to use DevicePreview
               localeResolutionCallback: (Locale? locale, Iterable<Locale> supportedLocales) => supportedLocales.contains(locale) ? locale : const Locale(Constant.defaultLocale),
               locale: Constant.enableDevicePreview ? DevicePreview.locale(context) : Locale(languageCode.localeCode),
               supportedLocales: S.delegate.supportedLocales,

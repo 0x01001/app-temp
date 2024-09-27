@@ -54,7 +54,7 @@ class SettingPage extends ConsumerWidget {
     return AppScaffold(
       appBar: AppTopBar(text: 'Setting'),
       body: AppListView(
-        shrinkWrap: true,
+        // shrinkWrap: true,
         sections: _buildList(),
       ),
     );

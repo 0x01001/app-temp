@@ -28,7 +28,6 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final safeArea = SafeArea(child: AppConnect(child: body));
     final scaffold = Scaffold(
       backgroundColor: backgroundColor ?? context.theme.extension<CustomTheme>()?.background,
       body: Shimmer(child: useSafeArea ? SafeArea(child: body) : body),
@@ -38,6 +37,16 @@ class AppScaffold extends StatelessWidget {
       floatingActionButtonLocation: floatingActionButtonLocation,
       extendBodyBehindAppBar: true,
     );
-    return hideKeyboardWhenTouchOutside ? GestureDetector(onTap: () => ViewUtils.hideKeyboard(context), child: scaffold) : scaffold;
+    final scaffoldWithBanner = Env.flavor == Flavor.prod
+        ? scaffold
+        : Banner(
+            location: BannerLocation.topEnd,
+            message: Env.flavor.name.toUpperCase(),
+            color: Env.flavor == Flavor.stg ? Colors.yellow.withOpacity(0.6) : Colors.red.withOpacity(0.6),
+            textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12, letterSpacing: 1),
+            textDirection: TextDirection.ltr,
+            child: scaffold,
+          );
+    return hideKeyboardWhenTouchOutside ? GestureDetector(onTap: () => ViewUtils.hideKeyboard(context), child: scaffoldWithBanner) : scaffoldWithBanner;
   }
 }

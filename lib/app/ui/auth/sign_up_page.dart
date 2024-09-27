@@ -39,7 +39,8 @@ class _Form extends AppForm {
     Future<void> onSubmit() async {
       final data = getFormData();
       if (data != null) {
-        final result = await ref.read(authProvider.notifier).register(data[FieldType.email.name], data[FieldType.password.name], data[FieldType.displayName.name]);
+        Log.d('data: $data');
+        final result = await ref.read(authProvider.notifier).register(data[FieldType.email.name], data[FieldType.signUpPassword.name], data[FieldType.displayName.name]);
         if (result == true) {
           await getIt.get<AppNavigator>().push(const MainRoute());
         }
@@ -47,17 +48,17 @@ class _Form extends AppForm {
     }
 
     Future<bool?> checkEmail(BaseInput data) async {
-      final result = await super.onFocus(data);
-      if (result == true) {
-        formKey.currentState!.save();
-        final data = formKey.currentState!.value[FieldType.email.name];
-        if (data != null) {
-          final check = await ref.read(authProvider.notifier).checkEmail(data.toString().trim());
-          if (check == true) {
-            errorText.value = S.current.emailAlreadyExists;
-          }
-        }
-      }
+      // final result = await super.onFocus(data);
+      // if (result == true) {
+      //   formKey.currentState!.save();
+      //   final data = formKey.currentState!.value[FieldType.email.name];
+      //   if (data != null) {
+      //     final check = await ref.read(authProvider.notifier).checkEmail(data.toString().trim());
+      //     if (check == true) {
+      //       errorText.value = S.current.emailAlreadyExists;
+      //     }
+      //   }
+      // }
       return null;
     }
 

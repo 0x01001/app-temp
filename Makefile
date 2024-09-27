@@ -75,7 +75,6 @@ build_prod_apk:
 build_dev_bundle:
 	$(BUILD_CMD) dev build appbundle
 
-
 build_stg_bundle:
 	$(BUILD_CMD) stg build appbundle
 

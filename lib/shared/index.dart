@@ -18,7 +18,7 @@ export 'utils/collection_utils.dart';
 export 'utils/constant.dart';
 export 'utils/data_helper.dart';
 export 'utils/date_time_utils.dart';
-export 'utils/device_utils.dart';
+export 'utils/device_helper.dart';
 export 'utils/enum.dart';
 export 'utils/env.dart';
 export 'utils/file_utils.dart';

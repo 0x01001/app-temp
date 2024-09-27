@@ -2,6 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../app/index.dart';
 import '../../data/index.dart';
+import '../index.dart';
 
 extension WidgetRefExt on WidgetRef {
   AppNavigator get nav => read(appNavigatorProvider);
@@ -40,7 +41,7 @@ extension RefExt on Ref {
   AppFirebaseAnalytics get analytics => read(appFirebaseAnalyticsProvider);
   AppFirebaseCrashlytics get crashlytics => read(appFirebaseCrashlyticsProvider);
   // DeepLinkHelper get deepLinkHelper => read(deepLinkHelperProvider);
-  // DeviceHelper get deviceHelper => read(deviceHelperProvider);
+  DeviceHelper get device => read(deviceHelperProvider);
   AppLocalPushNotification get localPush => read(appLocalPushNotificationProvider);
   // PackageHelper get packageHelper => read(packageHelperProvider);
   AppConnectivity get connectivity => read(appConnectivityProvider);

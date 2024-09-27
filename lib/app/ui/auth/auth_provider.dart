@@ -1,4 +1,3 @@
-import 'package:dartx/dartx.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../data/index.dart';
@@ -16,9 +15,27 @@ class AuthProvider extends BaseProvider<AuthState> {
 
   Future<bool?> login(String email, String password) async {
     return await runSafe(action: () async {
-      final response = await _ref.api.login(email, password);
-      if (response != null) await _saveTokenAndUser(response);
-      return response != null;
+      // final response = await _ref.api.login(email, password);
+      // if (response != null) await _saveTokenAndUser(response);
+      // return response != null;
+      final userId = await _ref.firebaseAuth.signInWithEmailAndPassword(email, password);
+      if (userId.isEmpty) return false;
+
+      final user = await _ref.firebaseFirestore.getCurrentUser(userId);
+      final deviceId = await _ref.device.id;
+      if (user.deviceIds?.isNotEmpty == true && !user.deviceIds!.contains(deviceId)) {
+        Log.d('ID: ${user.id} has logged in on new device ($deviceId)');
+        // await _ref.firebaseAuth.signOut();
+        // data = data.copyWith(onPageError: 'You have logged in on another device.');
+        // return;
+      }
+      final deviceToken = await _ref.share.deviceToken;
+      Log.d('Login > device token: $deviceToken');
+
+      final data = user.copyWith(deviceIds: [...user.deviceIds ?? [], deviceId], deviceTokens: [...user.deviceTokens ?? [], deviceToken]);
+      await _saveTokenAndUser(data);
+
+      return true;
     });
   }
 
@@ -32,9 +49,19 @@ class AuthProvider extends BaseProvider<AuthState> {
 
   Future<bool?> register(String email, String password, String name) async {
     return await runSafe(action: () async {
-      final response = await _ref.api.register(email, password, name);
-      if (response != null) await _saveTokenAndUser(response);
-      return response != null;
+      // final response = await _ref.api.register(email, password, name);
+      // if (response != null) await _saveTokenAndUser(response);
+      // return response != null;
+
+      final userId = await _ref.firebaseAuth.createUserWithEmailAndPassword(email, password);
+      if (userId.isEmpty) return false;
+
+      final deviceToken = await _ref.share.deviceToken;
+      final deviceId = await _ref.device.id;
+      Log.d('deviceToken: $deviceToken');
+      final data = FirebaseUserModel(id: userId, email: email, isVip: false, deviceIds: [deviceId], deviceTokens: [deviceToken]);
+      await _saveTokenAndUser(data, isUpdate: false);
+      return true;
     });
   }
 
@@ -48,17 +75,17 @@ class AuthProvider extends BaseProvider<AuthState> {
     );
   }
 
-  Future<List<dynamic>> _saveTokenAndUser(AuthModel data) async {
+  Future<List<dynamic>> _saveTokenAndUser(FirebaseUserModel data, {bool? isUpdate = true}) async {
     Log.d('_saveTokenAndUser: ${data.toJson()}');
     return Future.wait([
       // _ref.appPreferences.saveCurrentUser(data),
+      // if (!data.accessToken.isNullOrEmpty) _ref.preferences.saveAccessToken(data.accessToken!),
+      // if (!data.refreshToken.isNullOrEmpty) _ref.preferences.saveRefreshToken(data.refreshToken!),
       _ref.preferences.saveIsLoggedIn(true),
-      if (!data.accessToken.isNullOrEmpty) _ref.preferences.saveAccessToken(data.accessToken!),
-      if (!data.refreshToken.isNullOrEmpty) _ref.preferences.saveRefreshToken(data.refreshToken!),
-      // _ref.firebaseFirestore.updateCurrentUser(userId: userId, data: {
-      //   FirebaseUserModel.keyDeviceIds: [deviceId],
-      //   FirebaseUserModel.keyDeviceTokens: FieldValue.arrayUnion([deviceToken]),
-      // }),
+      _ref.preferences.saveUserId(data.id ?? ''),
+      _ref.preferences.saveEmail(data.email ?? ''),
+      if (isUpdate == true) _ref.firebaseFirestore.updateCurrentUser(userId: data.id ?? '', data: data.toMap()),
+      if (isUpdate == false) _ref.firebaseFirestore.putUserToFireStore(userId: data.id ?? '', data: data),
     ]);
   }
 }

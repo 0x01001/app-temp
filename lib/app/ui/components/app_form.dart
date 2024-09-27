@@ -149,7 +149,12 @@ class AppForm extends HookConsumerWidget {
   final formKey = useMemoized(() => GlobalKey<FormBuilderState>()); // don't move
 
   Future<bool?> onFocus(BaseInput data) async {
+    // formKey.currentState?.save();
+    // final val = formKey.currentState?.value[data.field.name];
+    // Log.d('AppForm > onFocus > val: $val');
+    // if (val != null && val.trim().isNotEmpty)
     return formKey.currentState?.fields[data.field.name]?.validate(focusOnInvalid: false) ?? false;
+    // return false;
   }
 
   String? validateRePassword(key, value) {

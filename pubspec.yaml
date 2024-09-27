@@ -98,13 +98,14 @@ dependencies:
   google_nav_bar: ^5.0.6
   badges: ^3.1.2
   dropdown_button2: ^2.0.0
-  settings_ui: ^2.0.2
+  # settings_ui: ^2.0.2
   chatview: 2.2.0
   popup_menu: 2.0.0
   flutter_linkify: 6.0.0
   device_preview: 1.2.0
   country_pickers: 3.0.0 #fix: country_pickers-2.0.0 Error: The getter 'subtitle1' isn't defined for the class 'TextTheme'.
   clock: 1.1.1
+  flutter_slidable: 3.1.1
 
 dev_dependencies:
   auto_route_generator: ^8.0.0

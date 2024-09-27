@@ -5,9 +5,7 @@ import 'package:injectable/injectable.dart';
 import '../../shared/index.dart';
 import '../index.dart';
 
-final firebaseFirestoreServiceProvider = Provider<FirebaseFirestoreService>(
-  (ref) => getIt.get<FirebaseFirestoreService>(),
-);
+final firebaseFirestoreServiceProvider = Provider<FirebaseFirestoreService>((ref) => getIt.get<FirebaseFirestoreService>());
 
 @LazySingleton()
 class FirebaseFirestoreService {
@@ -23,7 +21,6 @@ class FirebaseFirestoreService {
 
   Future<FirebaseUserModel> getCurrentUser(String userId) async {
     final documentSnapshot = await _userCollection.doc(userId).get();
-
     return FirebaseUserModel.fromMap(documentSnapshot.data() as Map<String, dynamic>);
   }
 
@@ -31,14 +28,11 @@ class FirebaseFirestoreService {
     await _userCollection.doc(userId).update(data);
   }
 
-  Future<void> putUserToFireStore({
-    required String userId,
-    required FirebaseUserModel user,
-  }) async {
+  Future<void> putUserToFireStore({required String userId, required FirebaseUserModel data}) async {
     final createdAt = FieldValue.serverTimestamp();
     final doc = _userCollection.doc(userId);
     await doc.set({
-      ...user.toMap(),
+      ...data.toMap(),
       FirebaseUserModel.keyCreatedAt: createdAt,
       FirebaseUserModel.keyUpdatedAt: createdAt,
     });

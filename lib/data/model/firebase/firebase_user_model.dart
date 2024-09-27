@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class FirebaseUserModel {
   String? id;
   String? email;
@@ -56,8 +58,8 @@ class FirebaseUserModel {
         isVip: json['is_vip'],
         deviceIds: json['device_ids'] == null ? [] : List<String>.from(json['device_ids']!.map((x) => x)),
         deviceTokens: json['device_tokens'] == null ? [] : List<String>.from(json['device_tokens']!.map((x) => x)),
-        createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at']),
-        updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at']),
+        createdAt: json['created_at'] == null ? null : (json['created_at'] is Timestamp ? (json['created_at'] as Timestamp).toDate() : DateTime.parse(json['created_at'])),
+        updatedAt: json['updated_at'] == null ? null : (json['updated_at'] is Timestamp ? (json['updated_at'] as Timestamp).toDate() : DateTime.parse(json['updated_at'])),
       );
 
   Map<String, dynamic> toMap() => {

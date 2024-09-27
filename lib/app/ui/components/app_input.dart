@@ -55,30 +55,28 @@ class AppInput extends BaseInput {
     final _isShowLoading = useState(false);
     final _isShowIcon = useState(false);
     final _focusNode = useFocusNode();
-    const _borderRadiusSize = 10.0;
     final _border = OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? _borderRadiusSize)),
+      borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? Constant.defaultBorderRadiusTextInput)),
       borderSide: BorderSide(width: 0, color: context.theme.extension<CustomTheme>()?.borderButton ?? const Color(0xFF000000)),
     );
     // debugPrint('build: $field');
 
     Future<void> callback() async {
-      debugPrint('onFocus: $field - ${_focusNode.hasFocus} - ${_controller.text}');
+      // debugPrint('onFocus: $field - ${_focusNode.hasFocus} - ${_controller.text}');
       if (_focusNode.hasFocus == false) {
         //   final val = _controller.text.toHalfWidth();  // convert fullsize to halfsize
         //   _controller.text = val;
-
         if (enableLoading) _isShowLoading.value = true;
         await onFocus?.call(this);
         if (enableLoading) _isShowLoading.value = false;
       }
     }
 
-    // useEffect(() {
-    //   // debugPrint('focusNodes: ${field} - ${_focusNode.hasFocus}');
-    //   _focusNode.addListener(callback);
-    //   return;
-    // }, [_focusNode]);
+    useEffect(() {
+      // debugPrint('focusNodes: ${field} - ${_focusNode.hasFocus}');
+      _focusNode.addListener(callback);
+      return () => _focusNode.removeListener(callback);
+    }, [_focusNode]);
 
     void onTextChanged(String? val) {
       _isShowIcon.value = val?.trim().isNotEmpty ?? false;
@@ -104,7 +102,6 @@ class AppInput extends BaseInput {
 
     Widget _buildContent() {
       return FormBuilderTextField(
-        // key: _fieldKey,
         name: field.name,
         focusNode: _focusNode,
         autocorrect: false,

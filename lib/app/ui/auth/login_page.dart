@@ -49,7 +49,7 @@ class _Form extends AppForm {
           AppInput(field: FieldType.email, nextField: FieldType.password, labelText: S.current.email, keyboardType: TextInputType.emailAddress, onFocus: onFocus),
           const SizedBox(height: 15),
           AppInput(field: FieldType.password, labelText: S.current.password, keyboardType: TextInputType.visiblePassword, enableNextFocus: false, onFocus: onFocus),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           AppButton(S.current.login, onPressed: onSubmit),
           const SizedBox(height: 20),
           Row(

@@ -43,33 +43,13 @@ class Log {
     return encoder.convert(json);
   }
 
-  static void _log(
-    String message, {
-    // int level = 0,
-    String name = '',
-    DateTime? time,
-    // int? sequenceNumber,
-    // Zone? zone,
-    Object? error,
-    StackTrace? stackTrace,
-    int? colorCode,
-  }) {
+  static void _log(String message, {String name = '', DateTime? time, Object? error, StackTrace? stackTrace, int? colorCode}) {
     if (_enableLog) {
       var msg = '${time ?? DateTime.now()}:${name != '' ? ' $name:' : ''} $message';
       if (colorCode != null) {
         msg = '\u001b[$colorCode' 'm' '$msg' '\u001b[0m';
       }
       debugPrint(msg);
-      // dev.log(
-      //   message,
-      //   name: name,
-      //   time: time,
-      //   // sequenceNumber: sequenceNumber,
-      //   // level: level,
-      //   // zone: zone,
-      //   error: error,
-      //   stackTrace: stackTrace,
-      // );
     }
   }
 }
