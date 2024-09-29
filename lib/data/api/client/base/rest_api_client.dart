@@ -5,7 +5,7 @@ import '../../../mapper/base/base_error_response_mapper.dart';
 import '../../../mapper/base/base_success_response_mapper.dart';
 import '../../exception_mapper/dio_exception_mapper.dart';
 
-enum RestMethod { get, post, put, patch, delete }
+enum Method { get, post, put, patch, delete }
 
 class RestApiClient {
   RestApiClient({
@@ -19,7 +19,7 @@ class RestApiClient {
   final Dio dio;
 
   Future<T?> request<D extends Object, T extends Object>({
-    required RestMethod method,
+    required Method method,
     required String path,
     String? url,
     Map<String, dynamic>? queryParameters,
@@ -59,23 +59,22 @@ class RestApiClient {
   Future<Response<T>> fetch<T>(RequestOptions requestOptions) => dio.fetch<T>(requestOptions);
 
   Future<Response<dynamic>> _requestByMethod({
-    required RestMethod method,
+    required Method method,
     required String path,
     Map<String, dynamic>? queryParameters,
-    // ignore: avoid-dynamic
     dynamic body,
     Options? options,
   }) {
     switch (method) {
-      case RestMethod.get:
+      case Method.get:
         return dio.get(path, queryParameters: queryParameters, options: options);
-      case RestMethod.post:
+      case Method.post:
         return dio.post(path, data: body, queryParameters: queryParameters, options: options);
-      case RestMethod.patch:
+      case Method.patch:
         return dio.patch(path, data: body, queryParameters: queryParameters, options: options);
-      case RestMethod.put:
+      case Method.put:
         return dio.put(path, data: body, queryParameters: queryParameters, options: options);
-      case RestMethod.delete:
+      case Method.delete:
         return dio.delete(path, data: body, queryParameters: queryParameters, options: options);
     }
   }

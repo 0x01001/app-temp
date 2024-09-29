@@ -17,7 +17,6 @@ class BasicAuthInterceptor extends BaseInterceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.headers[Constant.basicAuthorization] = _basicAuthenticationHeader();
-
     return super.onRequest(options, handler);
   }
 

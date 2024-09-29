@@ -30,17 +30,14 @@ class MainProvider extends BaseProvider<MainState> {
   void _updateCurrentUser(FirebaseUserModel user) => _ref.update<FirebaseUserModel>(currentUserProvider, (_) => user);
 
   FutureOr<void> init() async {
+    Log.start('MainProvider > init > start');
     setInitialCurrentUserState();
     listenConnectivity();
     listenToCurrentUser();
     listenOnDeviceTokenRefresh();
     listenOnMessageOpenedApp();
-    _ref.analytics.init();
-    await _ref.localPush.init();
-    await _ref.firebaseNotification.init();
-    await getIt.get<AppFirebaseRemoteConfig>().init();
-    await getIt.get<AppCodePush>().init();
     await getInitialMessage();
+    Log.end('MainProvider > init > end');
   }
 
   void setInitialCurrentUserState() {
@@ -83,7 +80,9 @@ class MainProvider extends BaseProvider<MainState> {
     onMessageOpenedAppSubscription?.cancel();
     onMessageOpenedAppSubscription = _ref.firebaseNotification.onMessageOpenedApp.listen(
       (event) async {
+        // when tab on noti IOS is open and background, android in background
         await _ref.localPush.cancelAll();
+        // DeepLinkHelper.getInstance().run(message.data['deeplink']);
         // await goToChatPage(_ref.remoteMessageAppNotificationMapper.mapToLocal(event));
       },
     );
@@ -92,7 +91,7 @@ class MainProvider extends BaseProvider<MainState> {
   Future<void> getInitialMessage() async {
     await runSafe(
       action: () async {
-        final initialMessage = await _ref.firebaseNotification.initialMessage;
+        // final initialMessage = await _ref.firebaseNotification.initialMessage;
         // await goToChatPage(_ref.remoteMessageAppNotificationMapper.mapToLocal(initialMessage));
       },
       handleLoading: false,

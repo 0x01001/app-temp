@@ -78,7 +78,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       flexibleSpace: flexibleSpace,
       bottom: bottom,
       shadowColor: shadowColor,
-      shape: shape ?? Border(bottom: BorderSide(color: Theme.of(context).dividerColor, width: 1)),
+      shape: shape ?? Border(bottom: BorderSide(color: context.theme.dividerColor, width: 1)),
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
       iconTheme: iconTheme,

@@ -16,7 +16,7 @@ class AppApiService {
 
   Future<AuthModel?> login(String email, String password) async {
     return _noneAuthAppServerApiClient.request(
-      method: RestMethod.post,
+      method: Method.post,
       path: 'accounts:signInWithPassword?key=${Env.apiKey}',
       body: {'email': email, 'password': password, 'returnSecureToken': true},
       decoder: AuthModel.fromMap,
@@ -25,12 +25,12 @@ class AppApiService {
   }
 
   Future<void> logout() async {
-    await _authAppServerApiClient.request(method: RestMethod.post, path: '/v1/auth/logout');
+    await _authAppServerApiClient.request(method: Method.post, path: '/v1/auth/logout');
   }
 
   Future<AuthModel?> register(String email, String password, String? name) async {
     return _noneAuthAppServerApiClient.request(
-      method: RestMethod.post,
+      method: Method.post,
       // path: '/v1/auth/register',
       path: 'accounts:signUp?key=${Env.apiKey}',
       body: {
@@ -48,7 +48,7 @@ class AppApiService {
 
   Future<AuthModel?> checkEmail(String email) async {
     return _noneAuthAppServerApiClient.request(
-      method: RestMethod.post,
+      method: Method.post,
       path: 'accounts:createAuthUri?key=${Env.apiKey}',
       body: {'identifier': email, 'continueUri': 'http://localhost'},
       decoder: AuthModel.fromMap,
@@ -58,7 +58,7 @@ class AppApiService {
 
   Future<void> forgotPassword(String email) async {
     await _noneAuthAppServerApiClient.request(
-      method: RestMethod.post,
+      method: Method.post,
       path: '/v1/auth/forgot-password',
       body: {'email': email},
     );
@@ -66,7 +66,7 @@ class AppApiService {
 
   Future<void> resetPassword({required String token, required String email, required String password}) async {
     await _noneAuthAppServerApiClient.request(
-      method: RestMethod.post,
+      method: Method.post,
       path: '/v1/auth/reset-password',
       body: {
         'token': token,
@@ -100,4 +100,14 @@ class AppApiService {
   //     decoder: PostModel.fromMap,
   //   );
   // }
+
+  Future<DataListResponse<UserModel>?> getListUser({int? page, int? limit}) async {
+    return _authAppServerApiClient.request(
+      method: Method.get,
+      path: 'user',
+      queryParameters: {'page': page ?? Constant.initialPage, 'limit': limit ?? Constant.itemsPerPage},
+      successResponseMapperType: SuccessResponseMapperType.dataJsonArray,
+      decoder: UserModel.fromMap,
+    );
+  }
 }

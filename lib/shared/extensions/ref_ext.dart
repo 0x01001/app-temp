@@ -33,17 +33,12 @@ extension RefExt on Ref {
   FirebaseAuthService get firebaseAuth => read(firebaseAuthServiceProvider);
   AppFirebaseNotification get firebaseNotification => read(appFirebaseNotificationProvider);
 
-  // // mapper
-  // MessageDataMapper messageDataMapper(String conversationId) => read(messageDataMapperProvider(conversationId));
-  // RemoteMessageAppNotificationMapper get remoteMessageAppNotificationMapper => read(remoteMessageAppNotificationMapperProvider);
-
   // helper
   AppFirebaseAnalytics get analytics => read(appFirebaseAnalyticsProvider);
   AppFirebaseCrashlytics get crashlytics => read(appFirebaseCrashlyticsProvider);
-  // DeepLinkHelper get deepLinkHelper => read(deepLinkHelperProvider);
+  DeepLinkHelper get deepLink => read(deepLinkHelperProvider);
   DeviceHelper get device => read(deviceHelperProvider);
   AppLocalPushNotification get localPush => read(appLocalPushNotificationProvider);
-  // PackageHelper get packageHelper => read(packageHelperProvider);
   AppConnectivity get connectivity => read(appConnectivityProvider);
 
   // provider

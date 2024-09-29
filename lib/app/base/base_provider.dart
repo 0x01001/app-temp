@@ -115,6 +115,7 @@ abstract class BaseProvider<T extends BaseState> extends StateNotifier<AppState<
         exception = appException;
       }
     } finally {
+      if (handleLoading) hideLoading();
       await onCompleted?.call();
     }
     return null;

@@ -24,13 +24,12 @@ class HeaderInterceptor extends BaseInterceptor {
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     final userAgentValue = userAgentClientHintsHeader();
     options.headers[Constant.userAgentKey] = userAgentValue;
-
+    options.headers[Constant.appId] = Env.dummyAppId; // TODO(dev): this is test api
     options.headers.addAll(_headers);
-
     handler.next(options);
   }
 
   String userAgentClientHintsHeader() {
-    return '${Platform.operatingSystem} - ${_appInfo.version}(${_appInfo.versionCode})';
+    return '${Platform.operatingSystem}: ${_appInfo.applicationId} - ${_appInfo.version}(${_appInfo.versionCode})';
   }
 }

@@ -79,11 +79,6 @@ dependencies:
 
   # html: ^0.15.4
   encrypt: ^5.0.1
-  dynamic_color: ^1.6.6
-  google_fonts: ^6.1.0
-  animations: ^2.0.7
-  simple_animations: ^5.0.2
-  lottie: ^3.0.0
   permission_handler: ^11.3.0
   path: ^1.8.3
   # flutter_downloader: ^1.11.3
@@ -92,19 +87,27 @@ dependencies:
   easy_debounce: ^2.0.3
   external_app_launcher: ^4.0.0 # open other app https://github.com/GeekyAnts/external_app_launcher/issues/26
   enum_to_string: ^2.0.1
-  pull_to_refresh: ^2.0.0
+  flutter_linkify: 6.0.0
+  device_preview: 1.2.0
+  country_pickers: 3.0.0 #fix: country_pickers-2.0.0 Error: The getter 'subtitle1' isn't defined for the class 'TextTheme'.
+  clock: 1.1.1
+  app_links: 6.3.2
+
+  # UI
+  dynamic_color: ^1.6.6
+  google_fonts: ^6.1.0
+  animations: ^2.0.7
+  simple_animations: ^5.0.2
+  lottie: ^3.0.0
+  pull_to_refresh_flutter3: ^2.0.2
   another_flushbar: ^1.12.30
   flex_color_scheme: ^7.3.1
   google_nav_bar: ^5.0.6
   badges: ^3.1.2
   dropdown_button2: ^2.0.0
-  # settings_ui: ^2.0.2
   chatview: 2.2.0
   popup_menu: 2.0.0
-  flutter_linkify: 6.0.0
-  device_preview: 1.2.0
-  country_pickers: 3.0.0 #fix: country_pickers-2.0.0 Error: The getter 'subtitle1' isn't defined for the class 'TextTheme'.
-  clock: 1.1.1
+  settings_ui: 2.0.2
   flutter_slidable: 3.1.1
 
 dev_dependencies:

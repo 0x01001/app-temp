@@ -19,6 +19,9 @@ class ExceptionHandler {
     Log.e('[APP] handleException: $appException');
 
     switch (appException.action) {
+      case AppExceptionAction.showMessage:
+        _showErrorMessage(message: appException.message);
+        break;
       case AppExceptionAction.showSnackBar:
         _showErrorSnackBar(appException.message);
         break;
@@ -64,9 +67,9 @@ class ExceptionHandler {
     // );
   }
 
-  // void _showErrorMessage({required String message, Duration duration = Constants.defaultErrorVisibleDuration}) {
-  //   navigator.showErrorMessage(message, duration: duration);
-  // }
+  void _showErrorMessage({required String message, Duration duration = Constant.defaultErrorVisibleDuration}) {
+    _ref.nav.showErrorMessage(message, duration: duration);
+  }
 
   // Future<void> _showErrorDialog({required String message, void Function()? onPressed, bool isRefreshTokenFailed = false}) async {
   //   await navigator.showDialog(AppPopupInfo.infoDialog(message: message, onPressed: onPressed)).then((value) {

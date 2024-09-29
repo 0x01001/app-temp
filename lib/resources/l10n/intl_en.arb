@@ -64,5 +64,8 @@
   "invalidLoginCredentials": "Invalid login credentials",
   "usernameAlreadyInUse": "Username already in use",
   "requiresRecentLogin": "Requires recent login",
-  "forceLogout": "Session has expired, please log in again"
+  "forceLogout": "Session has expired, please log in again",
+  "noData": "No data",
+  "pullToLoadMore": "Pull to load more",
+  "tryAgain": "Try again"
 }

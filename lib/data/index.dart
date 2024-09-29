@@ -63,3 +63,4 @@ export 'model/firebase/message_status.dart';
 export 'model/firebase/message_type.dart';
 export 'model/notification_model.dart';
 export 'model/refresh_token_model.dart';
+export 'model/user_model.dart';

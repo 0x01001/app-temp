@@ -85,7 +85,7 @@ class AppGridState<T> extends ConsumerState<AppGrid<T>> {
 
   void removeItem(T item) {}
 
-  Widget _buildColorItem(BuildContext context, int index) {
+  Widget _buildItem(BuildContext context, int index) {
     return widget.itemBuilder(context, widget.listData[index], index);
   }
 
@@ -96,47 +96,29 @@ class AppGridState<T> extends ConsumerState<AppGrid<T>> {
       controller: _controller,
       slivers: <Widget>[
         CupertinoSliverRefreshControl(onRefresh: _refresh),
-        SliverPadding(
-          padding: const EdgeInsets.all(16),
-          sliver: SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 2 / 3,
-              crossAxisSpacing: Constant.paddingItemsGrid,
-              mainAxisSpacing: Constant.paddingItemsGrid,
-              crossAxisCount: 3,
+        if (widget.listData.isNotEmpty)
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 2 / 3,
+                crossAxisSpacing: Constant.paddingItemsGrid,
+                mainAxisSpacing: Constant.paddingItemsGrid,
+                crossAxisCount: 3,
+              ),
+              delegate: SliverChildBuilderDelegate(_buildItem, childCount: widget.listData.length),
             ),
-            delegate: SliverChildBuilderDelegate(_buildColorItem, childCount: widget.listData.length),
           ),
-        ),
-        SliverToBoxAdapter(
-          child: _canLoadMore
-              ? Container(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  alignment: Alignment.center,
-                  child: const AppLoading(),
-                )
-              : const SizedBox(),
-        ),
+        if (_canLoadMore)
+          SliverToBoxAdapter(
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 16),
+              alignment: Alignment.center,
+              child: const AppLoading(),
+            ),
+          ),
         if (widget.listData.isNullOrEmpty) const SliverFillRemaining(child: AppNoData()),
       ],
     );
-
-    // return PagedSliverGrid<int, T>(
-    //   pagingController: _pagingController,
-    //   showNewPageProgressIndicatorAsGridChild: false,
-    //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    //     childAspectRatio: 2 / 3,
-    //     crossAxisSpacing: Constants.paddingItemsGrid,
-    //     mainAxisSpacing: Constants.paddingItemsGrid,
-    //     crossAxisCount: 3,
-    //   ),
-    //   builderDelegate: PagedChildBuilderDelegate(
-    //     animateTransitions: true,
-    //     noItemsFoundIndicatorBuilder: (context) => const AppNoData(),
-    //     itemBuilder: (context, item, index) => widget.itemBuilder(context, item, index),
-    //     // firstPageProgressIndicatorBuilder: (context) => enableLoading ? const AppLoading() : const SizedBox.shrink(), // visible when the list is empty/first load
-    //     // newPageProgressIndicatorBuilder: (context) => enableLoading ? const AppLoading() : const SizedBox.shrink(), // visible when loading more items at the bottom of the list
-    //   ),
-    // );
   }
 }

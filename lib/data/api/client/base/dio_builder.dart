@@ -7,10 +7,7 @@ import '../../../index.dart';
 class DioBuilder {
   const DioBuilder._();
 
-  static Dio createDio({
-    BaseOptions? options,
-    List<Interceptor> interceptors = const [],
-  }) {
+  static Dio createDio({BaseOptions? options, List<Interceptor> interceptors = const []}) {
     final dio = Dio(
       BaseOptions(
         connectTimeout: options?.connectTimeout ?? Constant.connectTimeout,

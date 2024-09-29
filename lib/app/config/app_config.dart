@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 import '../../shared/index.dart';
+import '../index.dart';
 
 class AppConfig extends Config {
   factory AppConfig.getInstance() {
@@ -15,7 +16,7 @@ class AppConfig extends Config {
 
   @override
   Future<void> config() async {
-    Log.d('App > config > start');
+    Log.start('App > config > start');
 
     // await SystemChrome.setPreferredOrientations(
     //   getIt.get<DeviceHelper>().deviceType == DeviceType.mobile ? Constant.mobileOrientation : Constant.tabletOrientation,
@@ -23,6 +24,12 @@ class AppConfig extends Config {
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     SystemChrome.setSystemUIOverlayStyle(Constant.systemUiOverlay);
 
-    Log.d('App > config > end');
+    getIt.get<AppFirebaseAnalytics>().init();
+    await getIt.get<AppLocalPushNotification>().init();
+    await getIt.get<AppFirebaseNotification>().init();
+    await getIt.get<AppFirebaseRemoteConfig>().init();
+    await getIt.get<AppCodePush>().init();
+
+    Log.end('App > config > end');
   }
 }

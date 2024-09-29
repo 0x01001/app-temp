@@ -26,7 +26,7 @@ class AppFirebaseAuthException extends AppException {
       };
 
   @override
-  AppExceptionAction get action => AppExceptionAction.doNothing;
+  AppExceptionAction get action => AppExceptionAction.showMessage;
 }
 
 enum AppFirebaseAuthExceptionKind {

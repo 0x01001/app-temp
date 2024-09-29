@@ -12,7 +12,7 @@ class RefreshTokenApiService {
   Future<DataResponse<RefreshTokenModel>?> refreshToken(String? refreshToken) async {
     try {
       return await _refreshTokenApiClient.request(
-        method: RestMethod.post,
+        method: Method.post,
         path: '/v1/auth/refresh',
         body: {
           'refresh_token': refreshToken,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../shared/index.dart';
 import 'color_card.dart';
 
 class ShowColorSchemeColors extends StatelessWidget {
@@ -28,22 +29,18 @@ class ShowColorSchemeColors extends StatelessWidget {
     final TextStyle headerStyle = theme.textTheme.titleMedium!;
     const double spacing = 5;
 
+    Log.d('UI > build > colorScheme: $colorScheme');
+
     ShapeBorder? border = theme.cardTheme.shape;
 
     if (border is RoundedRectangleBorder) {
       border = border.copyWith(
-        side: BorderSide(
-          color: theme.dividerColor,
-          width: 1,
-        ),
+        side: BorderSide(color: theme.dividerColor, width: 1),
       );
     } else {
       border ??= RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(useMaterial3 ? 12 : 4)),
-        side: BorderSide(
-          color: theme.dividerColor,
-          width: 1,
-        ),
+        side: BorderSide(color: theme.dividerColor, width: 1),
       );
     }
 

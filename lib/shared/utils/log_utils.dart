@@ -11,6 +11,7 @@ class Log {
   const Log._();
 
   static const _enableLog = true; // Constant.enableGeneralLog; //TODO: need uncomment before go live
+  static final _stopwatch = Stopwatch();
 
   static void d(Object? message, {String? name, DateTime? time, int? colorCode}) {
     _log('$message', name: name ?? '', time: time, colorCode: colorCode ?? 36);
@@ -30,6 +31,16 @@ class Log {
 
   static void e(Object? errorMessage, {String? name, Object? errorObject, StackTrace? stackTrace, DateTime? time, int? colorCode}) {
     _log('$errorMessage', name: name ?? '', error: errorObject, stackTrace: stackTrace, time: time, colorCode: colorCode ?? 31);
+  }
+
+  static void start(Object? message) {
+    if (_enableLog) _stopwatch.start();
+    d(message);
+  }
+
+  static void end(Object? message) {
+    if (_enableLog) _stopwatch.stop();
+    d('${message ?? ''}: ${_stopwatch.elapsed.inMilliseconds} milliseconds');
   }
 
   static String prettyJson(Map<String, dynamic> json) {

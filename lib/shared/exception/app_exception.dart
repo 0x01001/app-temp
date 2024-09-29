@@ -17,6 +17,7 @@ abstract class AppException implements Exception {
 }
 
 enum AppExceptionAction {
+  showMessage,
   showSnackBar,
   showDialog,
   showDialogWithRetry,

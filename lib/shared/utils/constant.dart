@@ -17,6 +17,9 @@ class Constant {
 
   static const mockApiBaseUrl = 'https://api.jsonbin.io/';
 
+  // Deep links
+  static const resetPasswordLink = 'domain://';
+
   /// Path
   static const remoteConfigPath = '/config/RemoteConfig.json';
   static const settingsPath = '/mypage/settings';

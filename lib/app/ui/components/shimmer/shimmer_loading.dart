@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'shimmer.dart';
+import '../../../../shared/index.dart';
+import '../../../index.dart';
 
 class ShimmerLoading extends StatefulWidget {
-  const ShimmerLoading({
-    required this.isLoading,
-    required this.child,
-    this.loadingWidget,
-    super.key,
-  });
+  const ShimmerLoading({required this.isLoading, required this.child, this.loadingWidget, super.key});
 
   final Widget child;
   final Widget? loadingWidget;
@@ -54,16 +50,14 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
     }
     final shimmerSize = shimmer.size;
     final gradient = shimmer.gradient;
-    final descendant = context.findRenderObject() as RenderBox?;
     Offset offsetWithinShimmer = Offset.zero;
+
     try {
-      offsetWithinShimmer = descendant != null
-          ? shimmer.getDescendantOffset(
-              descendant: descendant,
-            )
-          : Offset.zero;
+      final descendant = context.findRenderObject() as RenderBox?;
+      offsetWithinShimmer = descendant != null ? shimmer.getDescendantOffset(descendant: descendant) : Offset.zero;
     } catch (e) {
       // Known issue: null pointer exception
+      Log.d('ShimmerLoading > build > error: $e');
     }
 
     return ShaderMask(

@@ -3,6 +3,59 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+class CustomTheme extends ThemeExtension<CustomTheme> {
+  const CustomTheme({this.backgroundPopup, this.disabled, this.secondaryText, this.linkText, this.borderButton, this.background});
+  final Color? backgroundPopup;
+  final Color? disabled;
+  final Color? secondaryText;
+  final Color? linkText;
+  final Color? borderButton;
+  final Color? background;
+
+  @override
+  CustomTheme copyWith({Color? backgroundPopup, Color? disabled, Color? secondaryText, Color? linkText, Color? borderButton, Color? background}) => CustomTheme(
+        backgroundPopup: backgroundPopup ?? this.backgroundPopup,
+        disabled: disabled ?? this.disabled,
+        secondaryText: secondaryText ?? this.secondaryText,
+        linkText: linkText ?? this.linkText,
+        borderButton: borderButton ?? this.borderButton,
+        background: background ?? this.background,
+      );
+
+  @override
+  CustomTheme lerp(ThemeExtension<CustomTheme>? other, double t) {
+    if (other is! CustomTheme) {
+      return this;
+    }
+    return CustomTheme(
+      backgroundPopup: Color.lerp(backgroundPopup, other.backgroundPopup, t),
+      disabled: Color.lerp(disabled, other.disabled, t),
+      secondaryText: Color.lerp(secondaryText, other.secondaryText, t),
+      linkText: Color.lerp(linkText, other.linkText, t),
+      borderButton: Color.lerp(borderButton, other.borderButton, t),
+      background: Color.lerp(background, other.background, t),
+    );
+  }
+}
+
+const CustomTheme lightTheme = CustomTheme(
+  backgroundPopup: Colors.white,
+  disabled: Color(0xFFB2B7C7),
+  secondaryText: Color(0xFF545454),
+  linkText: Color(0xFF042122),
+  borderButton: Color(0xFFE6EBFF),
+  background: Color(0xFFFCFDFC),
+);
+
+const CustomTheme darkTheme = CustomTheme(
+  backgroundPopup: Color.fromARGB(255, 34, 34, 34),
+  disabled: Color(0xFFB2B7C7),
+  secondaryText: Color(0xFF545454),
+  linkText: Color(0xFF042122),
+  borderButton: Color(0xFFE6EBFF),
+  background: Color(0xff1e2331),
+);
+
 final FlexSchemeColor _schemeLight = FlexSchemeColor.from(
   primary: const Color(0xFF0C7E84),
   secondary: const Color(0xFF09565A), // const Color(0xFF404e8c), //const Color(0xFF006B54),
@@ -80,59 +133,6 @@ const bool _tooltipsMatchBackground = true;
 final VisualDensity _visualDensity = FlexColorScheme.comfortablePlatformDensity;
 
 final TargetPlatform _platform = defaultTargetPlatform;
-
-class CustomTheme extends ThemeExtension<CustomTheme> {
-  const CustomTheme({this.backgroundPopup, this.disabled, this.secondaryText, this.linkText, this.borderButton, this.background});
-  final Color? backgroundPopup;
-  final Color? disabled;
-  final Color? secondaryText;
-  final Color? linkText;
-  final Color? borderButton;
-  final Color? background;
-
-  @override
-  CustomTheme copyWith({Color? backgroundPopup, Color? disabled, Color? secondaryText, Color? linkText, Color? borderButton, Color? background}) => CustomTheme(
-        backgroundPopup: backgroundPopup ?? this.backgroundPopup,
-        disabled: disabled ?? this.disabled,
-        secondaryText: secondaryText ?? this.secondaryText,
-        linkText: linkText ?? this.linkText,
-        borderButton: borderButton ?? this.borderButton,
-        background: background ?? this.background,
-      );
-
-  @override
-  CustomTheme lerp(ThemeExtension<CustomTheme>? other, double t) {
-    if (other is! CustomTheme) {
-      return this;
-    }
-    return CustomTheme(
-      backgroundPopup: Color.lerp(backgroundPopup, other.backgroundPopup, t),
-      disabled: Color.lerp(disabled, other.disabled, t),
-      secondaryText: Color.lerp(secondaryText, other.secondaryText, t),
-      linkText: Color.lerp(linkText, other.linkText, t),
-      borderButton: Color.lerp(borderButton, other.borderButton, t),
-      background: Color.lerp(background, other.background, t),
-    );
-  }
-}
-
-const CustomTheme lightTheme = CustomTheme(
-  backgroundPopup: Colors.white,
-  disabled: Color(0xFFB2B7C7),
-  secondaryText: Color(0xFF545454),
-  linkText: Color(0xFF042122),
-  borderButton: Color(0xFFE6EBFF),
-  background: Color(0xFFFCFDFC),
-);
-
-const CustomTheme darkTheme = CustomTheme(
-  backgroundPopup: Color.fromARGB(255, 34, 34, 34),
-  disabled: Color(0xFFB2B7C7),
-  secondaryText: Color(0xFF545454),
-  linkText: Color(0xFF042122),
-  borderButton: Color(0xFFE6EBFF),
-  background: Color(0xFF2b384b),
-);
 
 bool useMaterial3 = true;
 

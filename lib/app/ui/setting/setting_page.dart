@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:settings_ui/settings_ui.dart';
 
 import '../../../shared/index.dart';
 import '../../index.dart';
@@ -14,7 +15,7 @@ class SettingPage extends ConsumerWidget {
     Log.d('SettingPage > build');
     final isDarkMode = ref.watch(isDarkModeProvider);
 
-    Future<void> onPressLogout() async {
+    Future<void> onPressLogout(_) async {
       final result = await ref.nav.showDialog(AppPopup.confirmDialog(
         'Confirm',
         message: 'Are you sure you want to log out?',
@@ -30,32 +31,33 @@ class SettingPage extends ConsumerWidget {
       ref.update<bool?>(isDarkModeProvider, (_) => val);
     }
 
-    void handleTap() {
+    void onPressed(BuildContext context) {
       Log.d('tap cell');
-    }
-
-    List<AppSectionData> _buildList() {
-      return [
-        AppSectionData(headerTitle: 'Account', itemList: [
-          AppItemData(title: 'Account Management', accessoryType: AppListCellAccessoryType.detail, onTap: handleTap),
-          AppItemData(title: 'Security', accessoryType: AppListCellAccessoryType.detail, onTap: handleTap),
-        ]),
-        AppSectionData(headerTitle: 'Settings', itemList: [
-          AppItemData(title: 'Language', accessoryType: AppListCellAccessoryType.detail, accessoryString: 'English', onTap: handleTap),
-          AppItemData(title: 'Eye Protection Mode', accessoryType: AppListCellAccessoryType.switchOnOff, onChanged: onChanged, accItemValue: isDarkMode),
-          AppItemData(title: 'Automatically Clear Cache', subtitle: 'Clean up every 10 days', accessoryType: AppListCellAccessoryType.checkmark, selected: true, onTap: handleTap)
-        ]),
-        AppSectionData(itemList: [
-          AppItemData(cellType: AppListCellType.button, buttonTitle: 'Logout', buttonTitleColor: Colors.red, onTap: onPressLogout),
-        ])
-      ];
     }
 
     return AppScaffold(
       appBar: AppTopBar(text: 'Setting'),
-      body: AppListView(
-        // shrinkWrap: true,
-        sections: _buildList(),
+      body: SettingsList(
+        applicationType: ApplicationType.both,
+        sections: [
+          SettingsSection(
+            title: const Text('Account'),
+            tiles: [
+              SettingsTile.navigation(leading: const Icon(Icons.manage_accounts), title: const Text('Account Management'), trailing: const Icon(Icons.navigate_next), onPressed: onPressed),
+              SettingsTile.navigation(leading: const Icon(Icons.security), title: const Text('Security'), trailing: const Icon(Icons.navigate_next), onPressed: onPressed),
+            ],
+          ),
+          SettingsSection(
+            title: const Text('Settings'),
+            tiles: [
+              SettingsTile.navigation(leading: const Icon(Icons.language), title: const Text('Language'), value: const Text('English'), onPressed: onPressed),
+              SettingsTile.switchTile(leading: const Icon(Icons.dark_mode), title: const Text('Eye Protection Mode'), initialValue: isDarkMode, onToggle: onChanged),
+            ],
+          ),
+          SettingsSection(
+            tiles: [SettingsTile.navigation(leading: const Icon(Icons.logout), title: const Text('Logout'), onPressed: onPressLogout)],
+          ),
+        ],
       ),
     );
   }
