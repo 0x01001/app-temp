@@ -46,7 +46,6 @@ export 'ui/components/base_input.dart';
 export 'ui/components/popup/common_dialog.dart';
 export 'ui/components/popup/popup_button.dart';
 export 'ui/components/shimmer/circle_shimmer.dart';
-export 'ui/components/shimmer/listview_loader.dart';
 export 'ui/components/shimmer/rectangle_shimmer.dart';
 export 'ui/components/shimmer/shimmer.dart';
 export 'ui/components/shimmer/shimmer_loading.dart';

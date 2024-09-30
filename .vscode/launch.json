@@ -8,9 +8,8 @@
             "program": "lib/main.dart",
             "toolArgs": [
                 "--flavor",
-                "dev",
-                "--dart-define",
-                "FLAVOR=dev"
+                "dev", 
+                "--dart-define-from-file=config/dev.json"
             ]
         }, 
         {
@@ -21,8 +20,7 @@
             "toolArgs": [
                 "--flavor",
                 "stg",
-                "--dart-define",
-                "FLAVOR=stg"
+                "--dart-define-from-file=config/stg.json"
             ]
         },
         {
@@ -33,8 +31,7 @@
             "toolArgs": [
                 "--flavor",
                 "prod",
-                "--dart-define",
-                "FLAVOR=prod"
+                "--dart-define-from-file=config/prod.json"
             ]
         },
         {

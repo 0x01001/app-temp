@@ -81,31 +81,13 @@ class AppApiService {
   //   return _noneAuthAppServerApiClient.request(method: RestMethod.get, path: '/v1/me', decoder: AuthModel.fromMap);
   // }
 
-  // Future<ResultsListResponse<UserEntity>?> getUsers({int? page, int? limit}) {
-  //   return _randomUserApiClient.request(
-  //     method: RestMethod.get,
-  //     path: '',
-  //     queryParameters: {'page': page ?? Constant.initialPage, 'limit': limit ?? Constant.itemsPerPage},
-  //     successResponseMapperType: SuccessResponseMapperType.resultsJsonArray,
-  //     decoder: UserModel.fromMap,
-  //   );
-  // }
-
-  // Future<DataListResponse<PostModel>?> getListPost({int? page, int? limit}) async {
-  //   return _authAppServerApiClient.request(
-  //     method: RestMethod.get,
-  //     path: 'post',
-  //     queryParameters: {'page': page ?? Constant.initialPage, 'limit': limit ?? Constant.itemsPerPage},
-  //     successResponseMapperType: SuccessResponseMapperType.dataJsonArray,
-  //     decoder: PostModel.fromMap,
-  //   );
-  // }
-
-  Future<DataListResponse<UserModel>?> getListUser({int? page, int? limit}) async {
+  /// [page]: number of page
+  /// [limit]: number of items on page
+  Future<DataListResponse<UserModel>?> getListUser({int? page = Constant.initialPage, int? limit = Constant.itemsPerPage}) async {
     return _authAppServerApiClient.request(
       method: Method.get,
       path: 'user',
-      queryParameters: {'page': page ?? Constant.initialPage, 'limit': limit ?? Constant.itemsPerPage},
+      queryParameters: {'page': page, 'limit': limit},
       successResponseMapperType: SuccessResponseMapperType.dataJsonArray,
       decoder: UserModel.fromMap,
     );

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../data/index.dart';
 import '../resources/index.dart';
@@ -72,6 +73,7 @@ class MyApp extends HookConsumerWidget {
               supportedLocales: S.delegate.supportedLocales,
               localizationsDelegates: const [
                 S.delegate,
+                RefreshLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,

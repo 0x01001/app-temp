@@ -71,7 +71,6 @@ class FirebaseMessageModel {
       };
 }
 
-
 // const json  = ''' 
 // {
 //   "id": "1",

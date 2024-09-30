@@ -138,7 +138,6 @@ class Location {
       };
 }
 
-
 // {
 //   "id": "string",
 //   "title": "string",
