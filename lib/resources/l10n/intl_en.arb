@@ -67,5 +67,6 @@
   "forceLogout": "Session has expired, please log in again",
   "noData": "No data",
   "pullToLoadMore": "Pull to load more",
-  "tryAgain": "Try again"
+  "tryAgain": "Try again",
+  "conversation": "Conversation"
 }

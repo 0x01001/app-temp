@@ -64,8 +64,8 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
                             child: Icon(Icons.home, color: Colors.grey[800]),
                           ),
                   ),
+                  GButton(icon: Icons.chat, text: S.current.conversation),
                   const GButton(icon: Icons.design_services, text: 'UI'),
-                  const GButton(icon: Icons.api, text: 'API'),
                   GButton(icon: Icons.settings, text: S.current.setting)
                 ],
                 selectedIndex: _selectedIndex.value,

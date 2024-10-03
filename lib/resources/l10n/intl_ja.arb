@@ -67,5 +67,6 @@
   "forceLogout": "セッションが失効しました。再度ログインしてください。",
   "noData": "データがありません",
   "pullToLoadMore": "引っ張って読み込む",
-  "tryAgain": "もう一度試す"
+  "tryAgain": "もう一度試す",
+  "conversation": "会話"
 }

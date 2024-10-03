@@ -34,7 +34,10 @@ class Log {
   }
 
   static void start(Object? message) {
-    if (_enableLog) _stopwatch.start();
+    if (_enableLog) {
+      _stopwatch.reset();
+      _stopwatch.start();
+    }
     d(message);
   }
 

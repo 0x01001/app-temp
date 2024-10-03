@@ -1,7 +1,9 @@
+import 'package:dartx/dartx.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/index.dart';
 import '../../shared/index.dart';
+import '../index.dart';
 
 final shareProvider = Provider((_ref) => ShareProvider(_ref));
 
@@ -46,17 +48,13 @@ class ShareProvider {
   //   }
   // }
 
-  // List<FirebaseConversationUserData> getRenamedMembers({required List<FirebaseConversationUserData> members, required String conversationId}) {
-  //   return members
-  //       .map((e) => e.copyWith(
-  //             email: _ref.appPreferences.getUserNickname(
-  //                   conversationId: conversationId,
-  //                   memberId: e.userId,
-  //                 ) ??
-  //                 e.email,
-  //           ))
-  //       .toList();
-  // }
+  List<FirebaseConversationUserModel>? getRenamedMembers({List<FirebaseConversationUserModel>? members, String? conversationId}) {
+    return members
+        ?.map((e) => e.copyWith(
+              email: _ref.preferences.getUserNickname(conversationId: conversationId, memberId: e.userId) ?? e.email,
+            ))
+        .toList();
+  }
 
   // Future<void> deleteConversation(FirebaseConversationData conversation) async {
   //   await _ref.firebaseFirestoreService.deleteConversation(conversation.id);
@@ -97,11 +95,46 @@ class ShowBottomNav extends StateNotifier<bool> {
 
 final showBottomNavProvider = StateNotifierProvider<ShowBottomNav, bool>((ref) => ShowBottomNav());
 
+final filterConversationsProvider = Provider.autoDispose<List<FirebaseConversationModel>?>(
+  (ref) {
+    final conversations = ref.watch(conversationProvider.select((value) => value.data?.conversationList));
+    final keyword = ref.watch(conversationProvider.select((value) => value.data?.keyword));
+    final allConversationsMembers = ref.watch(conversationMembersProvider);
+    final filteredConversationsMembers = allConversationsMembers.filter(
+      (element) => element.value.joinToString(transform: (e) => e.email ?? '').containsIgnoreCase(keyword?.trim() ?? ''),
+    );
+
+    return conversations
+        ?.filter(
+          (conversation) {
+            if (allConversationsMembers.containsKey(conversation.id)) {
+              return filteredConversationsMembers.containsKey(conversation.id);
+            } else {
+              return conversation.members?.joinToString(transform: (e) => e.email ?? '').containsIgnoreCase(keyword?.trim() ?? '') ?? false;
+            }
+          },
+        )
+        .map((e) => e.copyWith(members: allConversationsMembers[e.id] ?? e.members))
+        .toList();
+  },
+);
+
+final conversationNameProvider = Provider.autoDispose.family<String, String>((ref, conversationId) {
+  final currentUser = ref.watch(currentUserProvider);
+  final members = ref.watch(conversationMembersProvider.select((value) => value[conversationId]));
+
+  members?.removeWhere((element) => element.userId == currentUser.id);
+
+  return members?.joinToString(transform: (e) => e.email ?? '') ?? '';
+});
+
+final conversationMembersProvider = StateProvider<Map<String, List<FirebaseConversationUserModel>>>((ref) => {});
+
 final currentUserProvider = StateProvider<FirebaseUserModel>(
   (ref) {
     ref.listenSelf((previous, next) {
-      // ref.appPreferences.saveUserId(next.id);
-      // ref.appPreferences.saveEmail(next.email);
+      ref.preferences.saveUserId(next.id ?? '');
+      ref.preferences.saveEmail(next.email ?? '');
     });
 
     return FirebaseUserModel();

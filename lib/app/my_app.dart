@@ -20,18 +20,6 @@ class MyApp extends HookConsumerWidget {
     final _appPreferences = getIt.get<AppPreferences>();
     Log.d('MyApp > build -----------------------------');
 
-    // useEffect(() {
-    //   ref.listenManual(
-    //     isDarkModeProvider,
-    //     (previous, next) {
-    //
-    //     },
-    //     fireImmediately: true,
-    //   );
-
-    //   return null;
-    // }, const []);
-
     return ScreenUtilInit(
       designSize: const Size(Constant.designDeviceWidth, Constant.designDeviceHeight),
       builder: (context, _) => Consumer(

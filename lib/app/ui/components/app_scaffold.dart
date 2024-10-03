@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../resources/index.dart';
 import '../../../shared/index.dart';
-import '../../index.dart';
 
 class AppScaffold extends StatelessWidget {
   const AppScaffold({
@@ -30,7 +29,7 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final scaffold = Scaffold(
       backgroundColor: backgroundColor ?? context.theme.extension<CustomTheme>()?.background,
-      body: Shimmer(child: useSafeArea ? SafeArea(child: body) : body),
+      body: useSafeArea ? SafeArea(child: body) : body,
       appBar: appBar,
       drawer: drawer,
       floatingActionButton: floatingActionButton,

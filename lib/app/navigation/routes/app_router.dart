@@ -29,8 +29,8 @@ class AppRouter extends _$AppRouter {
       children: [
         RedirectRoute(path: '', redirectTo: 'home'),
         homeTab,
+        conversationTab,
         uiTab,
-        apiTab,
         settingTab,
       ],
     ),
@@ -62,6 +62,20 @@ final homeTab = AutoRoute(
   ],
 );
 
+@RoutePage(name: 'ConversationTab')
+class BottomTabAPIPage extends AutoRouter {
+  const BottomTabAPIPage({super.key});
+}
+
+final conversationTab = AutoRoute(
+  path: 'conversation',
+  page: ConversationTab.page,
+  children: [
+    AutoRoute(path: '', page: ConversationRoute.page, title: (ctx, _) => 'Conversation'),
+    // AutoRoute(path: ':id', page: ConversationDetailRoute.page, title: (ctx, _) => 'Conversation Detail'),
+  ],
+);
+
 @RoutePage(name: 'UITab')
 class BottomTabUIPage extends AutoRouter {
   const BottomTabUIPage({super.key});
@@ -72,19 +86,6 @@ final uiTab = AutoRoute(
   page: UITab.page,
   children: [
     AutoRoute(path: '', page: UIRoute.page, title: (ctx, _) => 'UI'),
-  ],
-);
-
-@RoutePage(name: 'APITab')
-class BottomTabAPIPage extends AutoRouter {
-  const BottomTabAPIPage({super.key});
-}
-
-final apiTab = AutoRoute(
-  path: 'api',
-  page: APITab.page,
-  children: [
-    AutoRoute(path: '', page: APIRoute.page, title: (ctx, _) => 'API'),
   ],
 );
 

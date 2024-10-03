@@ -23,7 +23,7 @@ extension RefExt on Ref {
 
   // local
   AppPreferences get preferences => read(appPreferencesProvider);
-  // AppDatabase get appDatabase => read(appDatabaseProvider);
+  AppDatabase get database => read(appDatabaseProvider);
 
   // api
   AppApiService get api => read(appApiServiceProvider);

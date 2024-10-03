@@ -96,6 +96,16 @@ class AppPreferences {
     return _secureStorage.write(key: keyPassword, value: password);
   }
 
+  Future<bool> saveUserNickname({String? conversationId, String? memberId, String? nickname}) {
+    final key = '$keyNickName/$userId/$conversationId/$memberId';
+    return _sharedPreference.setString(key, nickname?.trim() ?? '');
+  }
+
+  String? getUserNickname({String? conversationId, String? memberId}) {
+    final key = '$keyNickName/$userId/$conversationId/$memberId';
+    return _sharedPreference.getString(key);
+  }
+
   Future<void> clearCurrentUserData() async {
     await Future.wait(
       [

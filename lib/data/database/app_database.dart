@@ -1,8 +1,11 @@
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../shared/index.dart';
 import '../index.dart';
+
+final appDatabaseProvider = Provider<AppDatabase>((ref) => getIt.get<AppDatabase>());
 
 @LazySingleton()
 class AppDatabase {

@@ -104,12 +104,6 @@ extension StringExtension on String {
   String toFullWidth() => _convertWidth(halfWidthRegExp, halfFullWidthDelta);
   String toHalfWidth() => _convertWidth(fullWidthRegExp, -halfFullWidthDelta);
 
-  String plus(String other) {
-    return this + other;
-  }
-
-  bool equalsIgnoreCase(String secondString) => toLowerCase().contains(secondString.toLowerCase());
-
   bool get isValidEmail {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
     return emailRegExp.hasMatch(this);
@@ -129,4 +123,30 @@ extension StringExtension on String {
     final phoneRegExp = RegExp(r'^\+?0[0-9]{10}$');
     return phoneRegExp.hasMatch(this);
   }
+
+  String plus(String other) {
+    return this + other;
+  }
+
+  String? get firstOrNull => isNotEmpty ? this[0] : null;
+
+  bool equalsIgnoreCase(String secondString) => toLowerCase().contains(secondString.toLowerCase());
+
+  bool containsIgnoreCase(String secondString) => toLowerCase().contains(secondString.toLowerCase());
+
+  String replaceLast({
+    required Pattern pattern,
+    required String replacement,
+  }) {
+    final match = pattern.allMatches(this).lastOrNull;
+    if (match == null) {
+      return this;
+    }
+    final prefix = substring(0, match.start);
+    final suffix = substring(match.end);
+
+    return '$prefix$replacement$suffix';
+  }
+
+  String get hardcoded => this;
 }
