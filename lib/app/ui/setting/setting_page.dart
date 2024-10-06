@@ -50,7 +50,7 @@ class SettingPage extends ConsumerWidget {
           SettingsSection(
             title: const Text('Settings'),
             tiles: [
-              SettingsTile.navigation(leading: const Icon(Icons.language), title: const Text('Language'), value: const Text('English'), onPressed: onPressed),
+              SettingsTile.navigation(leading: const Icon(Icons.language), title: const Text('Language'), value: const Text('English'), trailing: const Icon(Icons.navigate_next), onPressed: onPressed),
               SettingsTile.switchTile(leading: const Icon(Icons.dark_mode), title: const Text('Eye Protection Mode'), initialValue: isDarkMode, onToggle: onChanged),
             ],
           ),

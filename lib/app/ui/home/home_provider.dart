@@ -13,7 +13,7 @@ class HomeState extends BaseState {
   List<UserModel>? users;
   int? total;
 
-  HomeState copyWith({bool? isLoading, List<UserModel>? users, int? total, String? keyword, List<FirebaseConversationModel>? conversationList}) {
+  HomeState copyWith({bool? isLoading, List<UserModel>? users, int? total}) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
       users: users ?? this.users,

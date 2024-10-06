@@ -7,6 +7,12 @@ endif
 TEST_DART_DEFINE_LIGHT_MODE_AND_JA=--dart-define=IS_DARK_MODE=false --dart-define=LOCALE=ja
 TEST_DART_DEFINE_DARK_MODE_AND_EN=--dart-define=IS_DARK_MODE=true --dart-define=LOCALE=en
 
+update_app_id:
+	dart run rename setBundleId --targets ios,android --value "com.example.bundleId"
+
+update_app_name:
+	dart run rename setAppName --targets ios,android --value "YourAppName"
+
 update_app_icon:
 	dart run flutter_launcher_icons -f config/app-icon.yaml 
 
@@ -40,10 +46,19 @@ gen_env:
 gen_lang:
 	dart run intl_utils:generate
 
+gen_asset:
+	fluttergen -c pubspec.yaml
+
+gen_route:
+	dart run build_runner build --delete-conflicting-outputs --build-filter 'lib/app/navigation/routes/**'
+	# dart run build_runner build --delete-conflicting-outputs --build-filter="lib/app/navigation/routes/app_router.dart"
+
 gen_model:
 	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/data/model/*.dart"
+
 gen_app:
-	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/app/*.dart"			
+	dart run build_runner build --delete-conflicting-outputs --build-filter="./lib/app/*.dart"
+
 gen:
 	dart run build_runner clean
 	dart run build_runner build --delete-conflicting-outputs --verbose
@@ -184,3 +199,40 @@ t1_test:
 	--driver=test/integration_test/test_driver/integration_driver.dart \
 	--target test/integration_test/t1_login_failed.dart \
 	--flavor dev --debug --dart-define-from-file=config/dev.json
+
+# CI/CD
+cd_dev:
+	make cd_dev_android
+	make cd_dev_ios 
+
+cd_stg:
+	make cd_stg_android
+	make cd_stg_ios
+
+cd_dev_android:
+	cd android && fastlane increase_version_build_and_up_firebase_develop
+
+cd_stg_android:
+	cd android && fastlane increase_version_build_and_up_firebase_staging
+
+cd_dev_ios:
+	cd ios && fastlane increase_version_build_and_up_testflight_develop
+
+cd_stg_ios:
+	cd ios && fastlane increase_version_build_and_up_testflight_staging
+
+fastlane_update_plugins:
+	cd ios && bundle install && fastlane update_plugins
+	cd android && bundle install && fastlane update_plugins
+
+# gen certificates
+cer: cer_dev cer_stg cer_prod
+
+cer_dev:
+	cd config && fastlane match development -a com.flutter.app.dev
+
+cer_stg:
+	cd config && fastlane match adhoc -a com.flutter.app.stg
+
+cer_prod:
+	cd config && fastlane match appstore -a com.flutter.app

@@ -9,6 +9,7 @@ export 'exception/app_uncaught_exception.dart';
 export 'exception/remote_exception.dart';
 export 'exception/validation_exception.dart';
 export 'extensions/collection_ext.dart';
+export 'extensions/num_ext.dart';
 export 'extensions/object_ext.dart';
 export 'extensions/ref_ext.dart';
 export 'extensions/string_ext.dart';

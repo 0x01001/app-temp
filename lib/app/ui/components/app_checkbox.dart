@@ -4,11 +4,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../index.dart';
 
 class AppCheckBox extends HookWidget {
-  const AppCheckBox({this.title, this.value, this.onChanged, super.key});
+  const AppCheckBox({this.title, this.value, this.onChanged, this.enabled, super.key});
 
   final Function(bool?)? onChanged;
   final String? title;
   final bool? value;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class AppCheckBox extends HookWidget {
     useValueChanged(value, (_, __) => _data.value = value); //like didUpdateWidget for StatefulWidget
 
     return CheckboxListTile(
+      enabled: enabled,
       title: Transform.translate(offset: const Offset(-8, 0), child: AppText(title)),
       value: _data.value,
       onChanged: (bool? val) {

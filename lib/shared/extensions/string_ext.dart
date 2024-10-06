@@ -134,10 +134,7 @@ extension StringExtension on String {
 
   bool containsIgnoreCase(String secondString) => toLowerCase().contains(secondString.toLowerCase());
 
-  String replaceLast({
-    required Pattern pattern,
-    required String replacement,
-  }) {
+  String replaceLast({required Pattern pattern, required String replacement}) {
     final match = pattern.allMatches(this).lastOrNull;
     if (match == null) {
       return this;

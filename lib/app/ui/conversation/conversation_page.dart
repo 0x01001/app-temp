@@ -30,34 +30,37 @@ class ConversationPage extends BasePage<ConversationState, AutoDisposeStateNotif
     final email = ref.watch(currentUserProvider.select((value) => value.email));
 
     return AppScaffold(
-      appBar: AppTopBar(text: S.current.conversation),
+      hideKeyboardWhenTouchOutside: true,
+      appBar: AppTopBar(enableSearchBar: true, text: S.current.conversation, titleSpacing: 0, onSearchBarChanged: (value) => ref.read(provider.notifier).setKeyWord(value ?? '')),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Consumer(
-                  builder: (context, ref, child) {
-                    final isVipMember = ref.watch(currentUserProvider.select((value) => value.isVip));
-                    return Row(
-                      children: [
-                        AppAvatar(text: email ?? ''),
-                        const SizedBox(width: 16),
-                        Flexible(child: AppText(email)),
-                        const SizedBox(width: 4),
-                        Visibility(
-                          visible: isVipMember ?? false,
-                          child: const Icon(Icons.local_police, size: 20, color: Colors.green),
-                        ),
-                      ],
-                    );
-                  },
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      final isVipMember = ref.watch(currentUserProvider.select((value) => value.isVip));
+                      return Row(
+                        children: [
+                          AppAvatar(text: email ?? ''),
+                          const SizedBox(width: 16),
+                          Flexible(child: AppText(email)),
+                          const SizedBox(width: 4),
+                          Visibility(
+                            visible: isVipMember ?? false,
+                            child: const Icon(Icons.local_police, size: 20, color: Colors.green),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.only(left: 6, right: 6, bottom: 6),
             child: Row(
@@ -65,15 +68,9 @@ class ConversationPage extends BasePage<ConversationState, AutoDisposeStateNotif
                 const SizedBox(width: 12),
                 AppText(S.current.conversation, type: TextType.title),
                 const Spacer(),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+                IconButton(icon: const Icon(Icons.add), onPressed: () => ref.nav.push(UserRoute(action: UserPageAction.createNewConversation))),
               ],
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, bottom: 6),
-            // child: SearchTextField(
-            //   onChanged: (value) => ref.read(provider.notifier).setKeyWord(value),
-            // ),
           ),
           Expanded(
             child: Consumer(

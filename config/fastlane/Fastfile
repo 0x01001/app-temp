@@ -1,0 +1,149 @@
+platform :android do
+  desc "upload_app_bundle"
+  lane :upload_app_bundle do
+    upload_to_play_store(
+      package_name: "com.flutter.app",
+      track: "internal",
+      release_status: "draft",
+      json_key_data: ENV["GOOGLE_PLAY_CONSOLE_SERVICE_ACCOUNT_KEY_CONTENT"],
+      aab: "./build/app/outputs/bundle/productionRelease/app-production-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      changes_not_sent_for_review: true,
+    )
+  end
+end
+
+platform :ios do
+
+  desc "upload testflight"
+  lane :upload_ipa_store_connect do
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+      duration: 1200,
+      in_house: false,
+    )
+
+    upload_to_testflight(
+      app_identifier: "com.flutter.app",
+      skip_waiting_for_build_processing: true,
+      api_key: api_key,
+      ipa: "./build/ios/ipa.ipa"
+    )
+  end
+
+  desc "match appstore"
+  lane :match_appstore do
+    keychain_name = ENV["MATCH_KEYCHAIN_NAME"]
+    keychain_password = ENV["MATCH_KEYCHAIN_PASSWORD"]
+    ensure_temp_keychain(keychain_name, keychain_password)
+
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+      duration: 1200,
+      in_house: false,
+    )
+
+    github_username = ENV["ADMIN_GITHUB_USERNAME"]
+    github_personal_access_token = ENV["ADMIN_GITHUB_ACCESS_TOKEN"]
+    authorization_token_str = "#{github_username}:#{github_personal_access_token}"
+    git_basic_authorization = Base64.strict_encode64(authorization_token_str)
+
+    match(
+      type: "appstore",
+      app_identifier: "com.flutter.app",
+      git_basic_authorization: git_basic_authorization,
+      team_id: ENV["APPLE_DEVELOPER_TEAM_ID"],
+      keychain_name: keychain_name,
+      keychain_password: keychain_password,
+      force_for_new_devices: true,
+      api_key: api_key,
+    )
+  end
+
+  desc "match adhoc"
+  lane :match_adhoc do
+    keychain_name = ENV["MATCH_KEYCHAIN_NAME"]
+    keychain_password = ENV["MATCH_KEYCHAIN_PASSWORD"]
+    ensure_temp_keychain(keychain_name, keychain_password)
+
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+      duration: 1200,
+      in_house: false,
+    )
+
+    github_username = ENV["ADMIN_GITHUB_USERNAME"]
+    github_personal_access_token = ENV["ADMIN_GITHUB_ACCESS_TOKEN"]
+    authorization_token_str = "#{github_username}:#{github_personal_access_token}"
+    git_basic_authorization = Base64.strict_encode64(authorization_token_str)
+
+    match(
+      type: "adhoc",
+      app_identifier: "com.flutter.app.stg",
+      git_basic_authorization: git_basic_authorization,
+      team_id: ENV["APPLE_DEVELOPER_TEAM_ID"],
+      keychain_name: keychain_name,
+      keychain_password: keychain_password,
+      force_for_new_devices: true,
+      api_key: api_key,
+    )
+  end
+
+  desc "clean"
+  lane :match_clean do
+    keychain_name = ENV["MATCH_KEYCHAIN_NAME"]
+    delete_temp_keychain(keychain_name)
+  end
+
+  desc "dsyms"
+  lane :dsyms do
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+      duration: 1200,
+      in_house: false,
+    )
+
+    download_dsyms(
+      api_key: api_key,
+      app_identifier: "com.flutter.app",
+      team_id: ENV["APPLE_DEVELOPER_TEAM_ID"],
+      version: ENV["RELEASE_VERSION_NUMBER"]
+    )
+    upload_symbols_to_crashlytics(
+      gsp_path: "./ios/Firebase/production/GoogleService-Info.plist",
+      binary_path: "./ios/Pods/FirebaseCrashlytics/upload-symbols"
+    )
+  end
+
+end
+
+def delete_temp_keychain(name)
+  delete_keychain(
+    name: name
+  ) if File.exist? File.expand_path("~/Library/Keychains/#{name}-db")
+end
+
+def create_temp_keychain(name, password)
+  create_keychain(
+    name: name,
+    password: password,
+    default_keychain: true,
+    timeout: 0
+  )
+end
+
+def ensure_temp_keychain(name, password)
+  delete_temp_keychain(name)
+  create_temp_keychain(name, password)
+end

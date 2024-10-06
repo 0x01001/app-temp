@@ -58,7 +58,7 @@ class FirebaseFirestoreService {
     });
   }
 
-  Stream<List<FirebaseUserModel>> getUsersExceptMembersStream(List<String> members) {
+  Stream<List<FirebaseUserModel>> getUsersExceptMembersStream(List<String?>? members) {
     return _userCollection.where(FirebaseUserModel.keyId, whereNotIn: members).orderBy(FirebaseUserModel.keyId).orderBy(FirebaseUserModel.keyUpdatedAt, descending: true).snapshots().map((event) {
       return event.docs.map((e) {
         return FirebaseUserModel.fromMap(e.data());

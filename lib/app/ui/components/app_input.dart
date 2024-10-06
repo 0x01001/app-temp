@@ -9,7 +9,7 @@ import '../../index.dart';
 
 class AppInput extends BaseInput {
   const AppInput({
-    required super.field,
+    super.field,
     this.hintText,
     this.suffixIcon,
     this.prefixIcon,
@@ -26,13 +26,20 @@ class AppInput extends BaseInput {
     this.nextField,
     this.enableLoading = false,
     this.enableNextFocus = true,
+    this.enableBackgroundColor = true,
+    this.enableBorder = true,
     this.borderRadius,
+    this.backgroundColor,
+    this.focusNode,
     super.key,
   });
 
   final FieldType? nextField;
   final bool enableLoading;
   final bool enableNextFocus;
+  final bool enableBackgroundColor;
+  final bool enableBorder;
+  final Color? backgroundColor;
   final String? Function(String?)? validator;
   final Function(String?)? onSubmitted;
   final Function(String?)? onChanged;
@@ -46,6 +53,7 @@ class AppInput extends BaseInput {
   final Widget? prefixIcon;
   final String? hintText;
   final String? labelText;
+  final FocusNode? focusNode;
   final Future<void> Function(BaseInput)? onFocus;
 
   @override
@@ -55,10 +63,12 @@ class AppInput extends BaseInput {
     final _isShowLoading = useState(false);
     final _isShowIcon = useState(false);
     final _focusNode = useFocusNode();
-    final _border = OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? Constant.defaultBorderRadiusTextInput)),
-      borderSide: BorderSide(width: 0, color: context.theme.extension<CustomTheme>()?.borderButton ?? const Color(0xFF000000)),
-    );
+    final _border = enableBorder
+        ? OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? Constant.defaultBorderRadiusTextInput)),
+            borderSide: BorderSide(width: 0, color: context.theme.extension<CustomTheme>()?.borderButton ?? Colors.transparent),
+          )
+        : InputBorder.none;
     // debugPrint('build: $field');
 
     Future<void> callback() async {
@@ -102,8 +112,8 @@ class AppInput extends BaseInput {
 
     Widget _buildContent() {
       return FormBuilderTextField(
-        name: field.name,
-        focusNode: _focusNode,
+        name: field?.name ?? '',
+        focusNode: focusNode ?? _focusNode,
         autocorrect: false,
         textAlignVertical: TextAlignVertical.center,
         style: context.bodySmall,
@@ -114,6 +124,8 @@ class AppInput extends BaseInput {
         // onEditingComplete: enableNextFocus ? () => FocusScope.of(context).nextFocus() : null, // bug render
         onSubmitted: onSubmitted, // ?? (_) => FocusScope.of(context).unfocus(), // (val) => nextField != null ? onTextFieldSubmitted(field, nextField) : focusNodes.value[field]?.unfocus(),
         decoration: InputDecoration(
+          filled: enableBackgroundColor,
+          fillColor: backgroundColor,
           contentPadding: EdgeInsets.fromLTRB(8, 16, suffixIcon != null || _buildSuffixIcon() != null ? 0 : 8, 16),
           border: _border,
           enabledBorder: _border,
@@ -145,8 +157,8 @@ class AppInput extends BaseInput {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        labelText != null ? AppText(labelText, type: TextType.content) : const SizedBox.shrink(),
-        const SizedBox(height: 5),
+        if (labelText != null) AppText(labelText, type: TextType.content),
+        if (labelText != null) const SizedBox(height: 5),
         _buildContent(),
       ],
     );

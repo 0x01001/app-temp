@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../data/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
@@ -46,11 +48,9 @@ class BottomTabHomePage extends AutoRouter {
 }
 
 final homeTab = AutoRoute(
-  path: 'home',
   page: HomeTab.page,
-  maintainState: true,
   children: [
-    AutoRoute(path: '', page: HomeRoute.page, title: (ctx, _) => 'Home'),
+    AutoRoute(page: HomeRoute.page, initial: true),
     // AutoRoute(
     //   path: ':id',
     //   page: ItemDetailRoute.page,
@@ -63,41 +63,39 @@ final homeTab = AutoRoute(
 );
 
 @RoutePage(name: 'ConversationTab')
-class BottomTabAPIPage extends AutoRouter {
-  const BottomTabAPIPage({super.key});
+class ConversationTabPage extends AutoRouter {
+  const ConversationTabPage({super.key});
 }
 
 final conversationTab = AutoRoute(
-  path: 'conversation',
   page: ConversationTab.page,
   children: [
-    AutoRoute(path: '', page: ConversationRoute.page, title: (ctx, _) => 'Conversation'),
-    // AutoRoute(path: ':id', page: ConversationDetailRoute.page, title: (ctx, _) => 'Conversation Detail'),
+    AutoRoute(page: ConversationRoute.page, initial: true),
+    AutoRoute(page: ChatRoute.page),
+    AutoRoute(page: UserRoute.page),
   ],
 );
 
 @RoutePage(name: 'UITab')
-class BottomTabUIPage extends AutoRouter {
-  const BottomTabUIPage({super.key});
+class UITabPage extends AutoRouter {
+  const UITabPage({super.key});
 }
 
 final uiTab = AutoRoute(
-  path: 'ui',
   page: UITab.page,
   children: [
-    AutoRoute(path: '', page: UIRoute.page, title: (ctx, _) => 'UI'),
+    AutoRoute(page: UIRoute.page, initial: true),
   ],
 );
 
 @RoutePage(name: 'SettingTab')
-class BottomTabSettingPage extends AutoRouter {
-  const BottomTabSettingPage({super.key});
+class SettingTabPage extends AutoRouter {
+  const SettingTabPage({super.key});
 }
 
 final settingTab = AutoRoute(
-  path: 'setting',
   page: SettingTab.page,
   children: [
-    AutoRoute(path: '', page: SettingRoute.page, title: (ctx, _) => 'Setting'),
+    AutoRoute(page: SettingRoute.page, initial: true),
   ],
 );

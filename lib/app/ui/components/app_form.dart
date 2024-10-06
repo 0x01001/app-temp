@@ -83,11 +83,11 @@ List<String? Function(T?)> checkLength<T>(int from, int to) => [
       FormBuilderValidators.maxLength(to, errorText: S.current.lengthCharacter(from, to)),
     ];
 
-String? Function(bool?) checkValidatorBool(FieldType type) {
+String? Function(bool?) checkValidatorBool(FieldType? type) {
   return FormBuilderValidators.equal(true, errorText: S.current.youMustAcceptTerms);
 }
 
-String? Function(String?) checkValidator(FieldType type) {
+String? Function(String?) checkValidator(FieldType? type) {
   switch (type) {
     case FieldType.address:
       return FormBuilderValidators.maxLength(128, errorText: S.current.lengthCharacter(0, 128));
@@ -153,7 +153,7 @@ class AppForm extends HookConsumerWidget {
     // final val = formKey.currentState?.value[data.field.name];
     // Log.d('AppForm > onFocus > val: $val');
     // if (val != null && val.trim().isNotEmpty)
-    return formKey.currentState?.fields[data.field.name]?.validate(focusOnInvalid: false) ?? false;
+    return formKey.currentState?.fields[data.field?.name]?.validate(focusOnInvalid: false) ?? false;
     // return false;
   }
 

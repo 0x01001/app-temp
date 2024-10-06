@@ -31,6 +31,7 @@ class HomePage extends BasePage<HomeState, AutoDisposeStateNotifierProvider<Home
             useRefresher: true,
             fetch: ref.read(provider.notifier).loadData,
             isLoading: isLoading,
+            padding: const EdgeInsets.symmetric(vertical: 4),
             items: users,
             total: total,
             itemBuilder: (_, index) => _Item(item: users?[index], index: index),

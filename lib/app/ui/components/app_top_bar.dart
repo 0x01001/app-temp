@@ -1,18 +1,28 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
-class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
+enum LeadingIcon { back, close, hambuger, none }
+
+enum AppBarTitle { logo, text, none }
+
+class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
   AppTopBar({
     super.key,
     this.text,
     this.onTitlePressed,
     this.leadingIcon,
     this.titleType = AppBarTitle.text,
+    this.title,
     this.centerTitle = true,
+    this.enableSearchBar = false,
     this.elevation = 1.0,
     this.actions,
     this.height,
@@ -35,13 +45,16 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
     this.systemOverlayStyle,
     this.leadingIconColor,
     this.leading,
+    this.onSearchBarChanged,
   }) : preferredSize = Size.fromHeight(height ?? 56);
 
   final String? text;
   final VoidCallback? onTitlePressed;
   final LeadingIcon? leadingIcon;
   final AppBarTitle titleType;
+  final Widget? title;
   final bool? centerTitle;
+  final bool? enableSearchBar;
   final double? elevation;
   final List<Widget>? actions;
   final double? height;
@@ -64,13 +77,97 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   final TextStyle? titleTextStyle;
   final Color? leadingIconColor;
   final SystemUiOverlayStyle? systemOverlayStyle;
+  final Function(String?)? onSearchBarChanged;
 
   @override
   final Size preferredSize;
 
   @override
-  Widget build(BuildContext context) {
-    final _nav = getIt.get<AppNavigator>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _enableSearchBar = useState(false);
+    final _animation = useAnimationController(duration: 400.ms);
+    final _textController = useTextEditingController();
+    final _focusNode = useFocusNode();
+
+    Widget _buildPrefixIcon() {
+      return IconButton(
+        onPressed: () {
+          FocusScope.of(context).requestFocus(_focusNode);
+          _enableSearchBar.value = !_enableSearchBar.value;
+        },
+        icon: const Icon(Icons.search, size: 24),
+      );
+    }
+
+    Widget _buildSuffixIcon() {
+      return AnimatedBuilder(
+        builder: (context, widget) => Transform.rotate(angle: _animation.value * 2.0 * pi, child: widget),
+        animation: _animation,
+        child: AnimatedOpacity(
+          opacity: _enableSearchBar.value ? 1.0 : 0.0,
+          duration: 200.ms,
+          child: IconButton(
+            onPressed: () {
+              _textController.clear();
+              final FocusScopeNode currentScope = FocusScope.of(context);
+              if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              }
+              _enableSearchBar.value = !_enableSearchBar.value;
+              _animation.status == AnimationStatus.completed ? _animation.reverse() : _animation.forward();
+            },
+            icon: const Icon(Icons.close, size: 24),
+          ),
+        ),
+      );
+    }
+
+    Widget _buildIcon(SvgGenImage svg) {
+      return svg.svg(colorFilter: ColorFilter.mode(leadingIconColor ?? Colors.transparent, BlendMode.srcIn), width: 10, height: 10);
+    }
+
+    Widget _buildTitle() {
+      return GestureDetector(
+          onTap: onTitlePressed,
+          behavior: HitTestBehavior.translucent,
+          child: titleType == AppBarTitle.text
+              ? AppText(text ?? '', textStyle: titleTextStyle, type: TextType.header)
+              : titleType == AppBarTitle.logo
+                  ? _buildIcon(Assets.images.logo)
+                  : null);
+    }
+
+    Widget _buildInputSearchBar() {
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          AnimatedOpacity(
+            opacity: _enableSearchBar.value ? 0.0 : 1.0,
+            duration: _enableSearchBar.value ? 200.ms : 400.ms,
+            child: Center(child: _buildTitle()),
+          ),
+          Container(
+            alignment: Alignment.centerRight,
+            child: AnimatedContainer(
+              duration: 400.ms,
+              width: _enableSearchBar.value ? AppSize.screenWidth : 48,
+              curve: Curves.easeOut,
+              child: AppInput(
+                controller: _textController,
+                focusNode: _focusNode,
+                prefixIcon: _buildPrefixIcon(),
+                suffixIcon: _buildSuffixIcon(),
+                hintText: S.current.searching,
+                enableBackgroundColor: false,
+                enableBorder: false,
+                onChanged: onSearchBarChanged,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     return AppBar(
       surfaceTintColor: Colors.transparent,
       toolbarHeight: preferredSize.height,
@@ -85,15 +182,15 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       actionsIconTheme: actionsIconTheme,
       primary: primary,
       excludeHeaderSemantics: excludeHeaderSemantics,
-      titleSpacing: leadingIcon == null ? 15 : titleSpacing,
+      titleSpacing: leadingIcon == null && enableSearchBar == false ? 16 : titleSpacing,
       toolbarOpacity: toolbarOpacity,
       bottomOpacity: bottomOpacity,
       leadingWidth: leadingWidth,
       systemOverlayStyle: systemOverlayStyle ?? (MediaQuery.platformBrightnessOf(context) == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark),
       leading: leading ??
-          (_nav.canPop
+          (ref.nav.canPop
               ? GestureDetector(
-                  onTap: () => _nav.pop(),
+                  onTap: () => ref.nav.pop(),
                   child: Padding(
                     padding: EdgeInsets.only(left: leadingIcon == LeadingIcon.close ? 0 : 10),
                     child: leadingIcon == LeadingIcon.close ? const Icon(Icons.close, size: 24) : const Icon(Icons.arrow_back_ios, size: 24),
@@ -101,29 +198,9 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
                 )
               : null),
       centerTitle: centerTitle,
-      title: GestureDetector(
-        onTap: onTitlePressed,
-        behavior: HitTestBehavior.translucent,
-        child: titleType == AppBarTitle.text
-            ? AppText(text ?? '', textStyle: titleTextStyle, type: TextType.header)
-            : titleType == AppBarTitle.logo
-                ? _buildIcon(Assets.images.logo)
-                : null,
-      ),
+      title: title ?? (enableSearchBar == true ? _buildInputSearchBar() : _buildTitle()),
       actions: actions,
       elevation: elevation,
     );
   }
-
-  Widget _buildIcon(SvgGenImage svg) {
-    return svg.svg(
-      colorFilter: ColorFilter.mode(leadingIconColor ?? Colors.transparent, BlendMode.srcIn),
-      width: 10,
-      height: 10,
-    );
-  }
 }
-
-enum LeadingIcon { back, close, hambuger, none }
-
-enum AppBarTitle { logo, text, none }

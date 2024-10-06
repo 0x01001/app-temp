@@ -68,5 +68,6 @@
   "noData": "No data",
   "pullToLoadMore": "Pull to load more",
   "tryAgain": "Try again",
-  "conversation": "Conversation"
+  "conversation": "Conversation",
+  "searching": "Search..."
 }

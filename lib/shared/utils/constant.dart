@@ -74,7 +74,7 @@ class Constant {
   static const defaultBorderRadiusTextInput = 5.0;
 
   // device
-  static const designDeviceWidth = 375.0;
+  static const designDeviceWidth = 375.0; // Design size (width, height) in px from Figma or Sketch
   static const designDeviceHeight = 667.0;
 
   static const maxMobileWidth = 450;

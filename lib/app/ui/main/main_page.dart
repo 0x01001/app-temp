@@ -22,15 +22,12 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
     final _showBottomNav = ref.watch(showBottomNavProvider);
     final _selectedIndex = useState(0);
 
-    useEffect(
-      () {
-        Future.microtask(() {
-          ref.read(provider.notifier).init();
-        });
-        return () {};
-      },
-      [],
-    );
+    useEffect(() {
+      Future.microtask(() {
+        ref.read(provider.notifier).init();
+      });
+      return () {};
+    }, []);
 
     return AutoTabsScaffold(
       routes: ref.nav.listRoutes,

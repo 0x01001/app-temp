@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../resources/index.dart';
+import '../../index.dart';
 
-class AppRefresher extends ConsumerWidget {
+class AppRefresher extends HookConsumerWidget {
   const AppRefresher({
     required this.refreshController,
     required this.child,
@@ -29,6 +31,7 @@ class AppRefresher extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final _isNoMoreData = useState(false);
     return SmartRefresher(
       controller: refreshController,
       enablePullUp: enablePullUp,
@@ -37,6 +40,8 @@ class AppRefresher extends ConsumerWidget {
       physics: physics,
       enablePullDown: onRefresh != null,
       footer: CustomFooter(
+        height: _isNoMoreData.value && !isShowNoData ? 0.0 : 60.0,
+        onModeChange: (mode) => _isNoMoreData.value = mode == LoadStatus.noMore,
         builder: (BuildContext context, LoadStatus? mode) {
           Widget body = const SizedBox.shrink();
           if (mode == LoadStatus.loading) {
@@ -53,11 +58,11 @@ class AppRefresher extends ConsumerWidget {
                 alignment: Alignment.center,
                 child: Column(
                   children: [
-                    Text(S.current.unknownException, style: context.bodyMedium, textAlign: TextAlign.center),
+                    AppText(S.current.unknownException, textAlign: TextAlign.center),
                     const SizedBox(height: 8),
                     const Icon(Icons.refresh_outlined),
                     const SizedBox(height: 8),
-                    Text(S.current.tryAgain, style: context.bodyMedium),
+                    AppText(S.current.tryAgain),
                   ],
                 ),
               ),
@@ -65,19 +70,17 @@ class AppRefresher extends ConsumerWidget {
           } else if (mode == LoadStatus.canLoading) {
             body = SizedBox(
               height: 50,
-              child: Center(child: Text(S.current.pullToLoadMore, style: context.bodyMedium)),
+              child: Center(child: AppText(S.current.pullToLoadMore)),
             );
           } else if (mode == LoadStatus.noMore) {
-            body = SizedBox(
-              height: isShowNoData ? 50 : 0,
-              child: Center(
-                child: Text(
-                  isShowNoData ? (noMoreDataText ?? S.current.noData) : '',
-                  style: context.bodyMedium,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
+            body = !isShowNoData
+                ? const SizedBox.shrink()
+                : SizedBox(
+                    height: 50,
+                    child: Center(
+                      child: AppText(noMoreDataText ?? S.current.noData, textAlign: TextAlign.center),
+                    ),
+                  );
           }
           return body;
         },

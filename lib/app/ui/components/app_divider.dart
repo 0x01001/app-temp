@@ -21,28 +21,13 @@ class AppDivider extends StatelessWidget {
     return direction == DividerDirection.horizontal
         ? SizedBox(
             height: 1,
-            // ignore: prefer_common_widgets
-            child: Divider(
-              height: thickness,
-              color: color,
-              indent: indent,
-              endIndent: endIndent,
-            ),
+            child: Divider(height: thickness, color: color, indent: indent, endIndent: endIndent),
           )
         : SizedBox(
             width: 1,
-            // ignore: prefer_common_widgets
-            child: VerticalDivider(
-              width: thickness,
-              color: color,
-              indent: indent,
-              endIndent: endIndent,
-            ),
+            child: VerticalDivider(width: thickness, color: color, indent: indent, endIndent: endIndent),
           );
   }
 }
 
-enum DividerDirection {
-  vertical,
-  horizontal,
-}
+enum DividerDirection { vertical, horizontal }

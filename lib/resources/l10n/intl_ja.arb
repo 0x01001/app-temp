@@ -68,5 +68,6 @@
   "noData": "データがありません",
   "pullToLoadMore": "引っ張って読み込む",
   "tryAgain": "もう一度試す",
-  "conversation": "会話"
+  "conversation": "会話",
+  "searching": "検索中..."
 }
