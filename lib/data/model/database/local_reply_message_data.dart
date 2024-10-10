@@ -56,4 +56,12 @@ class LocalReplyMessageData {
       replyBy: replyByUserId,
     );
   }
+
+  FirebaseReplyMessageModel toDataRemote() => FirebaseReplyMessageModel(
+        replyToMessageId: repplyToMessageId,
+        type: type.index,
+        replyToMessage: repplyToMessage,
+        replyByUserId: replyByUserId,
+        replyToUserId: replyToUserId,
+      );
 }

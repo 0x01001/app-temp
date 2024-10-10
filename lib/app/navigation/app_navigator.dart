@@ -11,9 +11,6 @@ import '../index.dart';
 
 final appNavigatorProvider = Provider<AppNavigator>((ref) => getIt.get<AppNavigator>());
 
-// @Riverpod(keepAlive: true)
-// AppNavigator appNavigator(AppNavigatorRef ref) => getIt.get<AppNavigator>();
-
 @LazySingleton()
 class AppNavigator {
   AppNavigator(this._appRouter);

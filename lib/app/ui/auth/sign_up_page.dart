@@ -73,7 +73,7 @@ class _Form extends AppForm {
           AppInput(field: FieldType.confirmPassword, labelText: S.current.confirmPassword, keyboardType: TextInputType.visiblePassword, enableNextFocus: false, onFocus: onFocus, validator: (val) => validateRePassword(FieldType.signUpPassword.name, val)),
           const SizedBox(height: 15),
           AppInput(field: FieldType.displayName, labelText: S.current.displayName),
-          const SizedBox(height: 15),
+          const SizedBox(height: 30),
           // AppInput(field: FieldType.lastName, labelText: S.current.lastName),
           // SizedBox(height: 15),
           // AppDropdown(field: FieldType.gender, labelText: S.current.gender, hintText: '-- Choose --', items: getGender()),

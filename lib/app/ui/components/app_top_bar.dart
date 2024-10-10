@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -26,7 +27,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
     this.elevation = 1.0,
     this.actions,
     this.height,
-    this.automaticallyImplyLeading = true,
+    this.automaticallyImplyLeading = false,
     this.flexibleSpace,
     this.bottom,
     this.shadowColor,
@@ -46,7 +47,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
     this.leadingIconColor,
     this.leading,
     this.onSearchBarChanged,
-  }) : preferredSize = Size.fromHeight(height ?? 56);
+  }) : preferredSize = Size.fromHeight(height ?? AppBar().preferredSize.height);
 
   final String? text;
   final VoidCallback? onTitlePressed;
@@ -85,9 +86,12 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _enableSearchBar = useState(false);
+    final _showLeading = useState(true);
     final _animation = useAnimationController(duration: 400.ms);
     final _textController = useTextEditingController();
     final _focusNode = useFocusNode();
+    final _currentPath = context.router.current.path;
+    // Log.d('Appbar: ${ref.nav.canPop} - ${context.router.current.parent?.path} > ${context.router.current.path}');
 
     Widget _buildPrefixIcon() {
       return IconButton(
@@ -114,6 +118,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
                 FocusManager.instance.primaryFocus?.unfocus();
               }
               _enableSearchBar.value = !_enableSearchBar.value;
+              _showLeading.value = true;
               _animation.status == AnimationStatus.completed ? _animation.reverse() : _animation.forward();
             },
             icon: const Icon(Icons.close, size: 24),
@@ -144,7 +149,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
           AnimatedOpacity(
             opacity: _enableSearchBar.value ? 0.0 : 1.0,
             duration: _enableSearchBar.value ? 200.ms : 400.ms,
-            child: Center(child: _buildTitle()),
+            child: Center(child: Transform.translate(offset: Offset(_currentPath.isNotEmpty ? -34 : 0, 0), child: _buildTitle())),
           ),
           Container(
             alignment: Alignment.centerRight,
@@ -168,6 +173,21 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
       );
     }
 
+    Widget _buildLeading() {
+      return AnimatedOpacity(
+        opacity: !_enableSearchBar.value ? 1.0 : 0.0,
+        duration: 200.ms,
+        onEnd: () => _showLeading.value = _enableSearchBar.value == true ? false : true,
+        child: GestureDetector(
+          onTap: () => ref.nav.pop(),
+          child: Padding(
+            padding: EdgeInsets.only(left: leadingIcon == LeadingIcon.close ? 0 : 10),
+            child: leadingIcon == LeadingIcon.close ? const Icon(Icons.close, size: 24) : const Icon(Icons.arrow_back_ios, size: 24),
+          ),
+        ),
+      );
+    }
+
     return AppBar(
       surfaceTintColor: Colors.transparent,
       toolbarHeight: preferredSize.height,
@@ -187,16 +207,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
       bottomOpacity: bottomOpacity,
       leadingWidth: leadingWidth,
       systemOverlayStyle: systemOverlayStyle ?? (MediaQuery.platformBrightnessOf(context) == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark),
-      leading: leading ??
-          (ref.nav.canPop
-              ? GestureDetector(
-                  onTap: () => ref.nav.pop(),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: leadingIcon == LeadingIcon.close ? 0 : 10),
-                    child: leadingIcon == LeadingIcon.close ? const Icon(Icons.close, size: 24) : const Icon(Icons.arrow_back_ios, size: 24),
-                  ),
-                )
-              : null),
+      leading: leading ?? (_currentPath.isNotEmpty && _showLeading.value ? _buildLeading() : null),
       centerTitle: centerTitle,
       title: title ?? (enableSearchBar == true ? _buildInputSearchBar() : _buildTitle()),
       actions: actions,

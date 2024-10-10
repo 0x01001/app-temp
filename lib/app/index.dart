@@ -27,6 +27,7 @@ export 'ui/components/app_dropdown.dart';
 export 'ui/components/app_form.dart';
 export 'ui/components/app_grid.dart';
 export 'ui/components/app_image.dart';
+export 'ui/components/app_ink_well.dart';
 export 'ui/components/app_input.dart';
 export 'ui/components/app_list.dart';
 export 'ui/components/app_loading.dart';

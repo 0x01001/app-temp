@@ -56,10 +56,12 @@ class ShareProvider {
         .toList();
   }
 
-  // Future<void> deleteConversation(FirebaseConversationData conversation) async {
-  //   await _ref.firebaseFirestoreService.deleteConversation(conversation.id);
-  //   await _ref.appDatabase.removeMessagesByConversationId(conversation.id);
-  // }
+  Future<void> deleteConversation(String? id) async {
+    if (id != null) {
+      await _ref.firebaseFirestore.deleteConversation(id);
+      await _ref.database.removeMessagesByConversationId(id);
+    }
+  }
 }
 
 final languageCodeProvider = StateProvider<LanguageCode>(
@@ -99,7 +101,7 @@ final filterConversationsProvider = Provider.autoDispose<List<FirebaseConversati
   (ref) {
     final conversations = ref.watch(conversationProvider.select((value) => value.data?.conversationList));
     final keyword = ref.watch(conversationProvider.select((value) => value.data?.keyword));
-    final allConversationsMembers = ref.watch(conversationMembersProvider);
+    final allConversationsMembers = ref.watch(conversationMembersMapProvider);
     final filteredConversationsMembers = allConversationsMembers.filter(
       (element) => element.value.joinToString(transform: (e) => e.email ?? '').containsIgnoreCase(keyword?.trim() ?? ''),
     );
@@ -121,14 +123,18 @@ final filterConversationsProvider = Provider.autoDispose<List<FirebaseConversati
 
 final conversationNameProvider = Provider.autoDispose.family<String, String>((ref, conversationId) {
   final currentUser = ref.watch(currentUserProvider);
-  final members = ref.watch(conversationMembersProvider.select((value) => value[conversationId]));
+  final members = ref.watch(conversationMembersMapProvider.select((value) => value[conversationId]));
 
   members?.removeWhere((element) => element.userId == currentUser.id);
 
   return members?.joinToString(transform: (e) => e.email ?? '') ?? '';
 });
 
-final conversationMembersProvider = StateProvider<Map<String, List<FirebaseConversationUserModel>>>((ref) => {});
+final conversationMembersMapProvider = StateProvider<Map<String, List<FirebaseConversationUserModel>>>((ref) => {});
+
+final conversationMembersProvider = Provider.autoDispose.family<List<FirebaseConversationUserModel>, String>((ref, conversationId) {
+  return ref.watch(conversationMembersMapProvider)[conversationId]?.distinctBy((element) => element.userId).toList() ?? [];
+});
 
 final currentUserProvider = StateProvider<FirebaseUserModel>(
   (ref) {

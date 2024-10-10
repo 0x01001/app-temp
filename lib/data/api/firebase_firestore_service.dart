@@ -17,7 +17,7 @@ class FirebaseFirestoreService {
 
   CollectionReference<Map<String, dynamic>> get _conversationCollection => FirebaseFirestore.instance.collection(_pathConversations);
 
-  CollectionReference<Map<String, dynamic>> _messageCollection(String conversationId) => FirebaseFirestore.instance.collection(_pathConversations).doc(conversationId).collection(_pathMessages);
+  CollectionReference<Map<String, dynamic>> _messageCollection(String? conversationId) => FirebaseFirestore.instance.collection(_pathConversations).doc(conversationId).collection(_pathMessages);
 
   Future<FirebaseUserModel> getCurrentUser(String userId) async {
     final documentSnapshot = await _userCollection.doc(userId).get();
@@ -31,14 +31,10 @@ class FirebaseFirestoreService {
   Future<void> putUserToFireStore({required String userId, required FirebaseUserModel data}) async {
     final createdAt = FieldValue.serverTimestamp();
     final doc = _userCollection.doc(userId);
-    await doc.set({
-      ...data.toMap(),
-      FirebaseUserModel.keyCreatedAt: createdAt,
-      FirebaseUserModel.keyUpdatedAt: createdAt,
-    });
+    await doc.set({...data.toMap(), FirebaseUserModel.keyCreatedAt: createdAt, FirebaseUserModel.keyUpdatedAt: createdAt});
   }
 
-  Future<void> deleteUser(String id) async {
+  Future<void> deleteUser(String? id) async {
     await _userCollection.doc(id).delete();
   }
 
@@ -68,9 +64,7 @@ class FirebaseFirestoreService {
 
   Future<FirebaseConversationModel> createConversation(List<FirebaseConversationUserModel> members) async {
     final createdAt = FieldValue.serverTimestamp();
-
     final collection = _conversationCollection.doc();
-
     final conversation = FirebaseConversationModel(
       id: collection.id,
       lastMessage: '',
@@ -91,36 +85,29 @@ class FirebaseFirestoreService {
     return conversation;
   }
 
-  Future<void> addMembers({required String conversationId, required List<FirebaseConversationUserModel> members}) async {
+  Future<void> addMembers({String? conversationId, List<FirebaseConversationUserModel>? members}) async {
     await _conversationCollection.doc(conversationId).update({
-      FirebaseConversationModel.keyMembers: members.map((e) => e.toJson()).toList(),
-      FirebaseConversationModel.keyMemberIds: members.map((e) => e.userId).toList(),
+      FirebaseConversationModel.keyMembers: members?.map((e) => e.toJson()).toList() ?? [],
+      FirebaseConversationModel.keyMemberIds: members?.map((e) => e.userId).toList() ?? [],
     });
   }
 
-  Future<List<FirebaseMessageModel>> getOlderMessages({required String latestMessageId, required String conversationId}) async {
+  Future<List<FirebaseMessageModel>> getOlderMessages({String? latestMessageId, String? conversationId}) async {
     final messagesCollection = _messageCollection(conversationId);
     final prevDocument = await messagesCollection.doc(latestMessageId).get();
-
     final querySnapshot = await messagesCollection.orderBy(FirebaseMessageModel.keyCreatedAt, descending: true).startAfterDocument(prevDocument).limit(Constant.itemsPerPage).get();
-
     return querySnapshot.docs.map((e) => FirebaseMessageModel.fromMap(e.data())).toList();
   }
 
-  Stream<List<FirebaseMessageModel>> getMessagesStream({required String conversationId, required int limit}) {
-    return _messageCollection(conversationId).orderBy(FirebaseMessageModel.keyCreatedAt, descending: true).limit(limit).snapshots().map((event) {
-      return event.docs
-          .map(
-            (e) => FirebaseMessageModel.fromMap(e.data()),
-          )
-          .toList();
+  Stream<List<FirebaseMessageModel>> getMessagesStream({String? conversationId, int? limit}) {
+    return _messageCollection(conversationId).orderBy(FirebaseMessageModel.keyCreatedAt, descending: true).limit(limit ?? Constant.itemsPerPage).snapshots().map((event) {
+      return event.docs.map((e) => FirebaseMessageModel.fromMap(e.data())).toList();
     });
   }
 
   Stream<FirebaseConversationModel?> getConversationDetailStream(String conversationId) {
     return _conversationCollection.doc(conversationId).snapshots().map((event) {
       final data = event.data();
-
       return data == null ? null : FirebaseConversationModel.fromMap(data);
     });
   }

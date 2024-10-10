@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import '../../index.dart';
+
 class FirebaseReplyMessageModel {
   String? replyToMessageId;
-  String? type;
+  int? type;
   String? replyToMessage;
   String? replyByUserId;
   String? replyToUserId;
@@ -23,7 +25,7 @@ class FirebaseReplyMessageModel {
 
   FirebaseReplyMessageModel copyWith({
     String? replyToMessageId,
-    String? type,
+    int? type,
     String? replyToMessage,
     String? replyByUserId,
     String? replyToUserId,
@@ -55,6 +57,15 @@ class FirebaseReplyMessageModel {
         'reply_by_user_id': replyByUserId,
         'reply_to_user_id': replyToUserId,
       };
+
+  LocalReplyMessageData toDataLocal(AppPreferences _appPreferences) => LocalReplyMessageData(
+        userId: _appPreferences.userId,
+        repplyToMessageId: replyToMessageId ?? '',
+        type: type != null ? (type as MessageType) : MessageType.text,
+        repplyToMessage: replyToMessage ?? '',
+        replyByUserId: replyByUserId ?? '',
+        replyToUserId: replyToUserId ?? '',
+      );
 }
 
 // const json = '''

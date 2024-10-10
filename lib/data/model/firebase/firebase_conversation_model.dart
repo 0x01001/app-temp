@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../index.dart';
 
 class FirebaseConversationModel {
@@ -64,8 +66,8 @@ class FirebaseConversationModel {
         lastMessageType: json['last_message_type'],
         members: json['members'] == null ? [] : List<FirebaseConversationUserModel>.from(json['members']!.map((x) => FirebaseConversationUserModel.fromMap(x))),
         memberIds: json['member_ids'] == null ? [] : List<String>.from(json['member_ids']!.map((x) => x)),
-        createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at']),
-        updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at']),
+        createdAt: json['created_at'] == null ? null : (json['created_at'] is Timestamp ? (json['created_at'] as Timestamp).toDate() : DateTime.parse(json['created_at'])),
+        updatedAt: json['updated_at'] == null ? null : (json['updated_at'] is Timestamp ? (json['updated_at'] as Timestamp).toDate() : DateTime.parse(json['updated_at'])),
       );
 
   Map<String, dynamic> toMap() => {

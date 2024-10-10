@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../data/index.dart';
-import '../../../../resources/index.dart';
 import '../../../index.dart';
 
 enum UserPageAction {
@@ -42,27 +41,19 @@ class UserPage extends BasePage<UserState, AutoDisposeStateNotifierProvider<User
 
     return AppScaffold(
       hideKeyboardWhenTouchOutside: true,
-      appBar: AppBar(title: AppText(action.title)),
+      appBar: AppTopBar(enableSearchBar: true, text: action.title, titleSpacing: 0, onSearchBarChanged: (value) => ref.read(provider.notifier).setKeyWord(value ?? '')),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 12, left: 16, right: 16, bottom: 6),
-            child: AppInput(
-              hintText: S.current.search,
-              onChanged: (value) => ref.read(provider.notifier).setKeyWord(value ?? ''),
-            ),
-          ),
           Expanded(
             child: Consumer(builder: (context, ref, child) {
-              final users = ref.watch(provider.select(
-                (value) => value.data?.filteredUsers,
-              ));
-
-              final members = ref.watch(
-                provider.select((value) => value.data?.conversationUsers),
-              );
+              final users = ref.watch(provider.select((value) => value.data?.filteredUsers));
+              final members = ref.watch(provider.select((value) => value.data?.conversationUsers));
+              final hasMembersTitle = members?.isNotEmpty ?? false;
+              final hasUsersTitle = users?.isNotEmpty ?? false;
+              final itemCount = (members?.length ?? 0) + (users?.length ?? 0) + (hasMembersTitle ? 1 : 0) + (hasUsersTitle ? 1 : 0);
 
               return ListView.separated(
+                shrinkWrap: true,
                 separatorBuilder: (context, index) {
                   final hasMembersList = members?.isNotEmpty ?? false;
                   final isNotShowDivider = hasMembersList
@@ -76,23 +67,19 @@ class UserPage extends BasePage<UserState, AutoDisposeStateNotifierProvider<User
                   return isNotShowDivider ? const SizedBox() : const SizedBox(height: 1, child: AppDivider(indent: 60));
                 },
                 padding: EdgeInsets.zero,
-                itemCount: () {
-                  final hasMembersTitle = members?.isNotEmpty ?? false;
-                  final hasUsersTitle = users?.isNotEmpty ?? false;
-                  return (members?.length ?? 0) + (users?.length ?? 0) + (hasMembersTitle ? 1 : 0) + (hasUsersTitle ? 1 : 0);
-                }(),
+                itemCount: itemCount,
                 itemBuilder: (context, index) {
                   if ((members?.isNotEmpty ?? false) && index == 0) {
                     return const Padding(
                       padding: EdgeInsets.only(top: 16, left: 16),
-                      child: AppText('members', type: TextType.title),
+                      child: AppText('Members', type: TextType.title),
                     );
                   }
 
                   if ((users?.isNotEmpty ?? false) && index == ((members?.isEmpty ?? false) ? 0 : (members?.length ?? 0) + 1)) {
                     return const Padding(
                       padding: EdgeInsets.only(top: 16, left: 16),
-                      child: AppText('users', type: TextType.title),
+                      child: AppText('Users', type: TextType.title),
                     );
                   }
 
@@ -100,44 +87,27 @@ class UserPage extends BasePage<UserState, AutoDisposeStateNotifierProvider<User
                     return _buildMemberItem(ref: ref, index: index - 1, users: members);
                   }
 
-                  return _buildUserItem(
-                    ref: ref,
-                    index: () {
-                      final membersItemCount = members?.length ?? 0;
-                      final membersTitleItemCount = (members?.isNotEmpty ?? false) ? 1 : 0;
-                      final usersTitleItemCount = (users?.isNotEmpty ?? false) ? 1 : 0;
+                  final membersItemCount = members?.length ?? 0;
+                  final membersTitleItemCount = (members?.isNotEmpty ?? false) ? 1 : 0;
+                  final usersTitleItemCount = (users?.isNotEmpty ?? false) ? 1 : 0;
+                  final i = index - membersItemCount - membersTitleItemCount - usersTitleItemCount;
 
-                      return index - membersItemCount - membersTitleItemCount - usersTitleItemCount;
-                    }(),
-                    users: users,
-                  );
+                  return _buildUserItem(ref: ref, index: i, users: users);
                 },
               );
             }),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 40),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
             child: Align(
               alignment: Alignment.bottomRight,
               child: Consumer(builder: (context, ref, child) {
                 final isAddButtonEnabled = ref.watch(provider.select((value) => value.data?.isAddButtonEnabled));
+                final _provider = ref.read(provider.notifier);
 
-                return ElevatedButton(
-                  onPressed: (isAddButtonEnabled ?? false) ? () => action == UserPageAction.createNewConversation ? ref.read(provider.notifier).createConversation() : ref.read(provider.notifier).addMembers() : null,
-                  style: ButtonStyle(
-                    minimumSize: WidgetStateProperty.all(
-                      const Size(double.infinity, 48),
-                    ),
-                    backgroundColor: WidgetStateProperty.all(
-                      Colors.black.withOpacity((isAddButtonEnabled ?? false) ? 1 : 0.5),
-                    ),
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                      const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                    ),
-                  ),
-                  child: const AppText('add', type: TextType.title),
+                return AppButton(
+                  'Add',
+                  onPressed: (isAddButtonEnabled ?? false) ? () => action == UserPageAction.createNewConversation ? _provider.createConversation() : _provider.addMembers() : null,
                 );
               }),
             ),
@@ -152,13 +122,14 @@ class UserPage extends BasePage<UserState, AutoDisposeStateNotifierProvider<User
     final userId = user?.userId;
     final email = user?.email;
     final isMe = userId == ref.watch(currentUserProvider.select((value) => value.id));
+    final _provider = ref.read(provider.notifier);
 
     return InkWell(
       onTap: isMe
           ? null
           : () {
-              final check = ref.read(provider.notifier).isConversationUserChecked(userId ?? '');
-              check ? ref.read(provider.notifier).unselectConversationUser(userId ?? '') : ref.read(provider.notifier).selectConversationUser(userId ?? '');
+              final check = _provider.isConversationUserChecked(userId ?? '');
+              check ? _provider.unselectConversationUser(userId ?? '') : _provider.selectConversationUser(userId ?? '');
             },
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -171,7 +142,7 @@ class UserPage extends BasePage<UserState, AutoDisposeStateNotifierProvider<User
                   value: ref.watch(provider.notifier).isConversationUserChecked(userId ?? ''),
                   enabled: !isMe,
                   onChanged: (value) async => {
-                    value == true ? ref.read(provider.notifier).selectConversationUser(userId ?? '') : ref.read(provider.notifier).unselectConversationUser(userId ?? ''),
+                    value == true ? _provider.selectConversationUser(userId ?? '') : _provider.unselectConversationUser(userId ?? ''),
                   },
                 ),
                 const SizedBox(width: 8),
@@ -189,10 +160,11 @@ class UserPage extends BasePage<UserState, AutoDisposeStateNotifierProvider<User
 
   Widget _buildUserItem({required WidgetRef ref, required int index, required List<FirebaseUserModel>? users}) {
     final userId = users?[index].id;
+    final _provider = ref.read(provider.notifier);
 
     return InkWell(
       onTap: () {
-        ref.read(provider.notifier).isUserChecked(userId ?? '') ? ref.read(provider.notifier).unselectUser(userId ?? '') : ref.read(provider.notifier).selectUser(userId ?? '');
+        _provider.isUserChecked(userId ?? '') ? _provider.unselectUser(userId ?? '') : _provider.selectUser(userId ?? '');
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -204,15 +176,13 @@ class UserPage extends BasePage<UserState, AutoDisposeStateNotifierProvider<User
                 AppCheckBox(
                   value: ref.watch(provider.notifier).isUserChecked(userId ?? ''),
                   onChanged: (value) async => {
-                    value == true ? ref.read(provider.notifier).selectUser(userId ?? '') : ref.read(provider.notifier).unselectUser(userId ?? ''),
+                    value == true ? _provider.selectUser(userId ?? '') : _provider.unselectUser(userId ?? ''),
                   },
                 ),
                 const SizedBox(width: 8),
                 AppAvatar(text: users?[index].email, width: 36, height: 36),
                 const SizedBox(width: 16),
-                Expanded(
-                  child: AppText(users?[index].email ?? '', type: TextType.title),
-                ),
+                Expanded(child: AppText(users?[index].email ?? '', type: TextType.title)),
               ],
             ),
             const SizedBox(height: 16),

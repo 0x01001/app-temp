@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:chatview/chatview.dart';
+
 class FirebaseConversationUserModel {
   String? userId;
   String? email;
@@ -48,6 +50,8 @@ class FirebaseConversationUserModel {
         'last_seen': lastSeen?.toIso8601String(),
         'is_conversation_admin': isConversationAdmin,
       };
+
+  ChatUser toChatUser() => ChatUser(id: userId ?? '', name: email ?? '');
 }
 
 

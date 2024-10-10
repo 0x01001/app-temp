@@ -107,7 +107,7 @@ class _Item extends ConsumerWidget {
     final conversationName = ref.watch(conversationNameProvider(item?.id ?? ''));
     return InkWell(
       onTap: () {
-        // ref.nav.push(ChatRoute(conversation: item));
+        if (item != null) ref.nav.push(ChatRoute(conversation: item!));
       },
       child: Dismissible(
         key: UniqueKey(),

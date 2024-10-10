@@ -71,4 +71,12 @@ class LocalMessageData {
       status: status.toChatViewMessageStatus(),
     );
   }
+
+  FirebaseMessageModel toDataRemote() => FirebaseMessageModel(
+        id: uniqueId,
+        senderId: senderId,
+        message: message,
+        type: type.index,
+        replyMessage: replyMessage == null ? null : replyMessage?.toDataRemote(),
+      );
 }

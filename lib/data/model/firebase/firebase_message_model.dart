@@ -1,11 +1,16 @@
 import 'dart:convert';
 
+import 'package:clock/clock.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../index.dart';
+
 class FirebaseMessageModel {
   String? id;
   String? senderId;
   String? message;
   int? type;
-  String? replyMessage;
+  FirebaseReplyMessageModel? replyMessage;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -32,7 +37,7 @@ class FirebaseMessageModel {
     String? senderId,
     String? message,
     int? type,
-    String? replyMessage,
+    FirebaseReplyMessageModel? replyMessage,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) =>
@@ -56,8 +61,8 @@ class FirebaseMessageModel {
         message: json['message'],
         type: json['type'],
         replyMessage: json['reply_message'],
-        createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at']),
-        updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at']),
+        createdAt: json['created_at'] == null ? null : (json['created_at'] is Timestamp ? (json['created_at'] as Timestamp).toDate() : DateTime.parse(json['created_at'])),
+        updatedAt: json['updated_at'] == null ? null : (json['updated_at'] is Timestamp ? (json['updated_at'] as Timestamp).toDate() : DateTime.parse(json['updated_at'])),
       );
 
   Map<String, dynamic> toMap() => {
@@ -69,6 +74,29 @@ class FirebaseMessageModel {
         'created_at': createdAt?.toIso8601String(),
         'updated_at': updatedAt?.toIso8601String(),
       };
+
+  LocalMessageData toDataLocal(AppPreferences _appPreferences, String _conversationId) => LocalMessageData(
+        userId: _appPreferences.userId,
+        conversationId: _conversationId,
+        uniqueId: id ?? '',
+        senderId: senderId ?? '',
+        message: message ?? '',
+        type: type != null ? (type as MessageType) : MessageType.text,
+        status: MessageStatus.sent,
+        createdAt: createdAt?.millisecondsSinceEpoch ?? clock.now().millisecondsSinceEpoch,
+        updatedAt: updatedAt?.millisecondsSinceEpoch ?? clock.now().millisecondsSinceEpoch,
+        replyMessage: replyMessage != null ? replyMessage?.toDataLocal(_appPreferences) : null,
+        // replyMessage: replyMessage != null
+        //     ? LocalReplyMessageData(
+        //         userId: _appPreferences.userId,
+        //         repplyToMessageId: replyMessage?.replyToMessageId ?? '',
+        //         type: replyMessage?.type != null ? (replyMessage?.type as MessageType) : MessageType.text,
+        //         repplyToMessage: replyMessage?.replyToMessage ?? '',
+        //         replyByUserId: replyMessage?.replyByUserId ?? '',
+        //         replyToUserId: replyMessage?.replyToUserId ?? '',
+        //       )
+        //     : null,
+      );
 }
 
 // const json  = ''' 

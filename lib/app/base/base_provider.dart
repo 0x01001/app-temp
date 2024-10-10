@@ -17,7 +17,7 @@ abstract class BaseProvider<T extends BaseState> extends StateNotifier<AppState<
     if (mounted) {
       super.state = value;
     } else {
-      Log.e('Cannot set state when widget is not mounted');
+      _log();
     }
   }
 
@@ -26,7 +26,7 @@ abstract class BaseProvider<T extends BaseState> extends StateNotifier<AppState<
     if (mounted) {
       return super.state;
     } else {
-      Log.e('Cannot get state when widget is not mounted');
+      _log();
       return initialState;
     }
   }
@@ -35,19 +35,19 @@ abstract class BaseProvider<T extends BaseState> extends StateNotifier<AppState<
     if (mounted) {
       state = state.copyWith(data: data);
     } else {
-      Log.e('Cannot set data when widget is not mounted');
+      _log();
     }
   }
 
   T? get data => state.data;
-
   int _loadingCount = 0;
+  void _log() => Log.e('[BaseState] Cannot set data when widget is not mounted');
 
   set exception(AppException appException) {
     if (mounted) {
       state = state.copyWith(appException: appException);
     } else {
-      Log.e('Cannot set exception when widget is not mounted');
+      _log();
     }
   }
 

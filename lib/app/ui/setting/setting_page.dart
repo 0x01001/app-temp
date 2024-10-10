@@ -13,7 +13,8 @@ class SettingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Log.d('SettingPage > build');
-    final isDarkMode = ref.watch(isDarkModeProvider);
+    bool? isDarkMode = ref.watch(isDarkModeProvider);
+    isDarkMode ??= MediaQuery.platformBrightnessOf(context) == Brightness.dark;
 
     Future<void> onPressLogout(_) async {
       final result = await ref.nav.showDialog(AppPopup.confirmDialog(

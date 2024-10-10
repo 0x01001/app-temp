@@ -82,7 +82,7 @@ class AppListView<T> extends HookConsumerWidget {
             scrollDirection: scrollDirection ?? Axis.vertical,
             physics: useRefresher == true ? const BouncingScrollPhysics() : physics,
             shrinkWrap: useRefresher ?? shrinkWrap ?? false,
-            padding: padding,
+            padding: padding ?? EdgeInsets.zero,
             itemBuilder: itemBuilder ?? (_, __) => const SizedBox.shrink(),
             separatorBuilder: separatorBuilder ?? (_, __) => _SeparatorBuilder(type: type),
             itemCount: items?.length ?? 0,

@@ -6,7 +6,6 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../resources/index.dart';
-import '../../../shared/extensions/num_ext.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 

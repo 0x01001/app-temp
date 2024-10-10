@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chatview/chatview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseUserModel {
@@ -71,6 +72,7 @@ class FirebaseUserModel {
         'created_at': createdAt?.toIso8601String(),
         'updated_at': updatedAt?.toIso8601String(),
       };
+  ChatUser toChatUser() => ChatUser(id: id ?? '', name: email ?? '');
 }
 
 // const json ='''

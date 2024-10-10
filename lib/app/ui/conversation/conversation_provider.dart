@@ -46,7 +46,7 @@ class ConversationProvider extends BaseProvider<ConversationState> {
         action: () async {
           data = data?.copyWith(conversationList: event);
           // _ref.read(conversationMembersProvider.notifier).update((state) => state.plusAll(mergeConversationMembers(event)));
-          _ref.update(conversationMembersProvider, (state) => state.plusAll(mergeConversationMembers(event)));
+          _ref.update(conversationMembersMapProvider, (state) => state.plusAll(mergeConversationMembers(event)));
         },
         handleLoading: false,
       );
