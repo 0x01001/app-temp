@@ -12,7 +12,7 @@ class RectangleShimmer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _isDarkMode = ref.watch(isDarkModeProvider) ?? false;
+    final _isDarkMode = ref.watch(isDarkModeProvider);
     return Container(
       width: width,
       height: height,

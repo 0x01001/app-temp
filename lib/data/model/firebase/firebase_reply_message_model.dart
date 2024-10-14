@@ -61,7 +61,7 @@ class FirebaseReplyMessageModel {
   LocalReplyMessageData toDataLocal(AppPreferences _appPreferences) => LocalReplyMessageData(
         userId: _appPreferences.userId,
         repplyToMessageId: replyToMessageId ?? '',
-        type: type != null ? (type as MessageType) : MessageType.text,
+        type: type != null ? (type as FirebaseMessageType) : FirebaseMessageType.text,
         repplyToMessage: replyToMessage ?? '',
         replyByUserId: replyByUserId ?? '',
         replyToUserId: replyToUserId ?? '',

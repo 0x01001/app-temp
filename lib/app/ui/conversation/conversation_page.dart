@@ -106,8 +106,12 @@ class _Item extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final conversationName = ref.watch(conversationNameProvider(item?.id ?? ''));
     return InkWell(
-      onTap: () {
-        if (item != null) ref.nav.push(ChatRoute(conversation: item!));
+      onTap: () async {
+        if (item != null) {
+          ref.update<bool>(showBottomNavProvider, (_) => false);
+          await ref.nav.push(ChatRoute(conversation: item!));
+          ref.update<bool>(showBottomNavProvider, (_) => true);
+        }
       },
       child: Dismissible(
         key: UniqueKey(),
@@ -115,7 +119,7 @@ class _Item extends ConsumerWidget {
           if (item != null) ref.read(conversationProvider.notifier).deleteConversation(item!);
         },
         confirmDismiss: (direction) async {
-          return await ref.nav.showDialog(AppPopup.confirmDialog('Are you sure you want to delete this conversation?'));
+          return await ref.nav.showDialog(AppPopup.confirmDialog('Confirm', message: 'Are you sure you want to delete this conversation?'));
         },
         child: Padding(
           padding: const EdgeInsets.only(

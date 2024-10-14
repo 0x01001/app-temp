@@ -68,7 +68,7 @@ class FirebaseFirestoreService {
     final conversation = FirebaseConversationModel(
       id: collection.id,
       lastMessage: '',
-      lastMessageType: MessageType.text.code,
+      lastMessageType: FirebaseMessageType.text.code,
       memberIds: members.map((e) => e.userId ?? '').toList(),
       members: members,
     );

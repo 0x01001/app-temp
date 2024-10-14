@@ -1,4 +1,4 @@
-import 'package:chatview/chatview.dart' as cv;
+import 'package:chatview/chatview.dart';
 import 'package:isar/isar.dart';
 
 import '../../index.dart';
@@ -12,8 +12,8 @@ class LocalMessageData {
     this.userId = '',
     this.conversationId = '',
     this.senderId = '',
-    this.type = MessageType.text,
-    this.status = MessageStatus.sending,
+    this.type = FirebaseMessageType.text,
+    this.status = FirebaseMessageStatus.sending,
     this.message = '',
     this.createdAt = 0,
     this.updatedAt = 0,
@@ -27,9 +27,9 @@ class LocalMessageData {
   String conversationId;
   String senderId;
   @Enumerated(EnumType.value, 'code')
-  MessageType type;
+  FirebaseMessageType type;
   @Enumerated(EnumType.value, 'code')
-  MessageStatus status;
+  FirebaseMessageStatus status;
   String message;
   int createdAt;
   int updatedAt;
@@ -60,12 +60,12 @@ class LocalMessageData {
   @override
   int get hashCode => id.hashCode ^ uniqueId.hashCode ^ userId.hashCode ^ conversationId.hashCode ^ senderId.hashCode ^ type.hashCode ^ status.hashCode ^ message.hashCode ^ createdAt.hashCode ^ updatedAt.hashCode ^ replyMessage.hashCode;
 
-  cv.Message toMessage() {
-    return cv.Message(
+  Message toMessage() {
+    return Message(
       id: uniqueId,
       message: message,
       sentBy: senderId,
-      replyMessage: replyMessage?.toReplyMessage() ?? const cv.ReplyMessage(),
+      replyMessage: replyMessage?.toReplyMessage() ?? const ReplyMessage(),
       messageType: type.toChatViewMessageType(),
       createdAt: DateTime.fromMillisecondsSinceEpoch(createdAt),
       status: status.toChatViewMessageStatus(),

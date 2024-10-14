@@ -28,26 +28,21 @@ class AppPreferences {
   static const keyIsLoggedIn = 'isLoggedIn';
 
   // keys should not be removed when logout
-  static const keyIsDarkMode = 'isDarkMode';
+  static const keyThemeMode = 'themeMode';
   static const keyLanguageCode = 'languageCode';
   static const keyNickName = 'nickName';
   static const keyIsFirstLaunchApp = 'isFirstLaunchApp';
 
-  bool? get isDarkMode => _sharedPreference.getBool(keyIsDarkMode);
+  int get themeMode => _sharedPreference.getInt(keyThemeMode) ?? 0;
   String get deviceToken => _sharedPreference.getString(keyDeviceToken) ?? '';
   String get languageCode => _sharedPreference.getString(keyLanguageCode) ?? Constant.defaultLocale;
   bool get isFirstLaunchApp => _sharedPreference.getBool(keyIsFirstLaunchApp) ?? false;
   Future<String?> get accessToken async => _secureStorage.read(key: keyAccessToken);
   Future<String?> get refreshToken async => _secureStorage.read(key: keyRefreshToken);
   bool get isLoggedIn => _sharedPreference.getBool(keyIsLoggedIn) ?? false;
-  // AuthModel? get currentUser {
-  //   final user = _sharedPreference.getString(keyCurrentUser);
-  //   if (user == null) return null;
-  //   return AuthModel.fromJson(json.decode(user));
-  // }
 
-  Future<bool> saveIsDarkMode(bool isDarkMode) {
-    return _sharedPreference.setBool(keyIsDarkMode, isDarkMode);
+  Future<bool> saveThemeMode(int themeMode) {
+    return _sharedPreference.setInt(keyThemeMode, themeMode);
   }
 
   Future<bool> saveLanguageCode(String languageCode) {
@@ -70,18 +65,12 @@ class AppPreferences {
     return _secureStorage.write(key: keyRefreshToken, value: token);
   }
 
-  // Future<bool> saveCurrentUser(AuthModel data) {
-  //   return _sharedPreference.setString(keyCurrentUser, json.encode(data));
-  // }
-
   Future<bool> saveDeviceToken(String token) {
     return _sharedPreference.setString(keyDeviceToken, token);
   }
 
   String get userId => _sharedPreference.getString(keyUserId) ?? '';
-
   String get email => _sharedPreference.getString(keyEmail) ?? '';
-
   Future<String?> get password async => _secureStorage.read(key: keyPassword);
 
   Future<bool> saveUserId(String userId) {

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:chatview/chatview.dart' as cv;
+import 'package:chatview/chatview.dart';
 import 'package:clock/clock.dart';
 import 'package:dartx/dartx.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -48,32 +48,28 @@ class ChatProvider extends BaseProvider<ChatState> {
     initState();
     listenToConversationDetail();
     listenToMessagesFromFirestore(Constant.itemsPerPage);
-    listenToLocalmessages();
+    listenToLocalMessages();
   }
 
   void initState() {
-    data = data?.copyWith(
-      isAdmin: _isConversationAdmin(data?.conversation),
-    );
+    data = data?.copyWith(isAdmin: _isConversationAdmin(data?.conversation));
   }
 
   Future<void> onLoadMore() async {
+    Log.d('onLoadMore: ${oldestMessage?.uniqueId} - ${data?.conversation?.id}');
     if (oldestMessage == null) {
       return;
     }
-
     final messages = await _ref.firebaseFirestore.getOlderMessages(latestMessageId: oldestMessage!.uniqueId, conversationId: data?.conversation?.id);
-
-    Log.d('load more firestore messages: $messages');
-
+    for (final x in messages) {
+      Log.d('onLoadMore > messages: ${x.toJson()}');
+    }
     final isLastPage = messages.length < Constant.itemsPerPage;
-
     await _ref.database.putMessages(messages.map((e) => e.toDataLocal(_ref.preferences, data?.conversation?.id ?? '')).toList());
-
     data = data?.copyWith(isLastPage: isLastPage);
   }
 
-  void listenToLocalmessages() {
+  void listenToLocalMessages() {
     _messagesSubscription?.cancel();
     _messagesSubscription = _ref.database.getMessagesStream(data?.conversation?.id ?? '').listen(
       (event) {
@@ -107,18 +103,16 @@ class ChatProvider extends BaseProvider<ChatState> {
 
   void listenToConversationDetail() {
     _conversationSubscription?.cancel();
+    if (data?.conversation?.id?.isNullOrEmpty == true) return;
     _conversationSubscription = _ref.firebaseFirestore.getConversationDetailStream(data?.conversation?.id ?? '').listen(
       (event) {
         Log.d('getConversationDetailStream event: $event');
         if (event != null) {
-          data = data?.copyWith(
-            conversation: event,
-            isAdmin: _isConversationAdmin(event),
-          );
+          data = data?.copyWith(conversation: event, isAdmin: _isConversationAdmin(event));
         }
       },
       onError: (e) {
-        Log.d('listenToConversationDetail error by $e');
+        Log.d('listenToConversationDetail error: $e');
       },
     );
   }
@@ -134,7 +128,7 @@ class ChatProvider extends BaseProvider<ChatState> {
     super.dispose();
   }
 
-  Future<void> sendMessage({required String message, cv.ReplyMessage? replyMessage}) async {
+  Future<void> sendMessage({required String message, ReplyMessage? replyMessage}) async {
     await runSafe(
       handleLoading: false,
       action: () async {
@@ -150,8 +144,8 @@ class ChatProvider extends BaseProvider<ChatState> {
           conversationId: conversationId,
           senderId: currentUserId,
           message: message,
-          type: MessageType.text,
-          status: MessageStatus.sending,
+          type: FirebaseMessageType.text,
+          status: FirebaseMessageStatus.sending,
           uniqueId: messageId,
           userId: currentUserId,
           createdAt: now,
@@ -160,7 +154,7 @@ class ChatProvider extends BaseProvider<ChatState> {
               ? LocalReplyMessageData(
                   userId: currentUserId,
                   repplyToMessageId: replyMessage.messageId,
-                  type: MessageType.fromChatViewMessageType(replyMessage.messageType),
+                  type: FirebaseMessageType.fromChatViewMessageType(replyMessage.messageType),
                   repplyToMessage: replyMessage.message,
                   replyByUserId: currentUserId,
                   replyToUserId: replyMessage.replyTo,

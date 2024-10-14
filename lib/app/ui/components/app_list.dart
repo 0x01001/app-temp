@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -26,6 +27,7 @@ class AppListView<T> extends HookConsumerWidget {
     this.total = 0,
     this.itemsPerPage = Constant.itemsPerPage,
     this.scrollDirection,
+    this.useAnimation = true,
   });
 
   final AppListViewType? type;
@@ -38,6 +40,7 @@ class AppListView<T> extends HookConsumerWidget {
   final List<T>? items;
   final bool? useRefresher;
   final bool? isLoading;
+  final bool? useAnimation;
   final Widget? loadingWidget; // shimmer loading
   final int? total; // total of items
   final int? itemsPerPage;
@@ -83,19 +86,34 @@ class AppListView<T> extends HookConsumerWidget {
             physics: useRefresher == true ? const BouncingScrollPhysics() : physics,
             shrinkWrap: useRefresher ?? shrinkWrap ?? false,
             padding: padding ?? EdgeInsets.zero,
-            itemBuilder: itemBuilder ?? (_, __) => const SizedBox.shrink(),
+            itemBuilder: (BuildContext context, int index) {
+              if (useAnimation == true) {
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: 375.ms,
+                  child: SlideAnimation(
+                    verticalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: itemBuilder?.call(context, index) ?? const SizedBox.shrink(),
+                    ),
+                  ),
+                );
+              }
+              return itemBuilder?.call(context, index) ?? const SizedBox.shrink();
+            },
             separatorBuilder: separatorBuilder ?? (_, __) => _SeparatorBuilder(type: type),
             itemCount: items?.length ?? 0,
           );
+    final content = useAnimation == true ? AnimationLimiter(child: listView) : listView;
 
     return useRefresher == true
         ? AppRefresher(
             refreshController: _controller.value,
             onRefresh: _onRefresh,
             onLoadMore: _onLoadMore,
-            child: isLoading == true ? loadingWidget ?? const SizedBox.shrink() : listView,
+            child: isLoading == true ? loadingWidget ?? const SizedBox.shrink() : content,
           )
-        : listView;
+        : content;
   }
 }
 

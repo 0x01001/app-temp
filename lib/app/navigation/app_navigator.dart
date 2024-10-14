@@ -41,6 +41,7 @@ class AppNavigator {
   }
 
   bool get canPop => _appRouter.canPop();
+
   m.BuildContext get currentContext => _rootRouterContext;
 
   String getCurrentRouteName({bool useRootNavigator = false}) => AutoRouter.of(useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext).current.name;

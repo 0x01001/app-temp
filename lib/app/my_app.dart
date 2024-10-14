@@ -24,15 +24,10 @@ class MyApp extends HookConsumerWidget {
       designSize: const Size(Constant.designDeviceWidth, Constant.designDeviceHeight),
       builder: (context, _) => Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          final isDarkTheme = ref.watch(isDarkModeProvider);
+          final themeMode = ref.watch(themeModeProvider);
           final languageCode = ref.watch(languageCodeProvider);
-          Log.d('MyApp > build languageCode: $languageCode - $isDarkTheme');
+          Log.d('MyApp > build languageCode: $languageCode - $themeMode');
           AppSize.init(context);
-          final themeMode = isDarkTheme == null
-              ? ThemeMode.system
-              : isDarkTheme
-                  ? ThemeMode.dark
-                  : ThemeMode.light;
 
           return DevicePreview(
             enabled: Constant.enableDevicePreview,
@@ -51,7 +46,7 @@ class MyApp extends HookConsumerWidget {
               routeInformationParser: _appRouter.defaultRouteParser(),
               title: Constant.materialAppTitle,
               // color: Constants.taskMenuMaterialAppColor,
-              themeMode: themeMode,
+              themeMode: ThemeMode.values[themeMode],
               theme: AppTheme.light,
               darkTheme: AppTheme.dark,
               debugShowCheckedModeBanner: false,

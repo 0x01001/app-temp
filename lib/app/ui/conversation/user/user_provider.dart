@@ -118,7 +118,9 @@ class UserProvider extends BaseProvider<UserState> {
       final users = [me, ...membersExceptMe].distinctBy((e) => e.id);
       final members = users.map((e) => FirebaseConversationUserModel(userId: e.id, email: AppUtils.randomName(), isConversationAdmin: e.id == currentUserId)).toList();
       final conversation = await _ref.firebaseFirestore.createConversation(members);
+      _ref.update<bool>(showBottomNavProvider, (_) => false);
       await _ref.nav.popAndPush(ChatRoute(conversation: conversation));
+      _ref.update<bool>(showBottomNavProvider, (_) => true);
     });
   }
 

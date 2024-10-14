@@ -43,9 +43,7 @@ class AppAvatar extends StatelessWidget {
           onTap: onTap,
           child: Stack(
             children: [
-              Center(
-                child: AppText(text?.trim().firstOrNull?.toUpperCase() ?? '', type: TextType.title, textStyle: textStyle),
-              ),
+              Center(child: AppText(text?.trim().firstOrNull?.toUpperCase() ?? '', type: TextType.title, textStyle: textStyle)),
               Visibility(
                 visible: isActive,
                 child: Align(
@@ -53,11 +51,7 @@ class AppAvatar extends StatelessWidget {
                   child: Container(
                     width: 14,
                     height: 14,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(7),
-                      border: Border.all(color: Colors.white),
-                      color: Colors.green,
-                    ),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(7), border: Border.all(color: Colors.white), color: Colors.green),
                   ),
                 ),
               ),

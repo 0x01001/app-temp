@@ -51,7 +51,7 @@ class _Form extends AppForm {
           AppInput(field: FieldType.password, labelText: S.current.password, keyboardType: TextInputType.visiblePassword, enableNextFocus: false, onFocus: onFocus),
           const SizedBox(height: 30),
           AppButton(S.current.login, onPressed: onSubmit),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -59,7 +59,10 @@ class _Form extends AppForm {
               GestureDetector(
                 onTap: () => ref.nav.push(const SignUpRoute()),
                 behavior: HitTestBehavior.opaque,
-                child: AppText(S.current.signUp, color: Colors.blue),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: AppText(S.current.signUp, color: Colors.blue),
+                ),
               ),
             ],
           ),

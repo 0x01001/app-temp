@@ -1,4 +1,4 @@
-import 'package:chatview/chatview.dart' as cv;
+import 'package:chatview/chatview.dart';
 import 'package:isar/isar.dart';
 
 import '../../index.dart';
@@ -11,7 +11,7 @@ class LocalReplyMessageData {
     this.userId = '',
     this.conversationId = '',
     this.repplyToMessageId = '',
-    this.type = MessageType.text,
+    this.type = FirebaseMessageType.text,
     this.repplyToMessage = '',
     this.replyByUserId = '',
     this.replyToUserId = '',
@@ -21,7 +21,7 @@ class LocalReplyMessageData {
   String conversationId;
   String repplyToMessageId;
   @Enumerated(EnumType.value, 'code')
-  MessageType type;
+  FirebaseMessageType type;
   String repplyToMessage;
   String replyByUserId;
   String replyToUserId;
@@ -47,8 +47,8 @@ class LocalReplyMessageData {
   @override
   int get hashCode => userId.hashCode ^ conversationId.hashCode ^ repplyToMessageId.hashCode ^ type.hashCode ^ repplyToMessage.hashCode ^ replyByUserId.hashCode ^ replyToUserId.hashCode;
 
-  cv.ReplyMessage toReplyMessage() {
-    return cv.ReplyMessage(
+  ReplyMessage toReplyMessage() {
+    return ReplyMessage(
       message: repplyToMessage,
       messageType: type.toChatViewMessageType(),
       messageId: repplyToMessageId,

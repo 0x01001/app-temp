@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dartx/dartx.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -74,28 +76,42 @@ final languageCodeProvider = StateProvider<LanguageCode>(
   },
 );
 
-final isDarkModeProvider = StateProvider<bool?>(
+final themeModeProvider = StateProvider<int>(
   (ref) {
     ref.listenSelf((previous, next) {
-      Log.d('isDarkModeProvider > listenSelf: $previous - $next');
+      Log.d('themeModeProvider > listenSelf: $previous - $next');
       if (next != previous) {
-        ref.preferences.saveIsDarkMode(next ?? false);
+        ref.preferences.saveThemeMode(next);
       }
     });
-    Log.d('isDarkModeProvider > build: ${ref.preferences.isDarkMode}');
-    return ref.preferences.isDarkMode;
+    final themeMode = ref.preferences.themeMode;
+    Log.d('themeModeProvider: ${themeMode}');
+    return themeMode;
   },
 );
 
-class ShowBottomNav extends StateNotifier<bool> {
-  ShowBottomNav() : super(true); // Initial state is true
+final isDarkModeProvider = Provider.autoDispose<bool>(
+  (ref) {
+    final themeMode = ref.watch(themeModeProvider);
+    bool isDarkTheme = themeMode == 2;
+    Log.d('isDarkModeProvider: ${themeMode}');
+    if (themeMode == 0) {
+      isDarkTheme = PlatformDispatcher.instance.platformBrightness == Brightness.dark; //MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+    }
+    Log.d('isDarkModeProvider > result: ${isDarkTheme} - ${PlatformDispatcher.instance.platformBrightness == Brightness.dark}');
+    return isDarkTheme;
+  },
+);
 
-  void change() => state = !state;
-  void hide() => state = false;
-  void show() => state = true;
-}
+final showBottomNavProvider = StateProvider<bool>((ref) => true);
 
-final showBottomNavProvider = StateNotifierProvider<ShowBottomNav, bool>((ref) => ShowBottomNav());
+// final showBottomNavProvider = StateNotifierProvider<ShowBottomNav, bool>((ref) => ShowBottomNav());
+// class ShowBottomNav extends StateNotifier<bool> {
+//   ShowBottomNav() : super(true); // Initial state is true
+//   void change() => state = !state;
+//   void hide() => state = false;
+//   void show() => state = true;
+// }
 
 final filterConversationsProvider = Provider.autoDispose<List<FirebaseConversationModel>?>(
   (ref) {

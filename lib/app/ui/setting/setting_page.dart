@@ -13,8 +13,7 @@ class SettingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Log.d('SettingPage > build');
-    bool? isDarkMode = ref.watch(isDarkModeProvider);
-    isDarkMode ??= MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+    final isDarkMode = ref.watch(isDarkModeProvider);
 
     Future<void> onPressLogout(_) async {
       final result = await ref.nav.showDialog(AppPopup.confirmDialog(
@@ -28,8 +27,20 @@ class SettingPage extends ConsumerWidget {
       Log.d('on close popup..: $result');
     }
 
+    Future<void> onPressDeleteAccount(_) async {
+      final result = await ref.nav.showDialog(AppPopup.confirmDialog(
+        'Confirm',
+        message: 'Your data will be deleted and cannot be recovered.\nAre you sure you want to delete account?',
+        onConfirm: () async {
+          // await ref.read(authProvider.notifier).logout();
+          await ref.nav.replace(const LoginRoute());
+        },
+      ));
+      Log.d('on close popup..: $result');
+    }
+
     void onChanged(bool? val) {
-      ref.update<bool?>(isDarkModeProvider, (_) => val);
+      ref.update(themeModeProvider, (_) => val == true ? 2 : 1); //TODO: fix me
     }
 
     void onPressed(BuildContext context) {
@@ -42,21 +53,22 @@ class SettingPage extends ConsumerWidget {
         applicationType: ApplicationType.both,
         sections: [
           SettingsSection(
-            title: const Text('Account'),
+            title: const AppText('Account'),
             tiles: [
-              SettingsTile.navigation(leading: const Icon(Icons.manage_accounts), title: const Text('Account Management'), trailing: const Icon(Icons.navigate_next), onPressed: onPressed),
-              SettingsTile.navigation(leading: const Icon(Icons.security), title: const Text('Security'), trailing: const Icon(Icons.navigate_next), onPressed: onPressed),
+              SettingsTile.navigation(leading: const Icon(Icons.manage_accounts), title: const AppText('Account Management', type: TextType.title, isBold: false), trailing: const Icon(Icons.navigate_next), onPressed: onPressed),
+              SettingsTile.navigation(leading: const Icon(Icons.security), title: const AppText('Security', type: TextType.title, isBold: false), trailing: const Icon(Icons.navigate_next), onPressed: onPressed),
             ],
           ),
           SettingsSection(
-            title: const Text('Settings'),
+            title: const AppText('Settings'),
             tiles: [
-              SettingsTile.navigation(leading: const Icon(Icons.language), title: const Text('Language'), value: const Text('English'), trailing: const Icon(Icons.navigate_next), onPressed: onPressed),
-              SettingsTile.switchTile(leading: const Icon(Icons.dark_mode), title: const Text('Eye Protection Mode'), initialValue: isDarkMode, onToggle: onChanged),
+              SettingsTile.navigation(leading: const Icon(Icons.language), title: const AppText('Language', type: TextType.title, isBold: false), value: const AppText('English', type: TextType.text), trailing: const Icon(Icons.navigate_next), onPressed: onPressed),
+              SettingsTile.switchTile(leading: Icon(isDarkMode == true ? Icons.brightness_4_outlined : Icons.dark_mode_outlined), title: const AppText('Eye Protection Mode', type: TextType.title, isBold: false), initialValue: isDarkMode, onToggle: onChanged),
+              SettingsTile.navigation(leading: const Icon(Icons.delete), title: const AppText('Delete Account', type: TextType.title, isBold: false), onPressed: onPressDeleteAccount),
             ],
           ),
           SettingsSection(
-            tiles: [SettingsTile.navigation(leading: const Icon(Icons.logout), title: const Text('Logout'), onPressed: onPressLogout)],
+            tiles: [SettingsTile.navigation(leading: const Icon(Icons.logout), title: const AppText('Logout', type: TextType.title, isBold: false), onPressed: onPressLogout)],
           ),
         ],
       ),

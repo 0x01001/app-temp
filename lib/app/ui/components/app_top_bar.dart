@@ -178,7 +178,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
         opacity: !_enableSearchBar.value ? 1.0 : 0.0,
         duration: 200.ms,
         onEnd: () => _showLeading.value = _enableSearchBar.value == true ? false : true,
-        child: GestureDetector(
+        child: AppInkWell(
           onTap: () => ref.nav.pop(),
           child: Padding(
             padding: EdgeInsets.only(left: leadingIcon == LeadingIcon.close ? 0 : 10),

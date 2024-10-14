@@ -39,14 +39,8 @@ enum SuccessResponseMapperType {
 }
 
 enum LanguageCode {
-  en(
-    localeCode: 'en',
-    value: Constant.en,
-  ),
-  ja(
-    localeCode: 'ja',
-    value: Constant.ja,
-  );
+  en(localeCode: 'en', value: Constant.en),
+  ja(localeCode: 'ja', value: Constant.ja);
 
   const LanguageCode({required this.localeCode, required this.value});
 
