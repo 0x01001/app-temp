@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../data/index.dart';
@@ -40,7 +41,35 @@ class AuthProvider extends BaseProvider<AuthState> {
   }
 
   Future<void> logout() async {
-    return await runSafe(action: () => _ref.api.logout());
+    // return await runSafe(action: () => _ref.api.logout());
+    try {
+      final deviceToken = await _ref.share.deviceToken;
+      await _ref.firebaseFirestore.updateCurrentUser(userId: _ref.preferences.userId, data: {
+        FirebaseUserModel.keyDeviceIds: [],
+        FirebaseUserModel.keyDeviceTokens: FieldValue.arrayRemove([deviceToken]),
+      });
+      await _ref.preferences.clearCurrentUserData();
+      await _ref.firebaseAuth.signOut();
+      _ref.update<FirebaseUserModel>(currentUserProvider, (state) => FirebaseUserModel());
+      await _ref.nav.replaceAll([const LoginRoute()]);
+    } catch (e) {
+      await _ref.nav.replaceAll([const LoginRoute()]);
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    return runSafe(
+      action: () async {
+        await _ref.preferences.clearCurrentUserData();
+        await _ref.firebaseFirestore.deleteUser(_ref.preferences.userId);
+        await _ref.firebaseAuth.deleteAccount();
+        await _ref.nav.replaceAll([const LoginRoute()]);
+      },
+      handleError: false,
+      onError: (e) async {
+        await _ref.nav.replaceAll([const LoginRoute()]);
+      },
+    );
   }
 
   // Future<bool?> autoRefreshToken() async {

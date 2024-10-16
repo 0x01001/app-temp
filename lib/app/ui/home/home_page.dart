@@ -20,7 +20,7 @@ class HomePage extends BasePage<HomeState, AutoDisposeStateNotifierProvider<Home
     Log.d('HomePage > build');
 
     return AppScaffold(
-      appBar: AppTopBar(text: S.current.home),
+      appBar: AppTopBar(text: L.current.home),
       body: Consumer(
         builder: (context, ref, child) {
           final users = ref.watch(provider.select((value) => value.data?.users));

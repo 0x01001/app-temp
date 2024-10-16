@@ -5,7 +5,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
@@ -50,7 +49,7 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
                 tabs: [
                   GButton(
                     icon: Icons.home,
-                    text: S.current.home,
+                    text: L.current.home,
                     leading: _selectedIndex.value == 0 // || badge == 0
                         ? null
                         : b.Badge(
@@ -60,9 +59,9 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
                             child: Icon(Icons.home, color: Colors.grey[800]),
                           ),
                   ),
-                  GButton(icon: Icons.chat, text: S.current.conversation),
+                  GButton(icon: Icons.chat, text: L.current.conversation),
                   const GButton(icon: Icons.design_services, text: 'UI'),
-                  GButton(icon: Icons.settings, text: S.current.setting)
+                  GButton(icon: Icons.settings, text: L.current.setting)
                 ],
                 selectedIndex: _selectedIndex.value,
                 onTabChange: (index) {
@@ -103,7 +102,7 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
 //               ),
 //             ),
 //             // SizedBox(height: 6.sp),
-//             // AppText(S.current.source, textStyle: context.labelSmall?.copyWith(color: AppColors.current.primaryTextColor)),
+//             // AppText(L.current.source, textStyle: context.labelSmall?.copyWith(color: AppColorL.current.primaryTextColor)),
 //           ],
 //         ),
 //       ),

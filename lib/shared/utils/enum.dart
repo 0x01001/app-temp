@@ -8,11 +8,11 @@ import '../index.dart';
 //     case Gender.unknown:
 //       return '';
 //     case Gender.male:
-//       return S.current.re1_male;
+//       return L.current.re1_male;
 //     case Gender.female:
-//       return S.current.re1_female;
+//       return L.current.re1_female;
 //     case Gender.other:
-//       return S.current.re1_other;
+//       return L.current.re1_other;
 //   }
 // }
 

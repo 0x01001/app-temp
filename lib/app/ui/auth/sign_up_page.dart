@@ -4,7 +4,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
@@ -19,7 +18,7 @@ class SignUpPage extends BasePage<AuthState, AutoDisposeStateNotifierProvider<Au
   Widget render(BuildContext context, WidgetRef ref) {
     return AppScaffold(
       hideKeyboardWhenTouchOutside: true,
-      appBar: AppTopBar(text: S.current.signUp),
+      appBar: AppTopBar(text: L.current.signUp),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child: _Form(),
@@ -32,7 +31,7 @@ class _Form extends AppForm {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // List<String> getGender() {
-    //   return [S.current.male, S.current.female, S.current.other];
+    //   return [L.current.male, L.current.female, L.current.other];
     // }
     final errorText = useState('');
 
@@ -55,7 +54,7 @@ class _Form extends AppForm {
       //   if (data != null) {
       //     final check = await ref.read(authProvider.notifier).checkEmail(data.toString().trim());
       //     if (check == true) {
-      //       errorText.value = S.current.emailAlreadyExists;
+      //       errorText.value = L.current.emailAlreadyExists;
       //     }
       //   }
       // }
@@ -66,23 +65,23 @@ class _Form extends AppForm {
       key: formKey,
       child: Column(
         children: [
-          AppInput(field: FieldType.email, labelText: S.current.email, keyboardType: TextInputType.emailAddress, enableLoading: true, onFocus: checkEmail, errorText: errorText.value),
+          AppInput(field: FieldType.email, labelText: L.current.email, keyboardType: TextInputType.emailAddress, enableLoading: true, onFocus: checkEmail, errorText: errorText.value),
           const SizedBox(height: 15),
-          AppInput(field: FieldType.signUpPassword, labelText: S.current.password, keyboardType: TextInputType.visiblePassword, onFocus: onFocus),
+          AppInput(field: FieldType.signUpPassword, labelText: L.current.password, keyboardType: TextInputType.visiblePassword, onFocus: onFocus),
           const SizedBox(height: 15),
-          AppInput(field: FieldType.confirmPassword, labelText: S.current.confirmPassword, keyboardType: TextInputType.visiblePassword, enableNextFocus: false, onFocus: onFocus, validator: (val) => validateRePassword(FieldType.signUpPassword.name, val)),
+          AppInput(field: FieldType.confirmPassword, labelText: L.current.confirmPassword, keyboardType: TextInputType.visiblePassword, enableNextFocus: false, onFocus: onFocus, validator: (val) => validateRePassword(FieldType.signUpPassword.name, val)),
           const SizedBox(height: 15),
-          AppInput(field: FieldType.displayName, labelText: S.current.displayName),
+          AppInput(field: FieldType.displayName, labelText: L.current.displayName),
           const SizedBox(height: 30),
-          // AppInput(field: FieldType.lastName, labelText: S.current.lastName),
+          // AppInput(field: FieldType.lastName, labelText: L.current.lastName),
           // SizedBox(height: 15),
-          // AppDropdown(field: FieldType.gender, labelText: S.current.gender, hintText: '-- Choose --', items: getGender()),
+          // AppDropdown(field: FieldType.gender, labelText: L.current.gender, hintText: '-- Choose --', items: getGender()),
           // SizedBox(height: 15),
-          // AppInput(field: FieldType.phoneNumber, labelText: S.current.phone),
+          // AppInput(field: FieldType.phoneNumber, labelText: L.current.phone),
           // SizedBox(height: 15),
-          // AppInput(field: FieldType.dateOfBirth, labelText: S.current.dateOfBirth, hintText: 'YYYY-MM-DD', enableNextFocus: false),
+          // AppInput(field: FieldType.dateOfBirth, labelText: L.current.dateOfBirth, hintText: 'YYYY-MM-DD', enableNextFocus: false),
           // SizedBox(height: 15),
-          AppButton(S.current.signUp, onPressed: onSubmit),
+          AppButton(L.current.signUp, onPressed: onSubmit),
         ],
       ),
     );

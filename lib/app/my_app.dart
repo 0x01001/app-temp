@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -27,7 +28,6 @@ class MyApp extends HookConsumerWidget {
           final themeMode = ref.watch(themeModeProvider);
           final languageCode = ref.watch(languageCodeProvider);
           Log.d('MyApp > build languageCode: $languageCode - $themeMode');
-          AppSize.init(context);
 
           return DevicePreview(
             enabled: Constant.enableDevicePreview,
@@ -56,6 +56,7 @@ class MyApp extends HookConsumerWidget {
               supportedLocales: S.delegate.supportedLocales,
               localizationsDelegates: const [
                 S.delegate,
+                LocaleNamesLocalizationsDelegate(),
                 RefreshLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,

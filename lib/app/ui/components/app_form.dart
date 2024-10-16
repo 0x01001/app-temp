@@ -5,7 +5,6 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../resources/index.dart';
 import '../../index.dart';
 
 enum FieldType {
@@ -35,11 +34,11 @@ FormFieldValidator<String> validateEmail({String? errorText}) => (valueCandidate
         return errorText ?? FormBuilderLocalizations.current.emailErrorText;
       }
       return null;
-      // return (valueCandidate?.isNotEmpty ?? false) && !EmailValidator.validate(valueCandidate!.trim()) ? errorText ?? FormBuilderLocalizations.current.emailErrorText : null;
+      // return (valueCandidate?.isNotEmpty ?? false) && !EmailValidator.validate(valueCandidate!.trim()) ? errorText ?? FormBuilderLocalizationL.current.emailErrorText : null;
     };
 FormFieldValidator<String> validateDate({String? errorText}) => (valueCandidate) {
       if (valueCandidate != null) {
-        final lang = S.current;
+        final lang = L.current;
         // //https://regex101.com/r/3TZfyU/1
         final regex = RegExp(
             r'^(?:(?:1[6-9]|[2-9]\d)?\d{2})(?:(?:(\/|-|\.)(?:0?[13578]|1[02])\1(?:31))|(?:(\/|-|\.)(?:0?[13-9]|1[0-2])\2(?:29|30)))$|^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)0?2\3(?:29)$|^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:0?[1-9]|1\d|2[0-8])$');
@@ -58,7 +57,7 @@ FormFieldValidator<String> validateDate({String? errorText}) => (valueCandidate)
 
 FormFieldValidator<String> checkWhitespace({String? errorText}) => (valueCandidate) {
       if (valueCandidate != null && (valueCandidate.startsWith(' ') || valueCandidate.endsWith(' '))) {
-        return errorText ?? S.current.lengthPassword(6, 128);
+        return errorText ?? L.current.lengthPassword(6, 128);
       }
       return null;
     };
@@ -66,53 +65,53 @@ FormFieldValidator<String> checkWhitespace({String? errorText}) => (valueCandida
 FormFieldValidator<String> validatePassword({String? errorText}) => (valueCandidate) {
       final regex = RegExp(r'^(?=.*[A-Za-z])(?=.*[\d]{1,})(?=.*[\W]{1,}).*$');
       if (!regex.hasMatch(valueCandidate!.trim())) {
-        return errorText ?? S.current.lengthPassword(6, 128);
+        return errorText ?? L.current.lengthPassword(6, 128);
       }
       return null;
     };
 
 List<String? Function(T?)> checkLengthPassword<T>({String? errorText}) => [
-      FormBuilderValidators.required(errorText: errorText ?? S.current.required),
-      FormBuilderValidators.minLength(8, errorText: errorText ?? S.current.lengthPassword(6, 128)),
-      FormBuilderValidators.maxLength(128, errorText: errorText ?? S.current.lengthPassword(6, 128)),
+      FormBuilderValidators.required(errorText: errorText ?? L.current.required),
+      FormBuilderValidators.minLength(8, errorText: errorText ?? L.current.lengthPassword(6, 128)),
+      FormBuilderValidators.maxLength(128, errorText: errorText ?? L.current.lengthPassword(6, 128)),
     ];
 
 List<String? Function(T?)> checkLength<T>(int from, int to) => [
-      FormBuilderValidators.required(errorText: S.current.required),
-      FormBuilderValidators.minLength(from, errorText: S.current.lengthCharacter(from, to)),
-      FormBuilderValidators.maxLength(to, errorText: S.current.lengthCharacter(from, to)),
+      FormBuilderValidators.required(errorText: L.current.required),
+      FormBuilderValidators.minLength(from, errorText: L.current.lengthCharacter(from, to)),
+      FormBuilderValidators.maxLength(to, errorText: L.current.lengthCharacter(from, to)),
     ];
 
 String? Function(bool?) checkValidatorBool(FieldType? type) {
-  return FormBuilderValidators.equal(true, errorText: S.current.youMustAcceptTerms);
+  return FormBuilderValidators.equal(true, errorText: L.current.youMustAcceptTerms);
 }
 
 String? Function(String?) checkValidator(FieldType? type) {
   switch (type) {
     case FieldType.address:
-      return FormBuilderValidators.maxLength(128, errorText: S.current.lengthCharacter(0, 128));
+      return FormBuilderValidators.maxLength(128, errorText: L.current.lengthCharacter(0, 128));
     case FieldType.postCode:
-      return FormBuilderValidators.maxLength(8, errorText: S.current.lengthCharacter(0, 8));
+      return FormBuilderValidators.maxLength(8, errorText: L.current.lengthCharacter(0, 8));
 
     case FieldType.gender:
-      return FormBuilderValidators.required(errorText: S.current.required);
+      return FormBuilderValidators.required(errorText: L.current.required);
     case FieldType.dateOfBirth:
       return FormBuilderValidators.compose([
-        FormBuilderValidators.required(errorText: S.current.required),
+        FormBuilderValidators.required(errorText: L.current.required),
         //https://stackoverflow.com/questions/15491894/regex-to-validate-date-formats-dd-mm-yyyy-dd-mm-yyyy-dd-mm-yyyy-dd-mmm-yyyy
         // FormBuilderValidators.match(
         //     r'^(?:(?:1[6-9]|[2-9]\d)?\d{2})(?:(?:(\/|-|\.)(?:0?[13578]|1[02])\1(?:31))|(?:(\/|-|\.)(?:0?[13-9]|1[0-2])\2(?:29|30)))$|^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)0?2\3(?:29)$|^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:0?[1-9]|1\d|2[0-8])$',
         //     errorText:lang.invalidFormat),
-        validateDate(errorText: S.current.invalidFormat),
+        validateDate(errorText: L.current.invalidFormat),
       ]);
     case FieldType.phoneNumber:
       return FormBuilderValidators.compose([
         // FormBuilderValidators.match(r'/^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/', errorText:lang.invalidFormat),
-        FormBuilderValidators.integer(errorText: S.current.thisFieldMustBeNumber),
-        FormBuilderValidators.maxLength(12, errorText: S.current.lengthCharacter(0, 12)),
+        FormBuilderValidators.integer(errorText: L.current.thisFieldMustBeNumber),
+        FormBuilderValidators.maxLength(12, errorText: L.current.lengthCharacter(0, 12)),
       ]);
     case FieldType.confirmPassword:
-      return FormBuilderValidators.required(errorText: S.current.required);
+      return FormBuilderValidators.required(errorText: L.current.required);
     case FieldType.newPassword:
     case FieldType.resetPassword:
     case FieldType.signUpPassword:
@@ -123,9 +122,9 @@ String? Function(String?) checkValidator(FieldType? type) {
       ]);
     case FieldType.currentPassword:
       return FormBuilderValidators.compose([
-        ...checkLengthPassword(errorText: S.current.wrongPassword),
-        validatePassword(errorText: S.current.wrongPassword),
-        checkWhitespace(errorText: S.current.wrongPassword),
+        ...checkLengthPassword(errorText: L.current.wrongPassword),
+        validatePassword(errorText: L.current.wrongPassword),
+        checkWhitespace(errorText: L.current.wrongPassword),
       ]);
     case FieldType.password:
       return FormBuilderValidators.compose(checkLength(8, 128));
@@ -135,7 +134,7 @@ String? Function(String?) checkValidator(FieldType? type) {
         // final RegExp emailRegex = RegExp(
         //   r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
         // FormBuilderValidators.match(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$", errorText:lang.invalidFormat),
-        validateEmail(errorText: S.current.invalid(S.current.email)),
+        validateEmail(errorText: L.current.invalid(L.current.email)),
       ]);
 
     default:
@@ -163,7 +162,7 @@ class AppForm extends HookConsumerWidget {
       formKey.currentState?.save();
       final data = formKey.currentState?.value;
       if (data != null && data[key] != data[FieldType.confirmPassword.name]) {
-        result = S.current.passwordDoesNotMatch;
+        result = L.current.passwordDoesNotMatch;
       }
     }
     return result;

@@ -1,5 +1,4 @@
-import '../../resources/index.dart';
-import 'app_exception.dart';
+import '../index.dart';
 
 class ValidationException extends AppException {
   ValidationException({required this.kind, super.rootException, super.onRetry}) : super();
@@ -16,9 +15,9 @@ class ValidationException extends AppException {
 
   @override
   String get message => switch (kind) {
-        ValidationExceptionKind.invalidEmail => S.current.invalidEmail,
-        ValidationExceptionKind.invalidPassword => S.current.invalidPassword,
-        ValidationExceptionKind.passwordsDoNotMatch => S.current.passwordsAreNotMatch,
+        ValidationExceptionKind.invalidEmail => L.current.invalidEmail,
+        ValidationExceptionKind.invalidPassword => L.current.invalidPassword,
+        ValidationExceptionKind.passwordsDoNotMatch => L.current.passwordsAreNotMatch,
       };
 }
 

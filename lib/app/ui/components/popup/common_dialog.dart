@@ -51,7 +51,7 @@ class CommonDialog extends StatelessWidget {
             enableFeedback: false,
           ),
           onPressed: actions[i].onPressed,
-          child: AppText(actions[i].text ?? S.current.ok, type: TextType.content, color: actions[i].text == S.current.ok ? scheme.secondary : null),
+          child: AppText(actions[i].text ?? L.current.ok, type: TextType.content, color: actions[i].text == L.current.ok ? scheme.secondary : null),
         ),
       ));
       if (actions.length > 1 && i == 0) {
@@ -90,7 +90,7 @@ class CommonDialog extends StatelessWidget {
       titlePadding: const EdgeInsets.fromLTRB(15, 15, 15, 10),
       actionsAlignment: MainAxisAlignment.end,
       actions: _buildActionsWidget(context),
-      title: Center(child: AppText(title ?? S.current.information, type: TextType.title)),
+      title: Center(child: AppText(title ?? L.current.information, type: TextType.title)),
       content: message != null ? AppText(message ?? '', type: TextType.content, textAlign: TextAlign.center, maxLines: 999) : content,
     );
   }
@@ -100,10 +100,10 @@ class CommonDialog extends StatelessWidget {
       actions: actions
           .map((e) => CupertinoDialogAction(
                 onPressed: e.onPressed,
-                child: AppText(e.text ?? S.current.ok, type: TextType.content),
+                child: AppText(e.text ?? L.current.ok, type: TextType.content),
               ))
           .toList(growable: false),
-      title: AppText(title ?? S.current.information, type: TextType.title),
+      title: AppText(title ?? L.current.information, type: TextType.title),
       content: message != null ? AppText(message ?? '', type: TextType.content) : content,
     );
   }

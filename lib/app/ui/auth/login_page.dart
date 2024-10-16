@@ -46,11 +46,11 @@ class _Form extends AppForm {
       child: Column(
         children: [
           Center(child: Padding(padding: const EdgeInsets.symmetric(vertical: 50.0), child: Assets.images.logo.svg())),
-          AppInput(field: FieldType.email, nextField: FieldType.password, labelText: S.current.email, keyboardType: TextInputType.emailAddress, onFocus: onFocus),
+          AppInput(field: FieldType.email, nextField: FieldType.password, labelText: L.current.email, keyboardType: TextInputType.emailAddress, onFocus: onFocus),
           const SizedBox(height: 15),
-          AppInput(field: FieldType.password, labelText: S.current.password, keyboardType: TextInputType.visiblePassword, enableNextFocus: false, onFocus: onFocus),
+          AppInput(field: FieldType.password, labelText: L.current.password, keyboardType: TextInputType.visiblePassword, enableNextFocus: false, onFocus: onFocus),
           const SizedBox(height: 30),
-          AppButton(S.current.login, onPressed: onSubmit),
+          AppButton(L.current.login, onPressed: onSubmit),
           const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +61,7 @@ class _Form extends AppForm {
                 behavior: HitTestBehavior.opaque,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: AppText(S.current.signUp, color: Colors.blue),
+                  child: AppText(L.current.signUp, color: Colors.blue),
                 ),
               ),
             ],

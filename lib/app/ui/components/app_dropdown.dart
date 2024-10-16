@@ -60,7 +60,7 @@ class AppDropdown extends HookConsumerWidget {
             // buttonPadding: const EdgeInsets.all(10.0),
             // dropdownPadding: const EdgeInsets.all(0.0),
             // itemPadding: const EdgeInsets.all(10.0),
-            // selectedItemHighlightColor: AppColors.current.primaryColor,
+            // selectedItemHighlightColor: AppColorL.current.primaryColor,
             // focusColor: Colors.red,
             // selectedItemBuilder: (context) {
             //   return [textTitle(item)];
@@ -121,7 +121,7 @@ class AppDropdown extends HookConsumerWidget {
         const SizedBox(height: 5),
         // SizedBox(
         //   height: 50,
-        // decoration: BoxDecoration(border: Border.all(color: AppColors.current.border), borderRadius: BorderRadius.all(Radius.circular(Dimens.d5.responsive()))),
+        // decoration: BoxDecoration(border: Border.all(color: AppColorL.current.border), borderRadius: BorderRadius.all(Radius.circular(Dimens.d5.responsive()))),
         // child:
         DropdownButtonHideUnderline(child: _buildContent()),
         // ),

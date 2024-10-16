@@ -93,6 +93,7 @@ dependencies:
   country_pickers: 3.0.0 #fix: country_pickers-2.0.0 Error: The getter 'subtitle1' isn't defined for the class 'TextTheme'.
   clock: 1.1.1
   app_links: 6.3.2
+  flutter_localized_locales: 2.0.5 # get name of locale
 
   # UI
   dynamic_color: ^1.6.6

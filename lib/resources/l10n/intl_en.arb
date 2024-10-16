@@ -69,5 +69,7 @@
   "pullToLoadMore": "Pull to load more",
   "tryAgain": "Try again",
   "conversation": "Conversation",
-  "searching": "Search..."
+  "searching": "Search...",
+  "language": "Language",
+  "theme": "Theme"
 }

@@ -127,21 +127,6 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
       );
     }
 
-    Widget _buildIcon(SvgGenImage svg) {
-      return svg.svg(colorFilter: ColorFilter.mode(leadingIconColor ?? Colors.transparent, BlendMode.srcIn), width: 10, height: 10);
-    }
-
-    Widget _buildTitle() {
-      return GestureDetector(
-          onTap: onTitlePressed,
-          behavior: HitTestBehavior.translucent,
-          child: titleType == AppBarTitle.text
-              ? AppText(text ?? '', textStyle: titleTextStyle, type: TextType.header)
-              : titleType == AppBarTitle.logo
-                  ? _buildIcon(Assets.images.logo)
-                  : null);
-    }
-
     Widget _buildInputSearchBar() {
       return Stack(
         alignment: Alignment.center,
@@ -149,7 +134,12 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
           AnimatedOpacity(
             opacity: _enableSearchBar.value ? 0.0 : 1.0,
             duration: _enableSearchBar.value ? 200.ms : 400.ms,
-            child: Center(child: Transform.translate(offset: Offset(_currentPath.isNotEmpty ? -34 : 0, 0), child: _buildTitle())),
+            child: Center(
+              child: Transform.translate(
+                offset: Offset(_currentPath.isNotEmpty ? -34 : 0, 0),
+                child: _BuildTitle(titleType: titleType, text: text, titleTextStyle: titleTextStyle, leadingIconColor: leadingIconColor),
+              ),
+            ),
           ),
           Container(
             alignment: Alignment.centerRight,
@@ -162,7 +152,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
                 focusNode: _focusNode,
                 prefixIcon: _buildPrefixIcon(),
                 suffixIcon: _buildSuffixIcon(),
-                hintText: S.current.searching,
+                hintText: L.current.searching,
                 enableBackgroundColor: false,
                 enableBorder: false,
                 onChanged: onSearchBarChanged,
@@ -209,9 +199,31 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
       systemOverlayStyle: systemOverlayStyle ?? (MediaQuery.platformBrightnessOf(context) == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark),
       leading: leading ?? (_currentPath.isNotEmpty && _showLeading.value ? _buildLeading() : null),
       centerTitle: centerTitle,
-      title: title ?? (enableSearchBar == true ? _buildInputSearchBar() : _buildTitle()),
+      title: title ?? (enableSearchBar == true ? _buildInputSearchBar() : _BuildTitle(titleType: titleType, text: text, titleTextStyle: titleTextStyle, leadingIconColor: leadingIconColor, onTitlePressed: onTitlePressed)),
       actions: actions,
       elevation: elevation,
     );
+  }
+}
+
+class _BuildTitle extends StatelessWidget {
+  const _BuildTitle({this.titleType, this.text, this.titleTextStyle, this.leadingIconColor, this.onTitlePressed});
+
+  final AppBarTitle? titleType;
+  final String? text;
+  final TextStyle? titleTextStyle;
+  final Color? leadingIconColor;
+  final VoidCallback? onTitlePressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: onTitlePressed,
+        behavior: HitTestBehavior.translucent,
+        child: titleType == AppBarTitle.text
+            ? AppText(text ?? '', textStyle: titleTextStyle, type: TextType.header)
+            : titleType == AppBarTitle.logo
+                ? Assets.images.logo.svg(colorFilter: ColorFilter.mode(leadingIconColor ?? Colors.transparent, BlendMode.srcIn), width: 10, height: 10)
+                : null);
   }
 }

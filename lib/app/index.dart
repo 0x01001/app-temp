@@ -1,6 +1,7 @@
 // library app;
 
 export '../shared/exception/exception_handler.dart';
+export '../shared/utils/app_language.dart';
 export 'base/app_state.dart';
 export 'base/base_page.dart';
 export 'base/base_provider.dart';
@@ -69,7 +70,6 @@ export 'utils/app_firebase_notification.dart';
 export 'utils/app_firebase_remote_config.dart';
 export 'utils/app_local_push_notification.dart';
 export 'utils/app_task.dart';
-export 'utils/app_ui.dart';
 export 'utils/app_utils.dart';
 export 'utils/deep_link_helper.dart';
 export 'utils/riverpod_logger.dart';

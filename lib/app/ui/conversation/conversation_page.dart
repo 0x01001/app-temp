@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../data/index.dart';
-import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
@@ -27,11 +27,9 @@ class ConversationPage extends BasePage<ConversationState, AutoDisposeStateNotif
       return () {};
     }, []);
 
-    final email = ref.watch(currentUserProvider.select((value) => value.email));
-
     return AppScaffold(
       hideKeyboardWhenTouchOutside: true,
-      appBar: AppTopBar(enableSearchBar: true, text: S.current.conversation, titleSpacing: 0, onSearchBarChanged: (value) => ref.read(provider.notifier).setKeyWord(value ?? '')),
+      appBar: AppTopBar(enableSearchBar: true, text: L.current.conversation, titleSpacing: 0, onSearchBarChanged: (value) => ref.read(provider.notifier).setKeyWord(value ?? '')),
       body: Column(
         children: [
           Padding(
@@ -43,6 +41,7 @@ class ConversationPage extends BasePage<ConversationState, AutoDisposeStateNotif
                   child: Consumer(
                     builder: (context, ref, child) {
                       final isVipMember = ref.watch(currentUserProvider.select((value) => value.isVip));
+                      final email = ref.watch(currentUserProvider.select((value) => value.email));
                       return Row(
                         children: [
                           AppAvatar(text: email ?? ''),
@@ -66,7 +65,7 @@ class ConversationPage extends BasePage<ConversationState, AutoDisposeStateNotif
             child: Row(
               children: [
                 const SizedBox(width: 12),
-                AppText(S.current.conversation, type: TextType.title),
+                AppText(L.current.conversation, type: TextType.title),
                 const Spacer(),
                 IconButton(icon: const Icon(Icons.add), onPressed: () => ref.nav.push(UserRoute(action: UserPageAction.createNewConversation))),
               ],
@@ -105,27 +104,62 @@ class _Item extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final conversationName = ref.watch(conversationNameProvider(item?.id ?? ''));
-    return InkWell(
-      onTap: () async {
-        if (item != null) {
-          ref.update<bool>(showBottomNavProvider, (_) => false);
-          await ref.nav.push(ChatRoute(conversation: item!));
-          ref.update<bool>(showBottomNavProvider, (_) => true);
-        }
-      },
-      child: Dismissible(
-        key: UniqueKey(),
-        onDismissed: (direction) {
-          if (item != null) ref.read(conversationProvider.notifier).deleteConversation(item!);
-        },
-        confirmDismiss: (direction) async {
-          return await ref.nav.showDialog(AppPopup.confirmDialog('Confirm', message: 'Are you sure you want to delete this conversation?'));
+    return Slidable(
+      // Specify a key if the Slidable is dismissible.
+      key: UniqueKey(),
+      // The start action pane is the one at the left or the top side.
+      startActionPane: ActionPane(
+        // A motion is a widget used to control how the pane animates.
+        motion: const DrawerMotion(),
+        // A pane can dismiss the Slidable.
+        dismissible: DismissiblePane(onDismissed: () {}),
+        // All actions are defined in the children parameter.
+        children: [
+          // A SlidableAction can have an icon and/or a label.
+          SlidableAction(
+            // An action can be bigger than the others.
+            flex: 2,
+            onPressed: (context) {},
+            backgroundColor: const Color(0xFF7BC043),
+            foregroundColor: Colors.white,
+            icon: Icons.archive,
+            label: 'Archive',
+          ),
+          SlidableAction(
+            onPressed: (context) {},
+            backgroundColor: const Color(0xFF21B7CA),
+            foregroundColor: Colors.white,
+            icon: Icons.share,
+            label: 'Share',
+          ),
+        ],
+      ),
+
+      // The end action pane is the one at the right or the bottom side.
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) {
+              if (item != null) ref.read(conversationProvider.notifier).deleteConversation(item!);
+            },
+            backgroundColor: const Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: () async {
+          if (item != null) {
+            ref.update<bool>(showBottomNavProvider, (_) => false);
+            await ref.nav.push(ChatRoute(conversation: item!));
+            ref.update<bool>(showBottomNavProvider, (_) => true);
+          }
         },
         child: Padding(
-          padding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-          ),
+          padding: const EdgeInsets.only(left: 16, right: 16),
           child: Column(
             children: [
               const SizedBox(height: 16),

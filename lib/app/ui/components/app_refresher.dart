@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../../resources/index.dart';
 import '../../index.dart';
 
 class AppRefresher extends HookConsumerWidget {
@@ -58,11 +57,11 @@ class AppRefresher extends HookConsumerWidget {
                 alignment: Alignment.center,
                 child: Column(
                   children: [
-                    AppText(S.current.unknownException, textAlign: TextAlign.center),
+                    AppText(L.current.unknownException, textAlign: TextAlign.center),
                     const SizedBox(height: 8),
                     const Icon(Icons.refresh_outlined),
                     const SizedBox(height: 8),
-                    AppText(S.current.tryAgain),
+                    AppText(L.current.tryAgain),
                   ],
                 ),
               ),
@@ -70,7 +69,7 @@ class AppRefresher extends HookConsumerWidget {
           } else if (mode == LoadStatus.canLoading) {
             body = SizedBox(
               height: 50,
-              child: Center(child: AppText(S.current.pullToLoadMore)),
+              child: Center(child: AppText(L.current.pullToLoadMore)),
             );
           } else if (mode == LoadStatus.noMore) {
             body = !isShowNoData
@@ -78,7 +77,7 @@ class AppRefresher extends HookConsumerWidget {
                 : SizedBox(
                     height: 50,
                     child: Center(
-                      child: AppText(noMoreDataText ?? S.current.noData, textAlign: TextAlign.center),
+                      child: AppText(noMoreDataText ?? L.current.noData, textAlign: TextAlign.center),
                     ),
                   );
           }

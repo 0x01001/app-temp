@@ -69,5 +69,7 @@
   "pullToLoadMore": "引っ張って読み込む",
   "tryAgain": "もう一度試す",
   "conversation": "会話",
-  "searching": "検索中..."
+  "searching": "検索中...",
+  "language": "言語",
+  "theme": "テーマ"
 }

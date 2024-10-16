@@ -1,7 +1,6 @@
 import 'package:dartx/dartx.dart';
 
 import '../../data/index.dart';
-import '../../resources/index.dart';
 import '../index.dart';
 
 class RemoteException extends AppException {
@@ -13,16 +12,16 @@ class RemoteException extends AppException {
 
   @override
   String get message => switch (kind) {
-        RemoteExceptionKind.badCertificate => S.current.unknownException,
-        RemoteExceptionKind.noInternet => S.current.noInternetException,
-        RemoteExceptionKind.network => S.current.canNotConnectToHost,
-        RemoteExceptionKind.serverDefined => generalServerMessage ?? S.current.unknownException,
-        RemoteExceptionKind.serverUndefined => generalServerMessage ?? S.current.unknownException,
-        RemoteExceptionKind.timeout => S.current.timeoutException,
-        RemoteExceptionKind.cancellation => S.current.unknownException,
-        RemoteExceptionKind.unknown => S.current.unknownException,
-        RemoteExceptionKind.refreshTokenFailed => S.current.tokenExpired,
-        RemoteExceptionKind.decodeError => S.current.unknownException,
+        RemoteExceptionKind.badCertificate => L.current.unknownException,
+        RemoteExceptionKind.noInternet => L.current.noInternetException,
+        RemoteExceptionKind.network => L.current.canNotConnectToHost,
+        RemoteExceptionKind.serverDefined => generalServerMessage ?? L.current.unknownException,
+        RemoteExceptionKind.serverUndefined => generalServerMessage ?? L.current.unknownException,
+        RemoteExceptionKind.timeout => L.current.timeoutException,
+        RemoteExceptionKind.cancellation => L.current.unknownException,
+        RemoteExceptionKind.unknown => L.current.unknownException,
+        RemoteExceptionKind.refreshTokenFailed => L.current.tokenExpired,
+        RemoteExceptionKind.decodeError => L.current.unknownException,
       };
 
   @override

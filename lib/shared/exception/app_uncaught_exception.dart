@@ -1,4 +1,3 @@
-import '../../resources/index.dart';
 import '../index.dart';
 
 class AppUncaughtException extends AppException {
@@ -13,7 +12,7 @@ class AppUncaughtException extends AppException {
   }
 
   @override
-  String get message => S.current.unknownException;
+  String get message => L.current.unknownException;
 
   @override
   AppExceptionAction get action => AppExceptionAction.doNothing;

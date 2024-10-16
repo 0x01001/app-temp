@@ -9,14 +9,6 @@ class AppLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final loading = SizedBox(
-    //   width: width ?? 30,
-    //   height: height ?? 30,
-    //   child: CircularProgressIndicator(
-    //     strokeWidth: strokeWidth ?? 3,
-    //     valueColor: AlwaysStoppedAnimation<Color>(AppColors.current.primaryColor),
-    //   ),
-    // );
     final loading = Transform.scale(
       scale: 0.7,
       child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onSurface),

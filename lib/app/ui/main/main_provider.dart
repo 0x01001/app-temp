@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../data/index.dart';
-import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
@@ -57,7 +56,7 @@ class MainProvider extends BaseProvider<MainState> {
     currentUserSubscription = _ref.firebaseFirestore.getUserDetailStream(userId).listen((user) async {
       // user deleted - force logout
       if (user.id?.isEmpty == true) {
-        await _ref.nav.showDialog(AppPopup.forceLogout(S.current.forceLogout));
+        await _ref.nav.showDialog(AppPopup.forceLogout(L.current.forceLogout));
         await _ref.preferences.clearCurrentUserData();
         _updateCurrentUser(FirebaseUserModel());
         await _ref.nav.replaceAll([const LoginRoute()]);

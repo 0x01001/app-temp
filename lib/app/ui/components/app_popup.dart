@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
@@ -21,7 +20,7 @@ class AppPopup {
         message: message,
         actions: [
           PopupButton(
-              text: S.current.ok,
+              text: L.current.ok,
               onPressed: () {
                 navigator.pop(useRootNavigator: true);
                 onPressed?.call();
@@ -40,11 +39,11 @@ class AppPopup {
         message: message,
         actions: [
           PopupButton(
-            text: S.current.cancel,
+            text: L.current.cancel,
             onPressed: onCancel ?? () => navigator.pop(useRootNavigator: true),
           ),
           PopupButton(
-              text: S.current.ok,
+              text: L.current.ok,
               onPressed: () {
                 navigator.pop(useRootNavigator: true);
                 onConfirm?.call();
@@ -61,11 +60,11 @@ class AppPopup {
         message: message,
         actions: [
           PopupButton(
-            text: S.current.cancel,
+            text: L.current.cancel,
             onPressed: () => navigator.pop(useRootNavigator: true),
           ),
           PopupButton(
-              text: S.current.retry,
+              text: L.current.retry,
               onPressed: () {
                 navigator.pop(useRootNavigator: true);
                 onRetryPressed?.call();
@@ -82,11 +81,11 @@ class AppPopup {
         message: 'Requires recent login',
         actions: [
           PopupButton(
-            text: S.current.cancel,
+            text: L.current.cancel,
             onPressed: () => navigator.pop(useRootNavigator: true),
           ),
           PopupButton(
-              text: S.current.retry,
+              text: L.current.retry,
               onPressed: () {
                 navigator.replaceAll([const LoginRoute()]);
               }),
@@ -102,7 +101,7 @@ class AppPopup {
         message: message,
         actions: [
           PopupButton(
-              text: S.current.ok,
+              text: L.current.ok,
               onPressed: () {
                 navigator.pop(useRootNavigator: true);
               }),
@@ -118,11 +117,11 @@ class AppPopup {
         actions: [
           CupertinoDialogAction(
             onPressed: () => navigator.pop(),
-            child: AppText(S.current.ok),
+            child: AppText(L.current.ok),
           ),
           CupertinoDialogAction(
             onPressed: () => navigator.pop(),
-            child: AppText(S.current.cancel),
+            child: AppText(L.current.cancel),
           ),
         ],
       ),

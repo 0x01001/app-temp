@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 extension TypographyExt on BuildContext {
   ThemeData get theme => Theme.of(this);
-  TextTheme get textTheme => GoogleFonts.notoSansTextTheme(theme.textTheme); // GoogleFonts.latoTextTheme(theme.textTheme);
+  TextTheme get textTheme => GoogleFonts.notoSansJpTextTheme(theme.textTheme); // GoogleFonts.latoTextTheme(theme.textTheme);
   ColorScheme get colors => theme.colorScheme;
   TextStyle? get displayLarge => textTheme.displayLarge?.copyWith(
         color: colors.onSurface,

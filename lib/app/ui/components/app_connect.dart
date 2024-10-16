@@ -27,7 +27,7 @@
 //             height: 20.h,
 //             width: double.infinity,
 //             color: Colors.redAccent,
-//             child: Center(child: AppText(S.current.noInternetException)),
+//             child: Center(child: AppText(L.current.noInternetException)),
 //           ),
 //         ),
 //       ],

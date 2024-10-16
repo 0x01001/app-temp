@@ -14,6 +14,7 @@ export 'extensions/object_ext.dart';
 export 'extensions/ref_ext.dart';
 export 'extensions/string_ext.dart';
 export 'utils/app_info.dart';
+export 'utils/app_language.dart';
 export 'utils/big_decimal.dart';
 export 'utils/collection_utils.dart';
 export 'utils/constant.dart';

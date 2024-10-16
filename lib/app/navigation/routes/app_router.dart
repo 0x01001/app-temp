@@ -97,5 +97,7 @@ final settingTab = AutoRoute(
   page: SettingTab.page,
   children: [
     AutoRoute(page: SettingRoute.page, initial: true),
+    AutoRoute(page: SettingThemeRoute.page),
+    AutoRoute(page: SettingLanguageRoute.page),
   ],
 );

@@ -11,6 +11,9 @@ abstract class BasePage<T extends BaseState, P extends ProviderListenable<AppSta
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    L.instance.init(context);
+    AppSize.init(context);
+
     ref.listen(
       provider.select((value) => value.appException),
       (previous, next) async {
