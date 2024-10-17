@@ -35,7 +35,7 @@ clean:
 	flutter clean && rm -rf pubspec.lock
 
 pod:
-	cd ios && rm -rf Pods && rm Podfile.lock && pod install --repo-update && cd ..
+	cd ios && rm -rf Pods && rm -rf Podfile.lock && pod install --repo-update && cd ..
 
 get:
 	flutter pub get
