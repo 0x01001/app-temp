@@ -22,7 +22,6 @@ class AppConfig extends Config {
     //   getIt.get<DeviceHelper>().deviceType == DeviceType.mobile ? Constant.mobileOrientation : Constant.tabletOrientation,
     // );
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-    SystemChrome.setSystemUIOverlayStyle(Constant.systemUiOverlay);
 
     getIt.get<AppFirebaseAnalytics>().init();
     await getIt.get<AppLocalPushNotification>().init();

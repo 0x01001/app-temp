@@ -196,7 +196,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
       toolbarOpacity: toolbarOpacity,
       bottomOpacity: bottomOpacity,
       leadingWidth: leadingWidth,
-      systemOverlayStyle: systemOverlayStyle ?? (MediaQuery.platformBrightnessOf(context) == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark),
+      //systemOverlayStyle: systemOverlayStyle ?? (MediaQuery.platformBrightnessOf(context) == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark),
       leading: leading ?? (_currentPath.isNotEmpty && _showLeading.value ? _buildLeading() : null),
       centerTitle: centerTitle,
       title: title ?? (enableSearchBar == true ? _buildInputSearchBar() : _BuildTitle(titleType: titleType, text: text, titleTextStyle: titleTextStyle, leadingIconColor: leadingIconColor, onTitlePressed: onTitlePressed)),

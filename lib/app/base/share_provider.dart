@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:dartx/dartx.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/index.dart';
@@ -90,6 +92,17 @@ final themeModeProvider = StateProvider<int>(
   },
 );
 
+Future<void> _changeStatusBarColor(bool isDarkTheme) async {
+  // Change status bar background color
+  await FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
+  // Determine if the status bar text color should be dark or light based on brightness
+  if (isDarkTheme) {
+    await FlutterStatusbarcolor.setStatusBarWhiteForeground(true); // White text
+  } else {
+    await FlutterStatusbarcolor.setStatusBarWhiteForeground(false); // Dark text
+  }
+}
+
 final isDarkModeProvider = Provider.autoDispose<bool>(
   (ref) {
     final themeMode = ref.watch(themeModeProvider);
@@ -99,6 +112,7 @@ final isDarkModeProvider = Provider.autoDispose<bool>(
       isDarkTheme = PlatformDispatcher.instance.platformBrightness == Brightness.dark; //MediaQuery.platformBrightnessOf(context) == Brightness.dark;
     }
     Log.d('isDarkModeProvider > result: ${isDarkTheme} - ${PlatformDispatcher.instance.platformBrightness == Brightness.dark}');
+    _changeStatusBarColor(isDarkTheme);
     return isDarkTheme;
   },
 );

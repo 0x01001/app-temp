@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../resources/index.dart';
 import '../../../shared/index.dart';
+import '../../index.dart';
 
 class AppScaffold extends StatelessWidget {
   const AppScaffold({
@@ -46,6 +47,6 @@ class AppScaffold extends StatelessWidget {
             textDirection: TextDirection.ltr,
             child: scaffold,
           );
-    return hideKeyboardWhenTouchOutside ? GestureDetector(onTap: () => ViewUtils.hideKeyboard(context), child: scaffoldWithBanner) : scaffoldWithBanner;
+    return hideKeyboardWhenTouchOutside ? GestureDetector(onTap: () => AppUtils.hideKeyboard(context), child: scaffoldWithBanner) : scaffoldWithBanner;
   }
 }

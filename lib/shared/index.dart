@@ -31,4 +31,3 @@ export 'utils/number_format_utils.dart';
 export 'utils/size_config.dart';
 export 'utils/typedef.dart';
 export 'utils/validation_utils.dart';
-export 'utils/view_utils.dart';

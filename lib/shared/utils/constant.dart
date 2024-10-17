@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../index.dart';
@@ -61,9 +60,6 @@ class Constant {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ];
-
-  /// status bar color
-  static const systemUiOverlay = SystemUiOverlayStyle(statusBarBrightness: Brightness.light, statusBarColor: Colors.transparent);
 
   static const textFieldTextStyleHeight = 1.3;
 

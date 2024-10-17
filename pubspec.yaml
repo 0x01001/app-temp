@@ -114,6 +114,7 @@ dependencies:
   shimmer: 3.0.0
   palette_generator: ^0.3.3+4 # generate color from image
   flutter_staggered_animations: 1.1.1
+  flutter_statusbarcolor_ns: 0.6.0
 
 dev_dependencies:
   auto_route_generator: ^8.0.0

@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
@@ -36,14 +37,13 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
             duration: 300.ms,
             height: _showBottomNav ? kBottomNavigationBarHeight : 0,
             child: Container(
-              decoration: BoxDecoration(border: Border(top: BorderSide(color: Theme.of(context).dividerColor, width: Constant.borderHeight))),
+              decoration: BoxDecoration(color: context.colors.surface, border: Border(top: BorderSide(color: context.theme.dividerColor, width: Constant.borderHeight))),
               child: GNav(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 gap: 8,
                 color: Colors.grey[800], // color of gbutton
-                activeColor: Theme.of(context).colorScheme.secondary,
-                iconSize: 24,
-                // tabBackgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+                activeColor: context.colors.secondary,
+                iconSize: 24, 
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 tabBorderRadius: 0,
                 tabs: [

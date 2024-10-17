@@ -229,15 +229,15 @@ class AppNavigator {
 
   void showErrorMessage(String message, {Duration? duration, SnackBarAction? action, bool? autoDismiss = true}) {
     // ViewUtils.showAppSnackBar(_rootRouterContext, message, duration: duration, action: action, autoDismiss: autoDismiss);
-    ViewUtils.showTopBarMessage(_rootRouterContext, message, duration: duration, icon: const Icon(Icons.error, color: Colors.red));
+    AppUtils.showTopBarMessage(_rootRouterContext, message, duration: duration, icon: const Icon(Icons.error, color: Colors.red));
   }
 
   void showSuccessMessager(String message, {Duration? duration, SnackBarAction? action, bool? autoDismiss = true}) {
-    ViewUtils.showTopBarMessage(_rootRouterContext, message, duration: duration, icon: const Icon(Icons.check_circle, color: Colors.green));
+    AppUtils.showTopBarMessage(_rootRouterContext, message, duration: duration, icon: const Icon(Icons.check_circle, color: Colors.green));
   }
 
   void hideCurrentSnackBar() {
-    ViewUtils.hideAppSnackBar(_rootRouterContext);
+    AppUtils.hideTopBarMessage();
   }
 
   void showSnackBar(AppPopup popup) {

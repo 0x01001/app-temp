@@ -14,10 +14,7 @@ class SettingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Log.d('SettingPage > build');
-    final isDarkMode = ref.watch(isDarkModeProvider);
-    final theme = ref.watch(themeModeProvider);
-    final language = ref.watch(languageCodeProvider);
+    Log.d('SettingPage > build'); 
 
     Future<void> onPressLogout(_) async {
       final result = await ref.nav.showDialog(AppPopup.confirmDialog(
@@ -63,20 +60,35 @@ class SettingPage extends ConsumerWidget {
               SettingsTile.navigation(
                 leading: const Icon(Icons.language),
                 title: AppText(L.current.language, type: TextType.title, isBold: false),
-                value: AppText(LocaleNames.of(context)?.nameOf(language.value), type: TextType.text, color: context.theme.extension<CustomTheme>()?.disabled),
+                value: Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                    final language = ref.watch(languageCodeProvider);
+                    return AppText(LocaleNames.of(context)?.nameOf(language.value), type: TextType.text, color: context.theme.extension<CustomTheme>()?.disabled);
+                  },
+                ),
                 onPressed: (_) => ref.nav.push(const SettingLanguageRoute()),
               ),
               SettingsTile.navigation(
-                leading: Icon(isDarkMode == true ? Icons.brightness_4_outlined : Icons.dark_mode_outlined),
+                leading: Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                    final isDarkMode = ref.watch(isDarkModeProvider);
+                    return Icon(isDarkMode == true ? Icons.brightness_4_outlined : Icons.dark_mode_outlined);
+                  },
+                ),
                 title: const AppText('Theme', type: TextType.title, isBold: false),
-                value: AppText(
-                    theme == 0
-                        ? 'Default System'
-                        : theme == 1
-                            ? 'Dark Mode'
-                            : 'Light Mode',
-                    type: TextType.text,
-                    color: context.theme.extension<CustomTheme>()?.disabled),
+                value: Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                    final theme = ref.watch(themeModeProvider);
+                    return AppText(
+                        theme == 0
+                            ? 'Default System'
+                            : theme == 1
+                                ? 'Dark Mode'
+                                : 'Light Mode',
+                        type: TextType.text,
+                        color: context.theme.extension<CustomTheme>()?.disabled);
+                  },
+                ),
                 onPressed: (_) => ref.nav.push(const SettingThemeRoute()),
               ),
               SettingsTile.navigation(leading: const Icon(Icons.delete), title: const AppText('Delete Account', type: TextType.title, isBold: false), trailing: const SizedBox.shrink(), onPressed: onPressDeleteAccount),
