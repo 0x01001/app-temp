@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../../data/model/user_model.dart';
 import '../../../resources/index.dart';
@@ -76,30 +75,6 @@ class _Item extends StatelessWidget {
         title: AppText('${item?.title?.toCapitalized()} ${item?.firstName} ${item?.lastName}', type: TextType.title),
         subtitle: AppText(item?.id ?? ''),
         onTap: () => Log.d('onTap: ${item?.id}'),
-      ),
-    );
-  }
-}
-
-class _LoadingWidget extends StatelessWidget {
-  const _LoadingWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: Constant.shimmerItemCount,
-        itemBuilder: (context, index) => const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: RectangleShimmer(
-            width: double.infinity,
-            height: 72,
-            borderRadius: BorderRadius.all(Radius.circular(3.0)),
-          ),
-        ),
       ),
     );
   }
