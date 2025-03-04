@@ -16,7 +16,7 @@ class AppNavigator {
   AppNavigator(this._appRouter);
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final listRoutes = const [HomeTab(), ConversationTab(), UITab(), SettingTab()];
+  final routes = const [HomeTab(), UITab(), SettingTab()];
 
   TabsRouter? tabsRouter;
   final AppRouter _appRouter;
@@ -206,46 +206,54 @@ class AppNavigator {
   //   // );
   // }
 
-  // Future<T?> showModalBottomSheet<T extends Object?>(
-  //   AppPopup appPopup, {
-  //   bool isScrollControlled = false,
-  //   bool useRootNavigator = false,
-  //   bool isDismissible = true,
-  //   bool enableDrag = true,
-  //   m.Color barrierColor = m.Colors.black54,
-  //   m.Color? backgroundColor,
-  // }) {
-  //   return m.showModalBottomSheet<T>(
-  //     context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
-  //     builder: (_) => _appPopupInfoMapper.map(appPopupInfo, this),
-  //     isDismissible: isDismissible,
-  //     enableDrag: enableDrag,
-  //     useRootNavigator: useRootNavigator,
-  //     isScrollControlled: isScrollControlled,
-  //     backgroundColor: backgroundColor,
-  //     barrierColor: barrierColor,
-  //   );
-  // }
+  Future<T?> showModalBottomSheet<T extends Object?>(
+    AppPopup appPopup, {
+    bool isScrollControlled = false,
+    bool useRootNavigator = false,
+    bool isDismissible = true,
+    bool enableDrag = true,
+    m.Color barrierColor = m.Colors.black54,
+    m.Color? backgroundColor,
+  }) {
+    return m.showModalBottomSheet<T>(
+      context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
+      builder: (context) => m.PopScope(
+        onPopInvoked: (didPop) async {
+          Log.d('BottomSheet $appPopup dismissed');
+          _popups.remove(appPopup.id);
+        },
+        canPop: canPop,
+        child: appPopup.builder(context, this),
+      ),
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
+      useRootNavigator: useRootNavigator,
+      isScrollControlled: isScrollControlled,
+      backgroundColor: backgroundColor,
+      barrierColor: barrierColor,
+    );
+  }
 
-  void showErrorMessage(String message, {Duration? duration, SnackBarAction? action, bool? autoDismiss = true}) {
+  void showErrorMessage(String message, {Duration? duration, SnackBarAction? action, bool? autoDismiss = true, bool? isWithAppBar = true}) {
     // ViewUtils.showAppSnackBar(_rootRouterContext, message, duration: duration, action: action, autoDismiss: autoDismiss);
-    AppUtils.showTopBarMessage(_rootRouterContext, message, duration: duration, icon: const Icon(Icons.error, color: Colors.red));
+    AppUtils.showTopBarMessage(_rootRouterContext, message, duration: duration, icon: const Icon(Icons.error, color: Colors.red), isWithAppBar: isWithAppBar);
   }
 
-  void showSuccessMessager(String message, {Duration? duration, SnackBarAction? action, bool? autoDismiss = true}) {
-    AppUtils.showTopBarMessage(_rootRouterContext, message, duration: duration, icon: const Icon(Icons.check_circle, color: Colors.green));
+  void showSuccessMessager(String message, {Duration? duration, SnackBarAction? action, bool? autoDismiss = true, bool? isWithAppBar = true}) {
+    AppUtils.showTopBarMessage(_rootRouterContext, message, duration: duration, icon: const Icon(Icons.check_circle, color: Colors.green), isWithAppBar: isWithAppBar);
   }
 
-  void hideCurrentSnackBar() {
-    AppUtils.hideTopBarMessage();
+  ScaffoldMessengerState? hideCurrentSnackBar() {
+    final messengerState = m.ScaffoldMessenger.maybeOf(_rootRouterContext);
+    if (messengerState == null) {
+      return null;
+    }
+    messengerState.hideCurrentSnackBar();
+    return messengerState;
   }
 
   void showSnackBar(AppPopup popup) {
-    final messengerState = m.ScaffoldMessenger.maybeOf(_rootRouterContext);
-    if (messengerState == null) {
-      return;
-    }
-    messengerState.hideCurrentSnackBar();
-    messengerState.showSnackBar(popup.builder(_rootRouterContext, this) as m.SnackBar);
+    final messengerState = hideCurrentSnackBar();
+    messengerState?.showSnackBar(popup.builder(_rootRouterContext, this) as m.SnackBar);
   }
 }

@@ -16,7 +16,8 @@ class ExceptionHandler {
       await _ref.crashlytics.recordError(exception: appException, stack: StackTrace.current, reason: appException.message);
     }
 
-    Log.e('[APP] handleException: $appException');
+    Log.e('[APP] handleException: ${appException.handleError} - $appException');
+    if (appException.handleError == false) return;
 
     switch (appException.action) {
       case AppExceptionAction.showMessage:
@@ -39,6 +40,13 @@ class ExceptionHandler {
         break;
       case AppExceptionAction.showDialogForceLogout:
         await _showErrorDialog(message: appException.message, forceLogout: true);
+        break;
+      case AppExceptionAction.showDialogMaintenance:
+        _ref.nav.showDialog(
+          AppPopup.maintenanceModeDialog(message: appException.message, time: appException.message),
+          barrierDismissible: false,
+          // canPop: false,
+        );
         break;
       case AppExceptionAction.doNothing:
         break;

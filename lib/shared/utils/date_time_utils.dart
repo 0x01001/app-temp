@@ -1,7 +1,4 @@
-import 'package:dartx/dartx.dart';
 import 'package:intl/intl.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 import '../index.dart';
 
@@ -84,7 +81,7 @@ class DateTimeUtils {
   static DateTime? tryParse({
     String? date,
     String? format,
-    String locale = Constant.defaultLocale,
+    String locale = Constant.defaultLanguageCode,
   }) {
     if (date == null) {
       return null;
@@ -100,50 +97,5 @@ class DateTimeUtils {
     } catch (e) {
       return null;
     }
-  }
-}
-
-extension DateTimeExtensions on DateTime {
-  String toStringWithFormat(String format) {
-    return DateFormat(format).format(this);
-  }
-
-  DateTime get lastDateOfMonth {
-    return DateTime(year, month + 1, 0);
-  }
-}
-
-extension DateTimeTimezoneExtension on DateTime {
-  Map<String, tz.Location> get getTimeZoneDatabase {
-    tz.initializeTimeZones();
-
-    return tz.timeZoneDatabase.locations;
-  }
-
-  int _getESTtoUTCDifference(String locationName) {
-    tz.initializeTimeZones();
-    final locationNY = tz.getLocation(locationName);
-    final tz.TZDateTime nowNY = tz.TZDateTime.now(locationNY);
-
-    return nowNY.timeZoneOffset.inHours;
-  }
-
-  DateTime toESTzone(String locationName) {
-    DateTime result = toUtc(); // local time to UTC
-    result = result.add(Duration(hours: _getESTtoUTCDifference(locationName))); // convert UTC to EST
-
-    return result;
-  }
-
-  DateTime fromESTzone(String locationName) {
-    DateTime result = subtract(Duration(hours: _getESTtoUTCDifference(locationName))); // convert EST to UTC
-
-    String dateTimeAsIso8601String = result.toIso8601String();
-    dateTimeAsIso8601String += dateTimeAsIso8601String.characters.last.equalsIgnoreCase('Z') ? '' : 'Z';
-    result = DateTime.parse(dateTimeAsIso8601String); // make isUtc to be true
-
-    result = result.toLocal(); // convert UTC to local time
-
-    return result;
   }
 }

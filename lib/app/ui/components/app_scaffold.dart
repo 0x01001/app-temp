@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import '../../../resources/index.dart';
 import '../../../shared/index.dart';
-import '../../index.dart';
 
 class AppScaffold extends StatelessWidget {
   const AppScaffold({
@@ -14,6 +14,8 @@ class AppScaffold extends StatelessWidget {
     this.backgroundColor,
     this.hideKeyboardWhenTouchOutside = false,
     this.useSafeArea = true,
+    this.extendBody = false,
+    this.extendBodyBehindAppBar = true,
     super.key,
   });
 
@@ -25,17 +27,20 @@ class AppScaffold extends StatelessWidget {
   final Color? backgroundColor;
   final bool hideKeyboardWhenTouchOutside;
   final bool useSafeArea;
+  final bool extendBody;
+  final bool extendBodyBehindAppBar;
 
   @override
   Widget build(BuildContext context) {
     final scaffold = Scaffold(
-      backgroundColor: backgroundColor ?? context.theme.extension<CustomTheme>()?.background,
+      backgroundColor: backgroundColor ?? context.colors.surface,
       body: useSafeArea ? SafeArea(child: body) : body,
       appBar: appBar,
       drawer: drawer,
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: floatingActionButtonLocation,
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: extendBodyBehindAppBar,
+      extendBody: extendBody,
     );
     final scaffoldWithBanner = Env.flavor == Flavor.prod
         ? scaffold
@@ -47,6 +52,6 @@ class AppScaffold extends StatelessWidget {
             textDirection: TextDirection.ltr,
             child: scaffold,
           );
-    return hideKeyboardWhenTouchOutside ? GestureDetector(onTap: () => AppUtils.hideKeyboard(context), child: scaffoldWithBanner) : scaffoldWithBanner;
+    return hideKeyboardWhenTouchOutside ? KeyboardDismissOnTap(dismissOnCapturedTaps: true, child: scaffoldWithBanner) : scaffoldWithBanner;
   }
 }

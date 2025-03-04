@@ -31,6 +31,7 @@ class AppInput extends BaseInput {
     this.borderRadius,
     this.backgroundColor,
     this.focusNode,
+    this.textAlign = TextAlign.start,
     super.key,
   });
 
@@ -55,6 +56,7 @@ class AppInput extends BaseInput {
   final String? labelText;
   final FocusNode? focusNode;
   final Future<void> Function(BaseInput)? onFocus;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,7 +68,7 @@ class AppInput extends BaseInput {
     final _border = enableBorder
         ? OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? Constant.defaultBorderRadiusTextInput)),
-            borderSide: BorderSide(width: 0, color: context.theme.extension<CustomTheme>()?.borderButton ?? Colors.transparent),
+            borderSide: BorderSide(width: 0, color: appColor.borderButton),
           )
         : InputBorder.none;
     // debugPrint('build: $field');
@@ -116,6 +118,7 @@ class AppInput extends BaseInput {
         focusNode: focusNode ?? _focusNode,
         autocorrect: false,
         textAlignVertical: TextAlignVertical.center,
+        textAlign: textAlign,
         style: context.bodySmall,
         controller: controller ?? _controller,
         validator: validator ?? checkValidator(field),
@@ -132,7 +135,7 @@ class AppInput extends BaseInput {
           focusedBorder: _border.copyWith(borderSide: BorderSide(color: context.colors.primary)),
           disabledBorder: _border,
           labelText: hintText ?? labelText,
-          labelStyle: context.bodySmall?.copyWith(color: context.theme.extension<CustomTheme>()?.disabled),
+          labelStyle: context.bodySmall?.copyWith(color: appColor.disabled),
           floatingLabelBehavior: FloatingLabelBehavior.never,
           alignLabelWithHint: true,
           isCollapsed: true,

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -18,9 +19,21 @@ class HomePage extends BasePage<HomeState, AutoDisposeStateNotifierProvider<Home
   @override
   Widget render(BuildContext context, WidgetRef ref) {
     Log.d('HomePage > build');
+    final _provider = ref.read(provider.notifier);
+
+    Future<void> _loadData() async {
+      return Future.microtask(() async {
+        await _provider.loadData(isRefresh: true);
+      });
+    }
+
+    useEffect(() {
+      _loadData();
+      return () {};
+    }, []);
 
     return AppScaffold(
-      appBar: AppTopBar(text: L.current.home),
+      appBar: AppTopBar(text: S.current.home),
       body: Consumer(
         builder: (context, ref, child) {
           final users = ref.watch(provider.select((value) => value.data?.users));
@@ -29,7 +42,6 @@ class HomePage extends BasePage<HomeState, AutoDisposeStateNotifierProvider<Home
           Log.d('HomePage > render: $isLoading - ${users?.length}');
           return AppListView(
             useRefresher: true,
-            fetch: ref.read(provider.notifier).loadData,
             isLoading: isLoading,
             padding: const EdgeInsets.symmetric(vertical: 4),
             items: users,

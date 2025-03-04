@@ -12,27 +12,32 @@ class RemoteException extends AppException {
 
   @override
   String get message => switch (kind) {
-        RemoteExceptionKind.badCertificate => L.current.unknownException,
-        RemoteExceptionKind.noInternet => L.current.noInternetException,
-        RemoteExceptionKind.network => L.current.canNotConnectToHost,
-        RemoteExceptionKind.serverDefined => generalServerMessage ?? L.current.unknownException,
-        RemoteExceptionKind.serverUndefined => generalServerMessage ?? L.current.unknownException,
-        RemoteExceptionKind.timeout => L.current.timeoutException,
-        RemoteExceptionKind.cancellation => L.current.unknownException,
-        RemoteExceptionKind.unknown => L.current.unknownException,
-        RemoteExceptionKind.refreshTokenFailed => L.current.tokenExpired,
-        RemoteExceptionKind.decodeError => L.current.unknownException,
+        RemoteExceptionKind.badCertificate => S.current.unknownException,
+        RemoteExceptionKind.noInternet => S.current.noInternetException,
+        RemoteExceptionKind.network => S.current.canNotConnectToHost,
+        RemoteExceptionKind.serverDefined => generalServerMessage ?? S.current.unknownException,
+        RemoteExceptionKind.userNotFound || RemoteExceptionKind.serverUndefined => generalServerMessage ?? S.current.unknownException,
+        RemoteExceptionKind.timeout => S.current.timeoutException,
+        RemoteExceptionKind.cancellation => S.current.unknownException,
+        RemoteExceptionKind.unknown => S.current.unknownException,
+        RemoteExceptionKind.refreshTokenFailed => S.current.tokenExpired,
+        RemoteExceptionKind.decodeError => S.current.unknownException,
+        RemoteExceptionKind.serverMaintenance => S.current.messageMaintenance,
       };
 
   @override
   AppExceptionAction get action {
     return switch (kind) {
+      RemoteExceptionKind.serverMaintenance => AppExceptionAction.showDialogMaintenance,
       RemoteExceptionKind.refreshTokenFailed => AppExceptionAction.showDialogForceLogout,
-      RemoteExceptionKind.serverDefined || RemoteExceptionKind.serverUndefined => AppExceptionAction.showDialog,
+      RemoteExceptionKind.serverDefined || RemoteExceptionKind.serverUndefined || RemoteExceptionKind.badCertificate || RemoteExceptionKind.decodeError || RemoteExceptionKind.cancellation || RemoteExceptionKind.unknown => AppExceptionAction.showDialog,
       RemoteExceptionKind.noInternet || RemoteExceptionKind.network || RemoteExceptionKind.timeout => AppExceptionAction.showDialogWithRetry,
       _ => AppExceptionAction.doNothing,
     };
   }
+
+  @override
+  bool get isForcedErrorToHandle => kind == RemoteExceptionKind.refreshTokenFailed || kind == RemoteExceptionKind.serverMaintenance;
 
   int get generalServerStatusCode => serverError?.generalServerStatusCode ?? serverError?.errors.firstOrNull?.serverStatusCode ?? -1;
 
@@ -59,12 +64,18 @@ class RemoteException extends AppException {
 
 enum RemoteExceptionKind {
   noInternet,
+  timeout,
 
   /// host not found, cannot connect to host, SocketException
   network,
 
   /// server has defined response
   serverDefined,
+
+  /// specific serverDefined errors need to be handled in separate ways
+  refreshTokenFailed,
+  serverMaintenance,
+  userNotFound,
 
   /// server has not defined response
   serverUndefined,
@@ -75,8 +86,7 @@ enum RemoteExceptionKind {
   /// error occurs when passing JSON
   decodeError,
 
-  refreshTokenFailed,
-  timeout,
+  /// other errors
   cancellation,
   unknown,
 }

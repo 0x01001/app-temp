@@ -1,13 +1,9 @@
 import 'dart:ui';
 
-import 'package:dartx/dartx.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/index.dart';
 import '../../shared/index.dart';
-import '../index.dart';
 
 final shareProvider = Provider((_ref) => ShareProvider(_ref));
 
@@ -51,30 +47,19 @@ class ShareProvider {
   //     await _ref.nav.replaceAll([const LoginRoute()]);
   //   }
   // }
-
-  List<FirebaseConversationUserModel>? getRenamedMembers({List<FirebaseConversationUserModel>? members, String? conversationId}) {
-    return members
-        ?.map((e) => e.copyWith(
-              email: _ref.preferences.getUserNickname(conversationId: conversationId, memberId: e.userId) ?? e.email,
-            ))
-        .toList();
-  }
-
-  Future<void> deleteConversation(String? id) async {
-    if (id != null) {
-      await _ref.firebaseFirestore.deleteConversation(id);
-      await _ref.database.removeMessagesByConversationId(id);
-    }
-  }
 }
 
-final languageCodeProvider = StateProvider<LanguageCode>(
+final showBottomNavProvider = StateProvider<bool>((ref) => true);
+final showKeyboardProvider = StateProvider<bool>((ref) => false);
+
+final languageCodeProvider = StateProvider<String>(
   (ref) {
     ref.listenSelf((previous, next) {
-      ref.preferences.saveLanguageCode(next.value);
+      Log.d('languageCodeProvider > listenSelf: $previous - $next');
+      ref.preferences.saveLanguageCode(next);
     });
 
-    return LanguageCode.fromValue(ref.preferences.languageCode);
+    return ref.preferences.languageCode;
   },
 );
 
@@ -92,18 +77,7 @@ final themeModeProvider = StateProvider<int>(
   },
 );
 
-Future<void> _changeStatusBarColor(bool isDarkTheme) async {
-  // Change status bar background color
-  await FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
-  // Determine if the status bar text color should be dark or light based on brightness
-  if (isDarkTheme) {
-    await FlutterStatusbarcolor.setStatusBarWhiteForeground(true); // White text
-  } else {
-    await FlutterStatusbarcolor.setStatusBarWhiteForeground(false); // Dark text
-  }
-}
-
-final isDarkModeProvider = Provider.autoDispose<bool>(
+final isDarkModeProvider = StateProvider<bool>(
   (ref) {
     final themeMode = ref.watch(themeModeProvider);
     bool isDarkTheme = themeMode == 2;
@@ -112,59 +86,10 @@ final isDarkModeProvider = Provider.autoDispose<bool>(
       isDarkTheme = PlatformDispatcher.instance.platformBrightness == Brightness.dark; //MediaQuery.platformBrightnessOf(context) == Brightness.dark;
     }
     Log.d('isDarkModeProvider > result: ${isDarkTheme} - ${PlatformDispatcher.instance.platformBrightness == Brightness.dark}');
-    _changeStatusBarColor(isDarkTheme);
+    AppUtils.changeStatusBarColor(isDarkTheme);
     return isDarkTheme;
   },
 );
-
-final showBottomNavProvider = StateProvider<bool>((ref) => true);
-
-// final showBottomNavProvider = StateNotifierProvider<ShowBottomNav, bool>((ref) => ShowBottomNav());
-// class ShowBottomNav extends StateNotifier<bool> {
-//   ShowBottomNav() : super(true); // Initial state is true
-//   void change() => state = !state;
-//   void hide() => state = false;
-//   void show() => state = true;
-// }
-
-final filterConversationsProvider = Provider.autoDispose<List<FirebaseConversationModel>?>(
-  (ref) {
-    final conversations = ref.watch(conversationProvider.select((value) => value.data?.conversationList));
-    final keyword = ref.watch(conversationProvider.select((value) => value.data?.keyword));
-    final allConversationsMembers = ref.watch(conversationMembersMapProvider);
-    final filteredConversationsMembers = allConversationsMembers.filter(
-      (element) => element.value.joinToString(transform: (e) => e.email ?? '').containsIgnoreCase(keyword?.trim() ?? ''),
-    );
-
-    return conversations
-        ?.filter(
-          (conversation) {
-            if (allConversationsMembers.containsKey(conversation.id)) {
-              return filteredConversationsMembers.containsKey(conversation.id);
-            } else {
-              return conversation.members?.joinToString(transform: (e) => e.email ?? '').containsIgnoreCase(keyword?.trim() ?? '') ?? false;
-            }
-          },
-        )
-        .map((e) => e.copyWith(members: allConversationsMembers[e.id] ?? e.members))
-        .toList();
-  },
-);
-
-final conversationNameProvider = Provider.autoDispose.family<String, String>((ref, conversationId) {
-  final currentUser = ref.watch(currentUserProvider);
-  final members = ref.watch(conversationMembersMapProvider.select((value) => value[conversationId]));
-
-  members?.removeWhere((element) => element.userId == currentUser.id);
-
-  return members?.joinToString(transform: (e) => e.email ?? '') ?? '';
-});
-
-final conversationMembersMapProvider = StateProvider<Map<String, List<FirebaseConversationUserModel>>>((ref) => {});
-
-final conversationMembersProvider = Provider.autoDispose.family<List<FirebaseConversationUserModel>, String>((ref, conversationId) {
-  return ref.watch(conversationMembersMapProvider)[conversationId]?.distinctBy((element) => element.userId).toList() ?? [];
-});
 
 final currentUserProvider = StateProvider<FirebaseUserModel>(
   (ref) {

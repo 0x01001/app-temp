@@ -35,7 +35,7 @@ class AppPreferences {
 
   int get themeMode => _sharedPreference.getInt(keyThemeMode) ?? 0;
   String get deviceToken => _sharedPreference.getString(keyDeviceToken) ?? '';
-  String get languageCode => _sharedPreference.getString(keyLanguageCode) ?? Constant.defaultLocale;
+  String get languageCode => _sharedPreference.getString(keyLanguageCode) ?? Constant.defaultLanguageCode;
   bool get isFirstLaunchApp => _sharedPreference.getBool(keyIsFirstLaunchApp) ?? false;
   Future<String?> get accessToken async => _secureStorage.read(key: keyAccessToken);
   Future<String?> get refreshToken async => _secureStorage.read(key: keyRefreshToken);

@@ -1,5 +1,6 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+
+import '../../../shared/extensions/color_ext.dart';
 
 class ColorCard extends StatefulWidget {
   const ColorCard({
@@ -34,7 +35,7 @@ class _ColorCardState extends State<ColorCard> {
   void initState() {
     super.initState();
     space = materialName == '' ? '' : ' ';
-    hexCode = widget.color.hexCode;
+    hexCode = widget.color.toHex();
   }
 
   @override
@@ -42,7 +43,7 @@ class _ColorCardState extends State<ColorCard> {
     super.didUpdateWidget(oldWidget);
     if (widget.color != oldWidget.color) {
       space = materialName == '' ? '' : ' ';
-      hexCode = widget.color.hexCode;
+      hexCode = widget.color.toHex();
     }
   }
 
@@ -51,7 +52,7 @@ class _ColorCardState extends State<ColorCard> {
     const double fontSize = 10;
     final Size effectiveSize = widget.size ?? const Size(90, 50);
 
-    final String hexCode = widget.color.hexCode;
+    final String hexCode = widget.color.toHex();
 
     return RepaintBoundary(
       child: Container(

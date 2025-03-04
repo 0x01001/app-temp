@@ -8,6 +8,7 @@ class AppInfo {
   PackageInfo? _packageInfo;
 
   bool? isConnected;
+  bool isLoginRequired = false;
 
   String get appName => _packageInfo?.appName ?? '';
   String get applicationId => _packageInfo?.packageName ?? '';

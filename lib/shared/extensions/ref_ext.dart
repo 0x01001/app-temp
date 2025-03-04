@@ -10,9 +10,11 @@ extension WidgetRefExt on WidgetRef {
   AppFirebaseAnalytics get analytics => read(appFirebaseAnalyticsProvider);
   AppFirebaseCrashlytics get crashlytics => read(appFirebaseCrashlyticsProvider);
   AppConnectivity get connectivity => read(appConnectivityProvider);
+  AppPreferences get preferences => read(appPreferencesProvider);
+  AppDatabase get database => read(appDatabaseProvider);
 
-  T update<T>(StateProvider<T> provider, T Function(T) cb) {
-    return read(provider.notifier).update(cb);
+  T update<T>(StateProvider<T> provider, T Function(T) callback) {
+    return read(provider.notifier).update(callback);
   }
 }
 
@@ -44,7 +46,7 @@ extension RefExt on Ref {
   // provider
   ShareProvider get share => read(shareProvider);
 
-  T update<T>(StateProvider<T> provider, T Function(T) cb) {
-    return read(provider.notifier).update(cb);
+  T update<T>(StateProvider<T> provider, T Function(T) callback) {
+    return read(provider.notifier).update(callback);
   }
 }

@@ -5,10 +5,10 @@ import '../index.dart';
 class DataHelper {
   DataHelper._();
 
-  static String decrypt(String data) {
+  static String decrypt(String data, String secretkey, String secretIV) {
     try {
-      final key = Key.fromBase64(Env.secretkey);
-      final iv = IV.fromBase64(Env.secretIV);
+      final key = Key.fromBase64(secretkey);
+      final iv = IV.fromBase64(secretIV);
       final e = Encrypter(AES(key, mode: AESMode.cbc));
       final result = e.decrypt(Encrypted.fromBase64(data), iv: iv);
       Log.d('decrypt:\n$result');
@@ -19,10 +19,10 @@ class DataHelper {
     return '';
   }
 
-  static String encrypt(String data) {
+  static String encrypt(String data, String secretkey, String secretIV) {
     try {
-      final key = Key.fromBase64(Env.secretkey);
-      final iv = IV.fromBase64(Env.secretIV);
+      final key = Key.fromBase64(secretkey);
+      final iv = IV.fromBase64(secretIV);
       final e = Encrypter(AES(key, mode: AESMode.cbc));
       final result = e.encrypt(data, iv: iv);
       Log.d('encrypt:\n${result.base64}');

@@ -39,7 +39,7 @@ class Constant {
   static const String tokenResetPassword = 'token';
 
   /// shimmer
-  static const shimmerItemCount = 20;
+  static const shimmerItemCount = 10;
 
   /// loading
   static const loadingTimeout = 20000;
@@ -70,8 +70,8 @@ class Constant {
   static const defaultBorderRadiusTextInput = 5.0;
 
   // device
-  static const designDeviceWidth = 375.0; // Design size (width, height) in px from Figma or Sketch
-  static const designDeviceHeight = 667.0;
+  static const designDeviceWidth = 428.0; // 375.0; // Design size (width, height) in px from Figma or Sketch
+  static const designDeviceHeight = 926.0; // 667.0;
 
   static const maxMobileWidth = 450;
   static const maxTabletWidth = 900;
@@ -85,6 +85,10 @@ class Constant {
   static const maxItemsPerRow = 3;
   static const paddingItemsGrid = 10.0;
   static const endReachedThreshold = 200.0;
+
+  static const defaultPadding = 16.0;
+  static const smallPadding = 8.0;
+  static const xsmallPadding = 5.0;
 
   // downloading
   static const limitActivedDownload = 3;
@@ -143,9 +147,7 @@ class Constant {
   static const appId = 'app-id';
 
   /// language code
-  static const en = 'en';
-  static const ja = 'ja';
-  static const defaultLocale = 'en';
+  static const defaultLanguageCode = 'en';
 
   /// gender
   static const male = 0;
@@ -216,8 +218,7 @@ class Constant {
   static const defaultListGridTransitionDuration = Duration(milliseconds: 500);
   static const defaultEventTransfomDuration = Duration(milliseconds: 500);
   static const defaultGeneralDialogTransitionDuration = Duration(milliseconds: 200);
-  static const defaultSnackBarDuration = Duration(seconds: 5);
-  static const defaultTopBarDuration = Duration(seconds: 3);
+  static const defaultTopBarDuration = Duration(seconds: 5);
   static const defaultErrorVisibleDuration = Duration(seconds: 3);
   static const listGridTransitionDuration = Duration(milliseconds: 500);
   static const generalDialogTransitionDuration = Duration(milliseconds: 200);
@@ -226,4 +227,12 @@ class Constant {
   /// database
   static const databaseName = 'DB';
   static const portName = 'downloader_send_port';
+
+  /// data
+  static const defaultResourceId = 2; //TODO: need change
+  static const limitChapter = 64;
+  static const itemsPerPageChapter = 20;
+
+  /// download
+  static const maxFileDownload = 3;
 }

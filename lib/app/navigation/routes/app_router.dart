@@ -13,31 +13,37 @@ final appRouterProvider = Provider<AppRouter>((ref) => getIt.get<AppRouter>());
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 @LazySingleton()
-class AppRouter extends _$AppRouter {
+class AppRouter extends RootStackRouter {
   @override
   RouteType get defaultRouteType => RouteType.custom(
         reverseDurationInMilliseconds: 300,
-        transitionsBuilder: (ctx, animation1, animation2, child) {
-          return child;
+        transitionsBuilder: (ctx, animation, secondaryAnimation, child) {
+          return SlideTransition(
+            position: Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero).animate(
+              CurvedAnimation(parent: animation, curve: Curves.linearToEaseOut, reverseCurve: Curves.easeInToLinear),
+            ),
+            child: child,
+          );
+          // return SwipeablePageRoute(builder: (_) => child).buildTransitions(ctx, animation1, animation2, child);
+          // return child;
         },
       );
 
   @override
   final List<AutoRoute> routes = [
-    AutoRoute(
+    CupertinoRoute(
       page: MainRoute.page,
       path: '/',
       guards: [getIt.get<RouteGuard>()],
       children: [
         RedirectRoute(path: '', redirectTo: 'home'),
         homeTab,
-        conversationTab,
         uiTab,
         settingTab,
       ],
     ),
-    AutoRoute(page: LoginRoute.page, path: '/login'),
-    AutoRoute(page: SignUpRoute.page, path: '/signUp'),
+    CupertinoRoute(page: LoginRoute.page, path: '/login'),
+    CupertinoRoute(page: SignUpRoute.page, path: '/signUp'),
     RedirectRoute(path: '*', redirectTo: '/'),
   ];
 }
@@ -47,32 +53,11 @@ class BottomTabHomePage extends AutoRouter {
   const BottomTabHomePage({super.key});
 }
 
-final homeTab = AutoRoute(
+final homeTab = CupertinoRoute(
   page: HomeTab.page,
   children: [
-    AutoRoute(page: HomeRoute.page, initial: true),
-    // AutoRoute(
-    //   path: ':id',
-    //   page: ItemDetailRoute.page,
-    //   title: (ctx, data) {
-    //     return 'Item Details ${data.pathParams.get('id')}';
-    //   },
-    // ),
+    CupertinoRoute(page: HomeRoute.page, initial: true),
     // CustomRoute(path: 'SlideBottomToTop', page: SlideBottomToTopRoute.page, title: (ctx, _) => 'SelectChapter', transitionsBuilder: TransitionsBuilders.slideBottom, durationInMilliseconds: 300), // popup
-  ],
-);
-
-@RoutePage(name: 'ConversationTab')
-class ConversationTabPage extends AutoRouter {
-  const ConversationTabPage({super.key});
-}
-
-final conversationTab = AutoRoute(
-  page: ConversationTab.page,
-  children: [
-    AutoRoute(page: ConversationRoute.page, initial: true),
-    AutoRoute(page: ChatRoute.page),
-    AutoRoute(page: UserRoute.page),
   ],
 );
 
@@ -81,10 +66,10 @@ class UITabPage extends AutoRouter {
   const UITabPage({super.key});
 }
 
-final uiTab = AutoRoute(
+final uiTab = CupertinoRoute(
   page: UITab.page,
   children: [
-    AutoRoute(page: UIRoute.page, initial: true),
+    CupertinoRoute(page: UIRoute.page, initial: true),
   ],
 );
 
@@ -93,11 +78,11 @@ class SettingTabPage extends AutoRouter {
   const SettingTabPage({super.key});
 }
 
-final settingTab = AutoRoute(
+final settingTab = CupertinoRoute(
   page: SettingTab.page,
   children: [
-    AutoRoute(page: SettingRoute.page, initial: true),
-    AutoRoute(page: SettingThemeRoute.page),
-    AutoRoute(page: SettingLanguageRoute.page),
+    CupertinoRoute(page: SettingRoute.page, initial: true),
+    CupertinoRoute(page: SettingThemeRoute.page),
+    CupertinoRoute(page: SettingLanguageRoute.page),
   ],
 );

@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import '../index.dart';
 
 class NotificationModel extends BaseModel {
@@ -112,5 +114,14 @@ class NotificationModel extends BaseModel {
   @override
   int get hashCode {
     return id.hashCode ^ status.hashCode ^ createdBy.hashCode ^ updatedBy.hashCode ^ createdTime.hashCode ^ lastModifiedTime.hashCode ^ notificationId.hashCode ^ image.hashCode ^ title.hashCode ^ message.hashCode ^ notificationType.hashCode;
+  }
+
+  NotificationModel mapToLocal(RemoteMessage? data) {
+    return NotificationModel(
+      title: data?.notification?.title ?? '',
+      message: data?.notification?.body ?? '',
+      image: data?.data['image'] as String? ?? '',
+      // customId: data?.data['custom_id'] as String? ?? '',
+    );
   }
 }

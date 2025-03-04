@@ -1,6 +1,6 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../shared/index.dart';
 import '../index.dart';
@@ -9,38 +9,38 @@ final appDatabaseProvider = Provider<AppDatabase>((ref) => getIt.get<AppDatabase
 
 @LazySingleton()
 class AppDatabase {
-  AppDatabase(this.isar, this.appPreferences);
+  AppDatabase(this.isar, this.preferences);
 
   final Isar isar;
-  final AppPreferences appPreferences;
+  final AppPreferences preferences;
 
-  String get userId => appPreferences.userId;
+  String get userId => preferences.userId;
 
-  Future<int> removeMessagesByConversationId(String id) {
-    return isar.writeTxn(() {
-      return isar.localMessageDatas.filter().conversationIdEqualTo(id).userIdEqualTo(userId).deleteAll();
-    });
-  }
+  // Future<void> removeMessagesByConversationId(String id) {
+  //   return isar.write((x) async {
+  //     x.localMessageDatas.where().conversationIdEqualTo(id).userIdEqualTo(userId).deleteAll();
+  //   });
+  // }
 
-  List<LocalMessageData> getLatestMessages(String conversationId) {
-    return isar.localMessageDatas.filter().conversationIdEqualTo(conversationId).userIdEqualTo(userId).sortByCreatedAtDesc().limit(Constant.itemsPerPage).build().findAllSync();
-  }
+  // Future<List<LocalMessageData>> getLatestMessages(String conversationId) async {
+  //   return await isar.localMessageDatas.where().conversationIdEqualTo(conversationId).userIdEqualTo(userId).sortByCreatedAtDesc().findAllAsync(limit: Constant.itemsPerPage);
+  // }
 
-  Stream<List<LocalMessageData>> getMessagesStream(String conversationId) {
-    return isar.localMessageDatas.filter().conversationIdEqualTo(conversationId).userIdEqualTo(userId).sortByCreatedAtDesc().build().watch(fireImmediately: true);
-  }
+  // Stream<List<LocalMessageData>> getMessagesStream(String conversationId) {
+  //   return isar.localMessageDatas.where().conversationIdEqualTo(conversationId).userIdEqualTo(userId).sortByCreatedAtDesc().build().watch(fireImmediately: true);
+  // }
 
-  Future<void> putMessages(List<LocalMessageData> messages) async {
-    await isar.writeTxn(() async {
-      await isar.localMessageDatas.putAll(messages);
-    });
-  }
+  // Future<void> putMessages(List<LocalMessageData> messages) async {
+  //   await isar.write((x) async {
+  //     x.localMessageDatas.putAll(messages);
+  //   });
+  // }
 
-  Future<void> putMessage(LocalMessageData message) async {
-    await isar.writeTxn(() async {
-      await isar.localMessageDatas.put(message);
-    });
-  }
+  // Future<void> putMessage(LocalMessageData message) async {
+  //   await isar.write((x) async {
+  //     x.localMessageDatas.put(message);
+  //   });
+  // }
 
   // Future<void> put(PostEntity data) async {
   //   return await isar.writeTxn(() async {

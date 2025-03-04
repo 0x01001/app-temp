@@ -15,6 +15,7 @@ class AppButton extends StatelessWidget {
     this.color,
     this.backgroundColor,
     this.borderRadius,
+    this.borderWidth,
     this.height,
     this.width,
     this.isBold = true,
@@ -22,6 +23,7 @@ class AppButton extends StatelessWidget {
     this.leftIcon,
     this.paddingButtonLink,
     this.isUnderline,
+    this.textType,
   });
   final ButtonType type;
   final String? value;
@@ -33,9 +35,11 @@ class AppButton extends StatelessWidget {
   final double? height;
   final double? width;
   final double? borderRadius;
+  final double? borderWidth;
   final Widget? leftIcon;
   final EdgeInsetsGeometry? paddingButtonLink;
   final bool? isUnderline;
+  final TextType? textType;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,7 @@ class AppButton extends StatelessWidget {
         locked = true;
         Future.delayed(const Duration(milliseconds: 1000), () => locked = false);
       }
-      onPressed?.call();
+      if (context.mounted) onPressed?.call();
     }
 
     Widget _buildContent() {
@@ -56,19 +60,20 @@ class AppButton extends StatelessWidget {
           return OutlinedButton(
             style: OutlinedButton.styleFrom(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? Constant.defaultBorderRadiusButton)),
-              side: BorderSide(color: color ?? context.colors.primary, width: 1.0, style: BorderStyle.solid),
+              side: BorderSide(color: onPressed == null ? appColor.disabled : color ?? context.colors.primary, width: borderWidth ?? 1.0, style: BorderStyle.solid),
               minimumSize: isExpand ? Size.fromHeight(height ?? Constant.defaultSizeButton) : null,
               padding: const EdgeInsets.all(0),
             ),
-            onPressed: onTap,
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                  child: SizedBox(width: 20, child: leftIcon),
-                ),
-                Padding(padding: const EdgeInsets.only(right: 5.0), child: AppText(value, isBold: isBold, color: color, type: TextType.content)),
-              ],
+            onPressed: onPressed != null ? onTap : null,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  leftIcon != null ? leftIcon! : const SizedBox.shrink(),
+                  Padding(padding: const EdgeInsets.symmetric(horizontal: 5.0), child: AppText(value, isBold: isBold, color: onPressed == null ? appColor.grey5 : color, type: TextType.text)),
+                ],
+              ),
             ),
           );
 
@@ -76,8 +81,8 @@ class AppButton extends StatelessWidget {
           return InkWell(
             onTap: onTap,
             child: Padding(
-              padding: paddingButtonLink ?? const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
-              child: AppText(value, color: color ?? context.colors.primary, isBold: isBold, type: TextType.content, decoration: isUnderline == true ? TextDecoration.underline : TextDecoration.none),
+              padding: paddingButtonLink ?? const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+              child: Align(alignment: Alignment.centerLeft, child: AppText(value, type: textType ?? TextType.content, color: color ?? context.colors.primary, isBold: isBold, decoration: isUnderline == true ? TextDecoration.underline : TextDecoration.none)),
             ),
           );
 
@@ -85,15 +90,23 @@ class AppButton extends StatelessWidget {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? Constant.defaultBorderRadiusButton)),
-              backgroundColor: onPressed == null ? context.theme.extension<CustomTheme>()?.disabled : backgroundColor ?? context.colors.primary,
+              backgroundColor: onPressed == null ? appColor.disabled : backgroundColor ?? context.colors.primary,
               minimumSize: isExpand ? Size.fromHeight(height ?? Constant.defaultSizeButton) : null,
+              padding: const EdgeInsets.all(0),
             ),
-            onPressed: onTap,
-            child: Stack(
-              children: <Widget>[
-                leftIcon != null ? Align(alignment: Alignment.centerLeft, child: SizedBox(width: 20, child: leftIcon)) : const SizedBox.shrink(),
-                Align(alignment: Alignment.center, child: AppText(value, isBold: isBold, color: color ?? context.colors.onPrimary, type: TextType.text)),
-              ],
+            onPressed: onPressed != null ? onTap : null,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  leftIcon != null ? leftIcon! : const SizedBox.shrink(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: AppText(value, isBold: isBold, color: color ?? context.colors.inverseSurface, type: TextType.text),
+                  ),
+                ],
+              ),
             ),
           );
       }

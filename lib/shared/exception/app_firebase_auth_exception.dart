@@ -16,12 +16,12 @@ class AppFirebaseAuthException extends AppException {
 
   @override
   String get message => switch (kind) {
-        AppFirebaseAuthExceptionKind.invalidEmail => L.current.invalidEmail,
-        AppFirebaseAuthExceptionKind.userDoesNotExist => L.current.userDoesNotExist,
-        AppFirebaseAuthExceptionKind.invalidLoginCredentials => L.current.invalidLoginCredentials,
-        AppFirebaseAuthExceptionKind.usernameAlreadyInUse => L.current.usernameAlreadyInUse,
-        AppFirebaseAuthExceptionKind.requiresRecentLogin => L.current.requiresRecentLogin,
-        AppFirebaseAuthExceptionKind.unknown => L.current.unknownException,
+        AppFirebaseAuthExceptionKind.invalidEmail => S.current.invalidEmail,
+        AppFirebaseAuthExceptionKind.userDoesNotExist => S.current.userDoesNotExist,
+        AppFirebaseAuthExceptionKind.invalidLoginCredentials => S.current.invalidLoginCredentials,
+        AppFirebaseAuthExceptionKind.usernameAlreadyInUse => S.current.usernameAlreadyInUse,
+        AppFirebaseAuthExceptionKind.requiresRecentLogin => S.current.requiresRecentLogin,
+        AppFirebaseAuthExceptionKind.unknown => S.current.unknownException,
       };
 
   @override

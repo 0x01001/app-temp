@@ -24,6 +24,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
     this.title,
     this.centerTitle = true,
     this.enableSearchBar = false,
+    this.autoFocusSearchBar = false,
     this.elevation = 1.0,
     this.actions,
     this.height,
@@ -38,7 +39,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
     this.actionsIconTheme,
     this.primary = true,
     this.excludeHeaderSemantics = false,
-    this.titleSpacing = 0.0,
+    this.titleSpacing,
     this.toolbarOpacity = 1.0,
     this.bottomOpacity = 1.0,
     this.leadingWidth,
@@ -56,6 +57,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
   final Widget? title;
   final bool? centerTitle;
   final bool? enableSearchBar;
+  final bool? autoFocusSearchBar;
   final double? elevation;
   final List<Widget>? actions;
   final double? height;
@@ -85,19 +87,38 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _enableSearchBar = useState(false);
+    final _showSearchBar = useState(false);
     final _showLeading = useState(true);
-    final _animation = useAnimationController(duration: 400.ms);
+    final _animation = useAnimationController(duration: const Duration(milliseconds: 400));
     final _textController = useTextEditingController();
     final _focusNode = useFocusNode();
     final _currentPath = context.router.current.path;
     // Log.d('Appbar: ${ref.nav.canPop} - ${context.router.current.parent?.path} > ${context.router.current.path}');
 
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (enableSearchBar == true && autoFocusSearchBar == true) {
+          _focusNode.requestFocus();
+        }
+      });
+      return () {};
+    }, []);
+
+    useEffect(() {
+      if (enableSearchBar == true) {
+        ref.listenManual(showKeyboardProvider, (previous, next) {
+          _showSearchBar.value = next;
+          _showLeading.value = !next;
+        }, fireImmediately: true);
+      }
+      return null;
+    }, []);
+
     Widget _buildPrefixIcon() {
       return IconButton(
         onPressed: () {
           FocusScope.of(context).requestFocus(_focusNode);
-          _enableSearchBar.value = !_enableSearchBar.value;
+          _showSearchBar.value = !_showSearchBar.value;
         },
         icon: const Icon(Icons.search, size: 24),
       );
@@ -108,8 +129,8 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
         builder: (context, widget) => Transform.rotate(angle: _animation.value * 2.0 * pi, child: widget),
         animation: _animation,
         child: AnimatedOpacity(
-          opacity: _enableSearchBar.value ? 1.0 : 0.0,
-          duration: 200.ms,
+          opacity: _showSearchBar.value ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 200),
           child: IconButton(
             onPressed: () {
               _textController.clear();
@@ -117,7 +138,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
               if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
                 FocusManager.instance.primaryFocus?.unfocus();
               }
-              _enableSearchBar.value = !_enableSearchBar.value;
+              _showSearchBar.value = !_showSearchBar.value;
               _showLeading.value = true;
               _animation.status == AnimationStatus.completed ? _animation.reverse() : _animation.forward();
             },
@@ -132,8 +153,8 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
         alignment: Alignment.center,
         children: [
           AnimatedOpacity(
-            opacity: _enableSearchBar.value ? 0.0 : 1.0,
-            duration: _enableSearchBar.value ? 200.ms : 400.ms,
+            opacity: _showSearchBar.value ? 0.0 : 1.0,
+            duration: _showSearchBar.value ? const Duration(milliseconds: 200) : const Duration(milliseconds: 400),
             child: Center(
               child: Transform.translate(
                 offset: Offset(_currentPath.isNotEmpty ? -34 : 0, 0),
@@ -144,15 +165,15 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
           Container(
             alignment: Alignment.centerRight,
             child: AnimatedContainer(
-              duration: 400.ms,
-              width: _enableSearchBar.value ? AppSize.screenWidth : 48,
+              duration: const Duration(milliseconds: 400),
+              width: _showSearchBar.value ? AppSize.screenWidth : 48,
               curve: Curves.easeOut,
               child: AppInput(
                 controller: _textController,
                 focusNode: _focusNode,
                 prefixIcon: _buildPrefixIcon(),
                 suffixIcon: _buildSuffixIcon(),
-                hintText: L.current.searching,
+                hintText: S.current.searching,
                 enableBackgroundColor: false,
                 enableBorder: false,
                 onChanged: onSearchBarChanged,
@@ -165,9 +186,9 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
 
     Widget _buildLeading() {
       return AnimatedOpacity(
-        opacity: !_enableSearchBar.value ? 1.0 : 0.0,
-        duration: 200.ms,
-        onEnd: () => _showLeading.value = _enableSearchBar.value == true ? false : true,
+        opacity: !_showSearchBar.value ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 200),
+        onEnd: () => _showLeading.value = _showSearchBar.value == true ? false : true,
         child: AppInkWell(
           onTap: () => ref.nav.pop(),
           child: Padding(
@@ -185,23 +206,23 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
       flexibleSpace: flexibleSpace,
       bottom: bottom,
       shadowColor: shadowColor,
-      shape: shape ?? Border(bottom: BorderSide(color: context.theme.dividerColor, width: 1)),
-      backgroundColor: backgroundColor,
+      shape: shape, // ?? Border(bottom: BorderSide(color: context.theme.dividerColor, width: 1)),
+      backgroundColor: backgroundColor ?? Theme.of(context).color.background,
       foregroundColor: foregroundColor,
       iconTheme: iconTheme,
       actionsIconTheme: actionsIconTheme,
       primary: primary,
       excludeHeaderSemantics: excludeHeaderSemantics,
-      titleSpacing: leadingIcon == null && enableSearchBar == false ? 16 : titleSpacing,
+      titleSpacing: titleSpacing ?? (leadingIcon == null && enableSearchBar == false ? 16 : (titleSpacing ?? 0)),
       toolbarOpacity: toolbarOpacity,
       bottomOpacity: bottomOpacity,
       leadingWidth: leadingWidth,
-      //systemOverlayStyle: systemOverlayStyle ?? (MediaQuery.platformBrightnessOf(context) == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark),
       leading: leading ?? (_currentPath.isNotEmpty && _showLeading.value ? _buildLeading() : null),
       centerTitle: centerTitle,
       title: title ?? (enableSearchBar == true ? _buildInputSearchBar() : _BuildTitle(titleType: titleType, text: text, titleTextStyle: titleTextStyle, leadingIconColor: leadingIconColor, onTitlePressed: onTitlePressed)),
       actions: actions,
       elevation: elevation,
+      // systemOverlayStyle: const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent, statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light),
     );
   }
 }
@@ -223,7 +244,7 @@ class _BuildTitle extends StatelessWidget {
         child: titleType == AppBarTitle.text
             ? AppText(text ?? '', textStyle: titleTextStyle, type: TextType.header)
             : titleType == AppBarTitle.logo
-                ? Assets.images.logo.svg(colorFilter: ColorFilter.mode(leadingIconColor ?? Colors.transparent, BlendMode.srcIn), width: 10, height: 10)
+                ? AppImage(appImage.logo.path, color: leadingIconColor ?? Colors.transparent, width: 10, height: 10)
                 : null);
   }
 }

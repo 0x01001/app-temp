@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../resources/index.dart';
+import '../../../shared/index.dart';
 import '../../index.dart';
 
 enum DropdownType { form, bottom }
@@ -18,10 +19,11 @@ class DataDropdown {
 class AppDropdown extends HookConsumerWidget {
   const AppDropdown({
     required this.items,
-    required this.field,
+    this.field,
     super.key,
     this.type = DropdownType.form,
-    this.item,
+    this.direction = Axis.vertical,
+    // this.item,
     this.labelText,
     this.hintText,
     this.onChanged,
@@ -31,46 +33,44 @@ class AppDropdown extends HookConsumerWidget {
   });
   final DropdownType type;
   final List<String> items;
-  final String? item;
+  // final String? item;
   final ValueChanged<String>? onChanged;
   final String? labelText;
   final String? hintText;
   final String? errorText;
 
-  final FieldType field;
+  final FieldType? field;
   final String? value;
   final String? Function(String?)? validator;
+  final Axis? direction;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _focusNode = useFocusNode();
+    final valueListenable = ValueNotifier<String?>(value);
+    final isSmall = (valueListenable.value?.length ?? 0) <= 3;
 
     Widget _buildContent() {
       switch (type) {
         case DropdownType.bottom:
           return DropdownButton2(
             isExpanded: true,
-            hint: AppText(hintText, type: TextType.content),
-            items: items.map((x) => DropdownMenuItem<String>(value: x, child: AppText(x))).toList(),
-            value: item,
-            onChanged: (String? val) => onChanged?.call(val ?? ''),
-            // buttonHeight: 40,
-            // itemHeight: 40,
-            // icon: Assets.svgs.arrow.svg(),
-            // buttonPadding: const EdgeInsets.all(10.0),
-            // dropdownPadding: const EdgeInsets.all(0.0),
-            // itemPadding: const EdgeInsets.all(10.0),
-            // selectedItemHighlightColor: AppColorL.current.primaryColor,
-            // focusColor: Colors.red,
-            // selectedItemBuilder: (context) {
-            //   return [textTitle(item)];
-            // },
-            // ),
+            hint: hintText?.isNotEmpty == true ? AppText(hintText, type: TextType.content) : null,
+            items: items.map((x) => DropdownItem<String>(value: x, child: Padding(padding: const EdgeInsets.only(left: 16.0), child: AppText(x)))).toList(),
+            valueListenable: valueListenable,
+            onChanged: (val) {
+              valueListenable.value = value;
+              onChanged?.call(val ?? '');
+            },
+            buttonStyleData: ButtonStyleData(height: 24, width: isSmall ? 65 : 70, decoration: BoxDecoration(color: context.colors.surface)),
+            menuItemStyleData: const MenuItemStyleData(padding: EdgeInsets.symmetric(vertical: 0, horizontal: 14)),
+            dropdownStyleData: DropdownStyleData(maxHeight: 400, width: isSmall ? 95 : 100, offset: const Offset(0, -3), padding: EdgeInsets.zero, decoration: BoxDecoration(color: context.colors.surface)),
+            dropdownSeparator: DropdownSeparator(height: 1, child: Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: Divider(color: appColor.grey5, thickness: Constant.borderHeight, height: 1))),
           );
 
         default:
           return FormBuilderDropdown(
-            name: field.name,
+            name: field?.name ?? '',
             initialValue: value == '' ? null : value,
             items: items.map((x) => DropdownMenuItem(alignment: AlignmentDirectional.centerStart, value: x, child: AppText(x, type: TextType.content))).toList(),
             focusNode: _focusNode,
@@ -115,17 +115,14 @@ class AppDropdown extends HookConsumerWidget {
       }
     }
 
-    return Column(
-      children: [
-        Align(alignment: Alignment.centerLeft, child: AppText(labelText, type: TextType.content)),
-        const SizedBox(height: 5),
-        // SizedBox(
-        //   height: 50,
-        // decoration: BoxDecoration(border: Border.all(color: AppColorL.current.border), borderRadius: BorderRadius.all(Radius.circular(Dimens.d5.responsive()))),
-        // child:
-        DropdownButtonHideUnderline(child: _buildContent()),
-        // ),
-      ],
-    );
+    return direction == Axis.vertical
+        ? Column(
+            children: [
+              Align(alignment: Alignment.centerLeft, child: AppText(labelText, type: TextType.content)),
+              const SizedBox(height: 5),
+              DropdownButtonHideUnderline(child: _buildContent()),
+            ],
+          )
+        : DropdownButtonHideUnderline(child: _buildContent());
   }
 }

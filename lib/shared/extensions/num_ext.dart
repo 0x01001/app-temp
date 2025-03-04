@@ -2,6 +2,7 @@
 
 import 'package:intl/intl.dart';
 
+import '../../resources/index.dart';
 import '../index.dart';
 
 extension NumberExtensions on num {
@@ -59,6 +60,14 @@ extension NumberExtensions on num {
   num div(num other) {
     return this / other;
   }
+
+  // static String formatYen(double price) {
+  //   return NumberFormat.currency(symbol: Constant.yen, decimalDigits: 0).format(price);
+  // }
+
+  // static String formatNumber(int number) {
+  //   return NumberFormat(Constant.numberFormat).format(number);
+  // }
 }
 
 extension IntExtensions on int {
@@ -98,5 +107,9 @@ extension DoubleExtensions on double {
 
   double div(double other) {
     return this / other;
+  }
+
+  dynamic toRound() {
+    return this % 1 == 0 ? toInt() : this;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../resources/index.dart';
 import '../../shared/index.dart';
 import '../index.dart';
 
@@ -11,9 +12,6 @@ abstract class BasePage<T extends BaseState, P extends ProviderListenable<AppSta
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    L.instance.init(context);
-    AppSize.init(context);
-
     ref.listen(
       provider.select((value) => value.appException),
       (previous, next) async {
@@ -29,7 +27,7 @@ abstract class BasePage<T extends BaseState, P extends ProviderListenable<AppSta
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) => Visibility(
             visible: ref.watch(provider.select((value) => value.isLoading ?? false)),
-            child: const AppLoading(),
+            child: Container(color: appColor.black3, width: double.infinity, height: double.infinity, child: const AppLoading()),
           ),
         ),
       ],

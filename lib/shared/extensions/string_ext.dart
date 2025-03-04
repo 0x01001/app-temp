@@ -1,6 +1,10 @@
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+// extension NullableStringExtensions on String? {
+//   bool get isEmptyOrNull => this == null || this?.isEmpty == true;
+// }
+
 extension StringExtension on String {
   String toCapitalized() => length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
   String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
@@ -57,8 +61,12 @@ extension StringExtension on String {
     return transactionDateFormatToServer.format(DateTime.parse(this));
   }
 
-  int? get tryToParseInt {
-    return int.tryParse(this);
+  int? get toInt {
+    return int.tryParse(this) ?? 0;
+  }
+
+  double? get toDouble {
+    return double.tryParse(this) ?? 0.0;
   }
 
   String get getDateTimeFromString {
@@ -83,14 +91,14 @@ extension StringExtension on String {
     return transactionDateFormat.format(tempDate);
   }
 
-  String get timeUntil {
-    final date = fromStringToDate;
-    return timeago.format(date, locale: 'vi', allowFromNow: true);
-  }
-
-  String get timeUntilShort {
-    final date = fromStringToDate;
-    return timeago.format(date, locale: 'vi', allowFromNow: true);
+  String toTimeAgo(String lang) {
+    try {
+      final date = fromStringToDate;
+      return timeago.format(date, locale: lang, allowFromNow: true);
+      // return timeago.format(date, locale: '${lang}_short', allowFromNow: true);
+    } catch (e) {
+      return '';
+    }
   }
 
   static const fullWidthRegExp = r'([\uff01-\uff5e])';

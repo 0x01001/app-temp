@@ -20,9 +20,9 @@ class AppFirebaseAnalytics {
     await FirebaseAnalytics.instance.logAppOpen(callOptions: options, parameters: parameters);
   }
 
-  Future<void> logScreen(String screenName, {String? className}) async {
+  Future<void> logScreen(String screenName, {Map<String, Object>? parameters}) async {
     Log.w('[App-Analytics] $screenName');
-    await FirebaseAnalytics.instance.logScreenView(screenName: screenName, screenClass: className ?? 'App');
+    await FirebaseAnalytics.instance.logScreenView(screenName: screenName, parameters: parameters);
   }
 
   Future<void> logEvent(String eventName, {Map<String, Object>? parameters}) async {

@@ -1,8 +1,10 @@
+import 'dart:ui';
+
 import 'package:auto_route/auto_route.dart';
-import 'package:badges/badges.dart' as b;
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../resources/index.dart';
@@ -19,7 +21,6 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
   @override
   Widget render(BuildContext context, WidgetRef ref) {
     final _showBottomNav = ref.watch(showBottomNavProvider);
-    final _selectedIndex = useState(0);
 
     useEffect(() {
       Future.microtask(() {
@@ -29,48 +30,61 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
     }, []);
 
     return AutoTabsScaffold(
-      routes: ref.nav.listRoutes,
+      routes: ref.nav.routes,
       bottomNavigationBuilder: (_, tabsRouter) {
         ref.nav.tabsRouter = tabsRouter;
-        return SafeArea(
-          child: AnimatedContainer(
-            duration: 300.ms,
-            height: _showBottomNav ? kBottomNavigationBarHeight : 0,
-            child: Container(
-              decoration: BoxDecoration(color: context.colors.surface, border: Border(top: BorderSide(color: context.theme.dividerColor, width: Constant.borderHeight))),
-              child: GNav(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                gap: 8,
-                color: Colors.grey[800], // color of gbutton
-                activeColor: context.colors.secondary,
-                iconSize: 24, 
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                tabBorderRadius: 0,
-                tabs: [
-                  GButton(
-                    icon: Icons.home,
-                    text: L.current.home,
-                    leading: _selectedIndex.value == 0 // || badge == 0
-                        ? null
-                        : b.Badge(
-                            badgeStyle: const b.BadgeStyle(badgeColor: Colors.red),
-                            position: b.BadgePosition.topEnd(top: -8, end: -8),
-                            badgeContent: const Text('8', style: TextStyle(color: Colors.white, fontSize: 10)),
-                            child: Icon(Icons.home, color: Colors.grey[800]),
-                          ),
-                  ),
-                  GButton(icon: Icons.chat, text: L.current.conversation),
-                  const GButton(icon: Icons.design_services, text: 'UI'),
-                  GButton(icon: Icons.settings, text: L.current.setting)
-                ],
-                selectedIndex: _selectedIndex.value,
-                onTabChange: (index) {
-                  _selectedIndex.value = index;
-                  tabsRouter.setActiveIndex(index);
+        final double height = _showBottomNav ? kBottomNavigationBarHeight + AppSize.deviceNavigationHeight : AppSize.deviceNavigationHeight + 3;
+
+        return Stack(
+          children: [
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  // final _showSystemNavigation = ref.watch(showSystemNavigationProvider); // in reading chapter
+                  // if (!_showSystemNavigation) return SizedBox.fromSize();
+                  Log.d('MainPage > build: $_showBottomNav - ${AppSize.deviceNavigationHeight} - $kBottomNavigationBarHeight - ${AppSize.bottomSafeAreaPadding}');
+                  return SizedBox(
+                    height: height,
+                    child: ClipRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                        child: Container(color: appColor.background.withOpacity(0.8)),
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
-          ),
+            SizedBox(
+              height: height,
+              child: BottomNavigationBar(
+                key: GlobalKey(),
+                currentIndex: tabsRouter.activeIndex,
+                onTap: (index) async {
+                  if (index == tabsRouter.activeIndex) {
+                    ref.nav.popUntilRootOfCurrentBottomTab();
+                  }
+                  tabsRouter.setActiveIndex(index);
+                  if (index == 0) {
+                    FlutterStatusbarcolor.setStatusBarWhiteForeground(true); // White text
+                  }
+                },
+                showSelectedLabels: true,
+                showUnselectedLabels: true,
+                type: BottomNavigationBarType.fixed,
+                items: BottomTab.values.map((tab) => BottomNavigationBarItem(label: tab.title, icon: tab.icon, activeIcon: tab.activeIcon(context.colors.primary))).toList(),
+                selectedLabelStyle: context.labelSmall?.copyWith(fontWeight: FontWeight.bold),
+                unselectedLabelStyle: context.labelSmall,
+                backgroundColor: Colors.transparent,
+                selectedItemColor: context.colors.primary,
+                unselectedItemColor: appColor.grey5,
+                elevation: 0.0,
+              ).animate(target: _showBottomNav ? 1.0 : 0.0).fade(begin: 0.0, end: 1.0, curve: Curves.easeInOutCubic).slideY(begin: 1.0, end: 0.0),
+            ),
+          ],
         );
       },
       // floatingActionButton: _showFab && _showBottomNav ? FAB(onPressed: onPress) : null,
@@ -79,33 +93,46 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
   }
 }
 
-// class FAB extends ConsumerWidget {
-//   const FAB({this.onPressed, super.key});
-//   final Function()? onPressed;
+enum BottomTab {
+  home,
+  ui,
+  setting;
 
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     return Padding(
-//       padding: const EdgeInsets.only(top: 10.0),
-//       child: SizedBox(
-//         width: 66,
-//         height: 66,
-//         child: Column(
-//           children: [
-//             ClipRRect(
-//               borderRadius: BorderRadius.circular(33),
-//               child: FloatingActionButton(
-//                 backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-//                 onPressed: onPressed,
-//                 elevation: 3,
-//                 child: const Icon(Icons.token, size: 30),
-//               ),
-//             ),
-//             // SizedBox(height: 6.sp),
-//             // AppText(L.current.source, textStyle: context.labelSmall?.copyWith(color: AppColorL.current.primaryTextColor)),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  const BottomTab();
+  // final Widget icon;
+  // final Widget activeIcon;
+
+  Widget get icon {
+    switch (this) {
+      case BottomTab.home:
+        return Icon(Icons.home, color: appColor.grey5);
+      // return AppImage(appImage.iconHome.path, color: appColor.grey5);
+      case BottomTab.ui:
+        return Icon(Icons.color_lens, color: appColor.grey5);
+      case BottomTab.setting:
+        return Icon(Icons.settings, color: appColor.grey5);
+    }
+  }
+
+  Widget activeIcon(Color color) {
+    switch (this) {
+      case BottomTab.home:
+        return Icon(Icons.home, color: color);
+      case BottomTab.ui:
+        return Icon(Icons.color_lens, color: color);
+      case BottomTab.setting:
+        return Icon(Icons.settings, color: color);
+    }
+  }
+
+  String get title {
+    switch (this) {
+      case BottomTab.home:
+        return S.current.home;
+      case BottomTab.ui:
+        return 'UI';
+      case BottomTab.setting:
+        return S.current.setting;
+    }
+  }
+}

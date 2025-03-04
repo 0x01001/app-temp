@@ -7,13 +7,18 @@ import '../../index.dart';
 
 @Injectable()
 class RouteGuard extends AutoRouteGuard {
-  RouteGuard(this.appPreferences);
+  RouteGuard(this.appPreferences, this.appInfo);
 
   final AppPreferences appPreferences;
+  final AppInfo appInfo;
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
-    Log.d('[APP] onNavigation: ${appPreferences.isLoggedIn} - ${router.current.name}');
+    if (!appInfo.isLoginRequired) {
+      resolver.next(true);
+      return;
+    }
+    // Log.d('[APP] onNavigation: ${appPreferences.isLoggedIn} - ${router.current.name}');
     if (appPreferences.isLoggedIn) {
       resolver.next(true);
     } else {

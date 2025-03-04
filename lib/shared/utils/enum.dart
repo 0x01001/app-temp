@@ -1,18 +1,14 @@
-import 'package:dartx/dartx.dart';
-
-import '../index.dart';
-
 // Example:
 // static String mapGenderToText(Gender gender) {
 //   switch (gender) {
 //     case Gender.unknown:
 //       return '';
 //     case Gender.male:
-//       return L.current.re1_male;
+//       return S.current.re1_male;
 //     case Gender.female:
-//       return L.current.re1_female;
+//       return S.current.re1_female;
 //     case Gender.other:
-//       return L.current.re1_other;
+//       return S.current.re1_other;
 //   }
 // }
 
@@ -38,18 +34,36 @@ enum SuccessResponseMapperType {
   plain,
 }
 
-enum LanguageCode {
-  en(localeCode: 'en', value: Constant.en),
-  ja(localeCode: 'ja', value: Constant.ja);
+// enum LanguageCode {
+//   en(code: 'en', countryCode: 'US'),
+//   ja(code: 'ja', countryCode: 'JP');
 
-  const LanguageCode({required this.localeCode, required this.value});
+//   const LanguageCode({required this.code, required this.countryCode});
 
-  factory LanguageCode.fromValue(String? data) {
-    return values.firstOrNullWhere((element) => element.value == data) ?? defaultValue;
+//   factory LanguageCode.fromValue(String? data) {
+//     return values.firstOrNullWhere((element) => element.countryCode == data) ?? defaultValue;
+//   }
+
+//   final String code;
+//   final String countryCode;
+
+//   static const defaultValue = en;
+// }
+
+enum ResourceType {
+  comick,
+  mangadex,
+}
+
+extension ResourceTypeExtension on ResourceType {
+  int get id {
+    switch (this) {
+      case ResourceType.comick:
+        return 1;
+      case ResourceType.mangadex:
+        return 2;
+      default:
+        return 0;
+    }
   }
-
-  final String localeCode;
-  final String value;
-
-  static const defaultValue = en;
 }

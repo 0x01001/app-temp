@@ -34,7 +34,7 @@ class AppAvatar extends StatelessWidget {
       width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(width / 2),
-        border: Border.all(color: context.theme.extension<CustomTheme>()?.borderButton ?? Colors.transparent, width: 0.5),
+        border: Border.all(color: appColor.borderButton, width: 0.5),
       ),
       child: Material(
         color: backgroundColor ?? context.colors.surface,

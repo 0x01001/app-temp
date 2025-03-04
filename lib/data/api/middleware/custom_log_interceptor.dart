@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 
 import '../../../shared/index.dart';
@@ -27,7 +29,7 @@ class CustomLogInterceptor extends BaseInterceptor {
     }
 
     final log = <String>[];
-    log.add('************ Request ************');
+    log.add('\n************ Request ************');
     log.add('Request: ${options.method} ${options.uri}');
     if (options.headers.isNotEmpty) {
       log.add('Request Headers:');
@@ -42,17 +44,15 @@ class CustomLogInterceptor extends BaseInterceptor {
           log.add('Fields: ${_prettyResponse(data.fields)}');
         }
         if (data.files.isNotEmpty) {
-          log.add(
-            'Files: ${_prettyResponse(data.files.map((e) => MapEntry(e.key, 'File name: ${e.value.filename}, Content type: ${e.value.contentType}, Length: ${e.value.length}')))}',
-          );
+          log.add('Files: ${_prettyResponse(data.files.map((e) => MapEntry(e.key, 'File name: ${e.value.filename}, Content type: ${e.value.contentType}, Length: ${e.value.length}')))}');
         }
       } else {
         log.add(_prettyResponse(options.data));
       }
     }
+    log.add('************ End Request ************');
+    Log.r(log.join('\n'));
 
-    Log.d(log.join('\n'));
-    Log.d('************ End Request ************');
     handler.next(options);
   }
 
@@ -60,21 +60,21 @@ class CustomLogInterceptor extends BaseInterceptor {
   void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {
     if (!_enableLogInterceptor || !enableLogSuccessResponse) {
       handler.next(response);
-
       return;
     }
 
     final log = <String>[];
-
-    log.add('************ Response ************');
-    log.add('${response.requestOptions.method} ${response.requestOptions.uri}');
-    log.add('Request Body: ${_prettyResponse(response.requestOptions.data)}');
-    log.add('Success Code: ${response.statusCode}');
-    log.add('Response Data:');
-    log.add(response.data.toString()); // log.add(_prettyResponse(response.data));
-
+    log.add('\n************ Response ************');
+    // log.add('${response.requestOptions.method} ${response.requestOptions.uri}');
+    // log.add('Request Body: ${_prettyResponse(response.requestOptions.data)}');
+    log.add('Response Code: ${response.statusCode}');
+    log.add(_cURL(response.requestOptions));
+    // log.add('Response Data:');
+    // final data = response.data.toString().length > 2000 ? response.data.toString().substring(0, 2000) : response.data.toString();
+    // log.add(data); //log.add(response.data.toString()); // log.add(_prettyResponse(response.data));
+    log.add('************ End Response ************');
     Log.r(log.join('\n'));
-    Log.r('************ End Response ************');
+
     handler.next(response);
   }
 
@@ -82,18 +82,18 @@ class CustomLogInterceptor extends BaseInterceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (!_enableLogInterceptor || !enableLogErrorResponse) {
       handler.next(err);
-
       return;
     }
 
     final log = <String>[];
-
-    log.add('************ Request Error ************');
-    log.add('${err.requestOptions.method} ${err.requestOptions.uri}');
+    log.add('\n************ Request Error ************');
+    // log.add('${err.requestOptions.method} ${err.requestOptions.uri}');
     log.add('Error Code: ${err.response?.statusCode ?? 'unknown status code'}');
+    log.add(_cURL(err.requestOptions));
     log.add('Json: ${err.response}');
-
+    log.add('************ End Request Error ************');
     Log.e(log.join('\n'));
+
     handler.next(err);
   }
 
@@ -104,5 +104,29 @@ class CustomLogInterceptor extends BaseInterceptor {
     }
 
     return data.toString();
+  }
+
+  String _cURL(RequestOptions options) {
+    final List<String> components = ['curl -i'];
+    if (options.method.toUpperCase() != 'GET') {
+      components.add('-X ${options.method}');
+    }
+
+    options.headers.forEach((k, v) {
+      if (k != 'Cookie') {
+        components.add('-H "$k: $v"');
+      }
+    });
+
+    if (options.data != null) {
+      final data = json.encode(options.data).replaceAll('"', '\\"');
+      components.add('-d "$data"');
+    }
+
+    final decodedUrl = Uri.decodeComponent(options.uri.toString());
+    components.add('"$decodedUrl"');
+
+    // return components.join(' \\\n\t');
+    return components.join(' ');
   }
 }

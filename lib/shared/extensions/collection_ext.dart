@@ -1,7 +1,7 @@
 import 'package:dartx/dartx.dart';
 
 extension NullableListExtensions<T> on List<T>? {
-  bool get isNullOrEmpty => this == null || this!.isEmpty;
+  bool get isNullOrEmpty => this == null || this?.isEmpty == true;
 }
 
 extension ListExtensions<T> on List<T> {

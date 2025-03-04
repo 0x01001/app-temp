@@ -32,7 +32,7 @@ patch_version:
 	cider bump patch --keep-build
  
 clean:
-	flutter clean && rm -rf pubspec.lock
+	flutter clean && flutter pub cache clean && rm -rf pubspec.lock
 
 pod:
 	cd ios && rm -rf Pods && rm -rf Podfile.lock && pod install --repo-update && cd ..
@@ -46,6 +46,7 @@ gen_env:
 gen_lang:
 	dart run intl_utils:generate
 
+# run first: dart pub global activate flutter_gen
 gen_asset:
 	fluttergen -c pubspec.yaml
 
@@ -149,6 +150,7 @@ lint:
 dart_fix:	
 	dart fix --apply
 
+# https://github.com/codecov/codecov-action
 cov_full:
 	flutter test --coverage
 	lcov --remove coverage/lcov.info \
@@ -200,6 +202,16 @@ t1_test:
 	--target test/integration_test/t1_login_failed.dart \
 	--flavor dev --debug --dart-define-from-file=config/dev.json
 
+# if you want to use scrcpy, please install it first https://github.com/Genymobile/scrcpy adb tcpip 5555 - adb connect 192.84.102.168
+connect:
+	adb kill-server && adb start-server && adb tcpip 5555 && adb connect 192.168.1.6
+
+disconnect:
+	adb disconnect 192.168.1.6
+ 
+open:
+	scrcpy -e --window-x=0 --window-y=30 --window-width=400 --window-height=800 -Sw -t
+
 # CI/CD
 cd_dev:
 	make cd_dev_android
@@ -225,7 +237,7 @@ fastlane_update_plugins:
 	cd ios && bundle install && fastlane update_plugins
 	cd android && bundle install && fastlane update_plugins
 
-# gen certificates
+# gen certificates for CI/CD
 cer: cer_dev cer_stg cer_prod
 
 cer_dev:

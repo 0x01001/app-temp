@@ -2,13 +2,12 @@ abstract class AppException implements Exception {
   AppException({this.onRetry, this.rootException});
 
   final Object? rootException;
+  bool? handleError;
   Future<void> Function()? onRetry;
-
   String get message;
-
   AppExceptionAction get action;
-
   bool get recordError => false;
+  bool get isForcedErrorToHandle => false;
 
   @override
   String toString() {
@@ -22,5 +21,6 @@ enum AppExceptionAction {
   showDialog,
   showDialogWithRetry,
   showDialogForceLogout,
+  showDialogMaintenance,
   doNothing,
 }

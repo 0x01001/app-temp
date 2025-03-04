@@ -17,6 +17,11 @@ class FileUtils {
     }
   }
 
+  static String getFileNameFromUrl(String url) {
+    final Uri uri = Uri.parse(url);
+    return uri.pathSegments.isNotEmpty ? uri.pathSegments.last : '';
+  }
+
   /// Read content of file by file-name
   ///
   /// Example:

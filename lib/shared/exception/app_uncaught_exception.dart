@@ -12,7 +12,7 @@ class AppUncaughtException extends AppException {
   }
 
   @override
-  String get message => L.current.unknownException;
+  String get message => S.current.unknownException;
 
   @override
   AppExceptionAction get action => AppExceptionAction.doNothing;

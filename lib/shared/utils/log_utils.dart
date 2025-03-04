@@ -57,13 +57,24 @@ class Log {
     return encoder.convert(json);
   }
 
-  static void _log(String message, {String name = '', DateTime? time, Object? error, StackTrace? stackTrace, int? colorCode}) {
+  static void _log(String message, {String name = '', DateTime? time, Object? error, StackTrace? stackTrace, int? colorCode, bool? enableFullText = true}) {
     if (_enableLog) {
       var msg = '${time ?? DateTime.now()}:${name != '' ? ' $name:' : ''} $message';
       if (colorCode != null) {
         msg = '\u001b[$colorCode' 'm' '$msg' '\u001b[0m';
       }
-      debugPrint(msg);
+      if (enableFullText == true) {
+        _logFullText(msg);
+      } else {
+        debugPrint(msg);
+      }
+    }
+  }
+
+  static void _logFullText(String text, {int chunkSize = 800}) {
+    final pattern = RegExp('.{1,$chunkSize}'); // Splits the text into chunks
+    for (final match in pattern.allMatches(text)) {
+      debugPrint(match.group(0)); // Logs each chunk
     }
   }
 

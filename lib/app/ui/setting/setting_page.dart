@@ -1,22 +1,36 @@
 import 'package:auto_route/annotations.dart';
+import 'package:country_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:settings_ui/settings_ui.dart';
 
 import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
+class SettingState extends BaseState {
+  SettingState();
+}
+
+final settingProvider = StateNotifierProvider.autoDispose<SettingProvider, AppState<SettingState>>((ref) => SettingProvider());
+
+class SettingProvider extends BaseProvider<SettingState> {
+  SettingProvider() : super(AppState(data: SettingState()));
+}
+
 @RoutePage()
-class SettingPage extends ConsumerWidget {
+class SettingPage extends BasePage {
   const SettingPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    Log.d('SettingPage > build'); 
+  AutoDisposeStateNotifierProvider<SettingProvider, AppState<SettingState>> get provider => settingProvider;
 
-    Future<void> onPressLogout(_) async {
+  @override
+  Widget render(BuildContext context, WidgetRef ref) {
+    Log.d('SettingPage > build');
+    final user = ref.watch(currentUserProvider);
+    final color = context.colors.inverseSurface;
+
+    Future<void> onPressLogout() async {
       final result = await ref.nav.showDialog(AppPopup.confirmDialog(
         'Confirm',
         message: 'Are you sure you want to log out?',
@@ -27,7 +41,7 @@ class SettingPage extends ConsumerWidget {
       Log.d('on close popup..: $result');
     }
 
-    Future<void> onPressDeleteAccount(_) async {
+    Future<void> onPressDeleteAccount() async {
       final result = await ref.nav.showDialog(AppPopup.confirmDialog(
         'Confirm',
         message: 'Your data will be deleted and cannot be recovered.\nAre you sure you want to delete account?',
@@ -38,66 +52,113 @@ class SettingPage extends ConsumerWidget {
       Log.d('on close popup..: $result');
     }
 
-    void onPressed(BuildContext context) {
-      Log.d('tap cell');
-    }
-
     return AppScaffold(
-      appBar: AppTopBar(text: L.current.setting),
-      body: SettingsList(
-        applicationType: ApplicationType.both,
-        sections: [
-          SettingsSection(
-            title: const AppText('Account'),
-            tiles: [
-              SettingsTile.navigation(leading: const Icon(Icons.manage_accounts), title: const AppText('Account Management', type: TextType.title, isBold: false), onPressed: onPressed),
-              SettingsTile.navigation(leading: const Icon(Icons.security), title: const AppText('Security', type: TextType.title, isBold: false), onPressed: onPressed),
-            ],
-          ),
-          SettingsSection(
-            title: const AppText('Settings'),
-            tiles: [
-              SettingsTile.navigation(
-                leading: const Icon(Icons.language),
-                title: AppText(L.current.language, type: TextType.title, isBold: false),
-                value: Consumer(
-                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                    final language = ref.watch(languageCodeProvider);
-                    return AppText(LocaleNames.of(context)?.nameOf(language.value), type: TextType.text, color: context.theme.extension<CustomTheme>()?.disabled);
-                  },
+      appBar: AppTopBar(text: S.current.setting),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (user.id?.isNotEmpty == true)
+              SizedBox(
+                height: 100,
+                child: Row(
+                  children: [
+                    AppAvatar(text: user.email ?? ''),
+                    const SizedBox(width: 16),
+                    Flexible(child: AppText(user.name ?? '')),
+                    const SizedBox(width: 10),
+                    Flexible(child: AppText(user.email ?? '')),
+                  ],
                 ),
-                onPressed: (_) => ref.nav.push(const SettingLanguageRoute()),
               ),
-              SettingsTile.navigation(
-                leading: Consumer(
-                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                    final isDarkMode = ref.watch(isDarkModeProvider);
-                    return Icon(isDarkMode == true ? Icons.brightness_4_outlined : Icons.dark_mode_outlined);
-                  },
-                ),
-                title: const AppText('Theme', type: TextType.title, isBold: false),
-                value: Consumer(
-                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                    final theme = ref.watch(themeModeProvider);
-                    return AppText(
-                        theme == 0
-                            ? 'Default System'
-                            : theme == 1
-                                ? 'Dark Mode'
-                                : 'Light Mode',
-                        type: TextType.text,
-                        color: context.theme.extension<CustomTheme>()?.disabled);
-                  },
-                ),
-                onPressed: (_) => ref.nav.push(const SettingThemeRoute()),
+            if (user.id?.isNotEmpty == true)
+              ListTile(
+                title: AppText(S.current.editProfile, type: TextType.title, isBold: false),
+                leading: Icon(Icons.person, color: color),
+                trailing: Icon(Icons.arrow_forward_ios, color: color),
+                onTap: () {},
               ),
-              SettingsTile.navigation(leading: const Icon(Icons.delete), title: const AppText('Delete Account', type: TextType.title, isBold: false), trailing: const SizedBox.shrink(), onPressed: onPressDeleteAccount),
-            ],
-          ),
-          SettingsSection(
-            tiles: [SettingsTile.navigation(leading: const Icon(Icons.logout), title: const AppText('Logout', type: TextType.title, isBold: false), trailing: const SizedBox.shrink(), onPressed: onPressLogout)],
-          ),
-        ],
+            ListTile(
+              title: AppText(S.current.notification, type: TextType.title, isBold: false),
+              leading: Icon(Icons.notifications, color: color),
+              trailing: Icon(Icons.arrow_forward_ios, color: color),
+              onTap: () {},
+            ),
+            ListTile(
+              title: AppText(S.current.download, type: TextType.title, isBold: false),
+              leading: Icon(Icons.download, color: color),
+              trailing: Icon(Icons.arrow_forward_ios, color: color),
+              onTap: () {},
+            ),
+            ListTile(
+              title: AppText(S.current.security, type: TextType.title, isBold: false),
+              leading: Icon(Icons.security, color: color),
+              trailing: Icon(Icons.arrow_forward_ios, color: color),
+              onTap: () {},
+            ),
+            ListTile(
+              title: AppText(S.current.privacyPolicy, type: TextType.title, isBold: false),
+              leading: Icon(Icons.policy, color: color),
+              trailing: Icon(Icons.arrow_forward_ios, color: color),
+              onTap: () {},
+            ),
+            ListTile(
+              title: AppText(S.current.language, type: TextType.title, isBold: false),
+              leading: Icon(Icons.translate, color: color),
+              trailing: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Consumer(
+                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                      final lang = ref.watch(languageCodeProvider);
+                      return AppText(languageToCountryCode[lang]?.language ?? 'English', color: appColor.grey5);
+                    },
+                  ),
+                  AppSize.XS,
+                  Icon(Icons.arrow_forward_ios, color: color),
+                ],
+              ),
+              onTap: () => ref.nav.push(const SettingLanguageRoute()),
+            ),
+            ListTile(
+              title: AppText(S.current.theme, type: TextType.title, isBold: false),
+              leading: Icon(Icons.color_lens, color: color), // AppImage(appImage.iconShow.path, color: color),
+              trailing: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Consumer(
+                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                      final theme = ref.watch(themeModeProvider);
+                      final text = theme == 0
+                          ? S.current.defaultSystem
+                          : theme == 1
+                              ? S.current.lightMode
+                              : S.current.darkMode;
+                      return AppText(text, color: appColor.grey5);
+                    },
+                  ),
+                  AppSize.XS,
+                  Icon(Icons.arrow_forward_ios, color: color),
+                ],
+              ),
+              onTap: () => ref.nav.push(const SettingThemeRoute()),
+            ),
+            if (user.id?.isNotEmpty == true)
+              ListTile(
+                title: AppText(S.current.deleteAccount, type: TextType.title, isBold: false, color: appColor.error),
+                leading: Icon(Icons.delete, color: appColor.error),
+                onTap: onPressDeleteAccount,
+              ),
+            if (user.id?.isNotEmpty == true)
+              ListTile(
+                title: AppText(S.current.logout, type: TextType.title, isBold: false),
+                leading: Icon(Icons.logout, color: color),
+                onTap: onPressLogout,
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -112,24 +173,32 @@ class SettingThemePage extends ConsumerWidget {
     final theme = ref.watch(themeModeProvider);
 
     void onPressed(int val) {
-      Log.d('SettingThemePage > onPressed: $val');
       ref.update(themeModeProvider, (_) => val);
     }
 
     return AppScaffold(
-      appBar: AppTopBar(text: L.current.theme),
-      body: SettingsList(
-        applicationType: ApplicationType.both,
-        contentPadding: const EdgeInsets.all(10),
-        sections: [
-          SettingsSection(
-            tiles: [
-              SettingsTile.navigation(title: const AppText('Default System'), trailing: theme == 0 ? const Icon(Icons.check) : null, onPressed: (_) => onPressed(0)),
-              SettingsTile.navigation(title: const AppText('Light Mode'), trailing: theme == 1 ? const Icon(Icons.check) : null, onPressed: (_) => onPressed(1)),
-              SettingsTile.navigation(title: const AppText('Dark Mode'), trailing: theme == 2 ? const Icon(Icons.check) : null, onPressed: (_) => onPressed(2)),
-            ],
-          ),
-        ],
+      appBar: AppTopBar(text: S.current.theme),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListTile(
+              title: AppText(S.current.defaultSystem, type: TextType.title, isBold: false),
+              trailing: theme == 0 ? const Icon(Icons.check) : null,
+              onTap: () => onPressed(0),
+            ),
+            ListTile(
+              title: AppText(S.current.lightMode, type: TextType.title, isBold: false),
+              trailing: theme == 1 ? const Icon(Icons.check) : null,
+              onTap: () => onPressed(1),
+            ),
+            ListTile(
+              title: AppText(S.current.darkMode, type: TextType.title, isBold: false),
+              trailing: theme == 2 ? const Icon(Icons.check) : null,
+              onTap: () => onPressed(2),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -141,28 +210,33 @@ class SettingLanguagePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(languageCodeProvider);
+    final lang = ref.watch(languageCodeProvider);
 
     void onPressed(String languageCode) {
-      Log.d('SettingLanguagePage > onPressed: $languageCode');
-      ref.update<LanguageCode>(languageCodeProvider, (state) => LanguageCode.fromValue(languageCode));
+      ref.update(languageCodeProvider, (state) => languageCode);
     }
 
     return AppScaffold(
-      appBar: AppTopBar(text: L.current.language),
-      body: SettingsList(
-        applicationType: ApplicationType.both,
-        sections: S.delegate.supportedLocales
-            .map((e) => SettingsSection(
-                  tiles: [
-                    SettingsTile.navigation(
-                      title: AppText(LocaleNames.of(context)?.nameOf(e.languageCode)),
-                      trailing: language.value == e.languageCode ? const Icon(Icons.check) : null,
-                      onPressed: (_) => onPressed(e.languageCode),
+      appBar: AppTopBar(text: S.current.language),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: AppString.delegate.supportedLocales
+              .map((x) => ListTile(
+                    leading: Container(
+                      height: 16.0,
+                      width: 22.0,
+                      decoration: BoxDecoration(border: Border.all(color: appColor.grey5, width: Constant.borderHeight)),
+                      child: ClipRRect(
+                        child: CountryPickerUtils.getDefaultFlagImage(CountryPickerUtils.getCountryByIsoCode(languageToCountryCode[x.languageCode]?.code ?? 'US')),
+                      ),
                     ),
-                  ],
-                ))
-            .toList(),
+                    title: AppText(languageToCountryCode[x.languageCode]?.language ?? 'English', type: TextType.title, isBold: false),
+                    trailing: lang == x.languageCode ? const Icon(Icons.check) : null,
+                    onTap: () => onPressed(x.languageCode),
+                  ))
+              .toList(),
+        ),
       ),
     );
   }

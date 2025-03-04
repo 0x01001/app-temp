@@ -11,7 +11,7 @@ class RiverpodLogger extends ProviderObserver {
 
   @override
   void didUpdateProvider(ProviderBase<dynamic> provider, Object? previousValue, Object? newValue, ProviderContainer container) {
-    Log.i('didUpdateProvider → ${provider.name ?? provider.runtimeType},  "newValue": "$newValue"');
+    Log.i('didUpdateProvider → ${provider.name ?? provider.runtimeType}'); //,  "newValue": "$newValue"
   }
 
   @override

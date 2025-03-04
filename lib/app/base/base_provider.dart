@@ -54,17 +54,21 @@ abstract class BaseProvider<T extends BaseState> extends StateNotifier<AppState<
   void showLoading() {
     if (_loadingCount <= 0) {
       state = state.copyWith(isLoading: true);
+      Future.delayed(Constant.connectTimeout, () {
+        hideLoading(force: true);
+      });
     }
 
     _loadingCount++;
   }
 
-  void hideLoading() {
-    if (_loadingCount <= 1) {
+  void hideLoading({bool force = false}) {
+    if (_loadingCount <= 1 || force) {
       state = state.copyWith(isLoading: false);
+      _loadingCount = 0;
     }
 
-    _loadingCount--;
+    if (_loadingCount > 0) _loadingCount--;
   }
 
   Future<S?> runSafe<S>({
@@ -77,6 +81,7 @@ abstract class BaseProvider<T extends BaseState> extends StateNotifier<AppState<
     bool handleLoading = true,
     bool handleError = true,
     bool handleRetry = true,
+    bool handleRethrow = false,
     bool Function(AppException)? forceHandleError,
     String? overrideErrorMessage,
   }) async {
@@ -91,10 +96,12 @@ abstract class BaseProvider<T extends BaseState> extends StateNotifier<AppState<
       return result;
     } on Object catch (e) {
       if (handleLoading) hideLoading();
+      if (handleRethrow) rethrow;
       final appException = e is AppException ? e : AppUncaughtException(rootException: e);
+      appException.handleError = handleError;
       await onError?.call(appException);
 
-      if (handleError || forceHandleError?.call(appException) != false) {
+      if (handleError || forceHandleError?.call(appException) != false || appException.isForcedErrorToHandle) {
         appException.onRetry = () async {
           await onRetry?.call();
           await runSafe(

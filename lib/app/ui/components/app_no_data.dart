@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../../../shared/index.dart';
 import '../../index.dart';
 
 class AppNoData extends HookWidget {
   const AppNoData({super.key});
   @override
   Widget build(BuildContext context) {
-    return Center(child: AppText(L.current.noData));
+    return Center(child: AppText(S.current.noData));
   }
 }

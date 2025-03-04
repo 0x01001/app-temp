@@ -15,10 +15,12 @@ class ConfigModel extends BaseModel {
   final bool? isForceUpdateAndroid;
   final String? forceUpdateIosVersion; //1.0.0_1
   final String? forceUpdateAndroidVersion; //1.0.0_1
-  // final List<ResourceEntity>? data;
+  // final List<ResourceModel>? data;
   final List<String>? whitelistLoginEmailDomains; // example: only user xxx@domain.com can login app
   final List<String>? whitelistTesters;
   final List<String>? whitelistIgnoreForceUpdate;
+  final String? dataIV;
+  final String? dataKey;
 
   const ConfigModel({
     this.scheme,
@@ -32,13 +34,15 @@ class ConfigModel extends BaseModel {
     this.forceUpdateAndroidVersion,
     this.whitelistTesters,
     this.whitelistIgnoreForceUpdate,
+    this.dataIV,
+    this.dataKey,
   });
 
   ConfigModel copyWith({
     SchemeModel? scheme,
     SchemeModel? schemeSME,
     bool? inReview,
-    // List<ResourceEntity>? data,
+    // List<ResourceModel>? data,
     String? versionInReview,
     List<String>? whitelistLoginEmailDomains,
     bool? isForceUpdateIos,
@@ -47,6 +51,8 @@ class ConfigModel extends BaseModel {
     String? forceUpdateAndroidVersion,
     List<String>? whitelistTesters,
     List<String>? whitelistIgnoreForceUpdate,
+    String? dataIV,
+    String? dataKey,
   }) {
     return ConfigModel(
       scheme: scheme ?? this.scheme,
@@ -60,12 +66,14 @@ class ConfigModel extends BaseModel {
       forceUpdateAndroidVersion: forceUpdateAndroidVersion ?? this.forceUpdateAndroidVersion,
       whitelistTesters: whitelistTesters ?? this.whitelistTesters,
       whitelistIgnoreForceUpdate: whitelistIgnoreForceUpdate ?? this.whitelistIgnoreForceUpdate,
+      dataIV: dataIV ?? this.dataIV,
+      dataKey: dataKey ?? this.dataKey,
     );
   }
 
   @override
   String toString() {
-    return 'ConfigModel(scheme: $scheme,   inReview: $inReview,  versionInReview: $versionInReview, whitelistLoginEmailDomains: $whitelistLoginEmailDomains, isForceUpdateIos: $isForceUpdateIos, isForceUpdateAndroid: $isForceUpdateAndroid, forceUpdateIosVersion: $forceUpdateIosVersion, forceUpdateAndroidVersion: $forceUpdateAndroidVersion, whitelistTesters: $whitelistTesters, whitelistIgnoreForceUpdate: $whitelistIgnoreForceUpdate)';
+    return 'ConfigModel(scheme: $scheme, dataIV: $dataIV, dataKey: $dataKey, inReview: $inReview, versionInReview: $versionInReview, whitelistLoginEmailDomains: $whitelistLoginEmailDomains, isForceUpdateIos: $isForceUpdateIos, isForceUpdateAndroid: $isForceUpdateAndroid, forceUpdateIosVersion: $forceUpdateIosVersion, forceUpdateAndroidVersion: $forceUpdateAndroidVersion, whitelistTesters: $whitelistTesters, whitelistIgnoreForceUpdate: $whitelistIgnoreForceUpdate)';
   }
 
   @override
@@ -83,7 +91,9 @@ class ConfigModel extends BaseModel {
         other.forceUpdateIosVersion == forceUpdateIosVersion &&
         other.forceUpdateAndroidVersion == forceUpdateAndroidVersion &&
         listEquals(other.whitelistTesters, whitelistTesters) &&
-        listEquals(other.whitelistIgnoreForceUpdate, whitelistIgnoreForceUpdate);
+        listEquals(other.whitelistIgnoreForceUpdate, whitelistIgnoreForceUpdate) &&
+        other.dataIV == dataIV &&
+        other.dataKey == dataKey;
   }
 
   @override
@@ -98,7 +108,9 @@ class ConfigModel extends BaseModel {
         forceUpdateIosVersion.hashCode ^
         forceUpdateAndroidVersion.hashCode ^
         whitelistTesters.hashCode ^
-        whitelistIgnoreForceUpdate.hashCode;
+        whitelistIgnoreForceUpdate.hashCode ^
+        dataIV.hashCode ^
+        dataKey.hashCode;
   }
 }
 

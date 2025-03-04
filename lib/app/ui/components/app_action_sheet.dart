@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../resources/index.dart';
+
 // Translucent, very light gray that is painted on top of the blurred backdrop
 // as the action sheet's background color.
 // (LongCatIsLooong): https://github.com/flutter/flutter/issues/39272. Use
@@ -144,9 +146,9 @@ class AppActionSheet extends StatelessWidget {
     final Orientation orientation = MediaQuery.orientationOf(context);
     double preferWidth;
     if (orientation == Orientation.portrait) {
-      preferWidth = MediaQuery.sizeOf(context).width - margin.horizontal;
+      preferWidth = AppSize.screenWidth - margin.horizontal;
     } else {
-      preferWidth = MediaQuery.sizeOf(context).height - margin.horizontal;
+      preferWidth = AppSize.screenHeight - margin.horizontal;
     }
 
     return SafeArea(

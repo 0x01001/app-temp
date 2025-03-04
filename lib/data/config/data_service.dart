@@ -10,6 +10,12 @@ import '../index.dart';
 
 // import '../repository/source/database/generated/objectbox.g.dart' show getObjectBoxModel;
 
+Future<Isar> openIsar() async {
+  final document = await getApplicationDocumentsDirectory();
+  final isar = await Isar.openAsync(schemas: [UserEntitySchema], directory: document.path, inspector: Env.flavor != Flavor.prod); // /data/user/0/app.eam.dev/app_flutter/default.isar
+  return isar;
+}
+
 @module
 abstract class ServiceModule {
   @preResolve
@@ -22,11 +28,18 @@ abstract class ServiceModule {
       );
 
   @preResolve
-  Future<Isar> getIsar() async {
-    final document = await getApplicationDocumentsDirectory();
-    final isar = await Isar.open([LocalMessageDataSchema], directory: document.path, inspector: Env.flavor != Flavor.prod); // /data/user/0/com.flutter.app.dev/app_flutter/default.isar
-    return isar;
-  }
+  Future<Isar> get isar => openIsar();
+
+  // @preResolve
+  // Future<Isar> getIsar() async {
+  //   final document = await getApplicationDocumentsDirectory();
+  //   final isar = await Isar.openAsync(
+  //     schemas: [MangaEntitySchema, ChapterEntitySchema, DownloadEntitySchema],
+  //     directory: document.path,
+  //     inspector: Env.flavor != Flavor.prod,
+  //   ); // /data/user/0/app.eam.dev/app_flutter/default.isar
+  //   return isar;
+  // }
 
   // @preResolve
   // Future<Store> getStore() async {

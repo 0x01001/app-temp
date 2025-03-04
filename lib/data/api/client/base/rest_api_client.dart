@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../../../../shared/index.dart';
-import '../../../mapper/base/base_error_response_mapper.dart';
-import '../../../mapper/base/base_success_response_mapper.dart';
-import '../../exception_mapper/dio_exception_mapper.dart';
+import '../../../index.dart';
 
 enum Method { get, post, put, patch, delete }
 
@@ -52,6 +50,7 @@ class RestApiClient {
       // if (responseType == ResponseType.plain) return response.data;
       return BaseSuccessResponseMapper<D, T>.fromType(successResponseMapperType ?? this.successResponseMapperType).map(response: response.data, decoder: decoder);
     } catch (error) {
+      // Log.e('RestApiClient > request: $error');
       throw DioExceptionMapper(BaseErrorResponseMapper.fromType(errorResponseMapperType ?? this.errorResponseMapperType)).map(error);
     }
   }
