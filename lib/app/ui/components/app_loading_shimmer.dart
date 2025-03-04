@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../shared/index.dart';
 import '../../index.dart';
 
-enum LoadingShimmerType { search, newChapter, recentlyAdded, ongoingCompleted, mostPopular, download, downloadCompeleted }
+enum LoadingShimmerType { search, newData, other }
 
 class AppLoadingShimmer extends StatelessWidget {
   const AppLoadingShimmer({super.key, this.useSliverList = false, this.width, this.height, this.scrollDirection, this.type, this.padding});
@@ -16,7 +16,7 @@ class AppLoadingShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = type == LoadingShimmerType.search || type == LoadingShimmerType.newChapter || type == LoadingShimmerType.downloadCompeleted
+    final content = type == LoadingShimmerType.search || type == LoadingShimmerType.newData
         ? AppShimmer(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -37,7 +37,7 @@ class AppLoadingShimmer extends StatelessWidget {
               ),
             ),
           )
-        : type == LoadingShimmerType.download
+        : type == LoadingShimmerType.other
             ? AppShimmer(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),

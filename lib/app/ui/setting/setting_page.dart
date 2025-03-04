@@ -75,31 +75,31 @@ class SettingPage extends BasePage {
               ListTile(
                 title: AppText(S.current.editProfile, type: TextType.title, isBold: false),
                 leading: Icon(Icons.person, color: color),
-                trailing: Icon(Icons.arrow_forward_ios, color: color),
+                // trailing: Icon(Icons.arrow_forward_ios, color: color),
                 onTap: () {},
               ),
             ListTile(
               title: AppText(S.current.notification, type: TextType.title, isBold: false),
               leading: Icon(Icons.notifications, color: color),
-              trailing: Icon(Icons.arrow_forward_ios, color: color),
+              // trailing: Icon(Icons.arrow_forward_ios, color: color),
               onTap: () {},
             ),
             ListTile(
               title: AppText(S.current.download, type: TextType.title, isBold: false),
               leading: Icon(Icons.download, color: color),
-              trailing: Icon(Icons.arrow_forward_ios, color: color),
+              // trailing: Icon(Icons.arrow_forward_ios, color: color),
               onTap: () {},
             ),
             ListTile(
               title: AppText(S.current.security, type: TextType.title, isBold: false),
               leading: Icon(Icons.security, color: color),
-              trailing: Icon(Icons.arrow_forward_ios, color: color),
+              // trailing: Icon(Icons.arrow_forward_ios, color: color),
               onTap: () {},
             ),
             ListTile(
               title: AppText(S.current.privacyPolicy, type: TextType.title, isBold: false),
               leading: Icon(Icons.policy, color: color),
-              trailing: Icon(Icons.arrow_forward_ios, color: color),
+              // trailing: Icon(Icons.arrow_forward_ios, color: color),
               onTap: () {},
             ),
             ListTile(

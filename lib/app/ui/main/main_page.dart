@@ -33,7 +33,7 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
       routes: ref.nav.routes,
       bottomNavigationBuilder: (_, tabsRouter) {
         ref.nav.tabsRouter = tabsRouter;
-        final double height = _showBottomNav ? kBottomNavigationBarHeight + AppSize.deviceNavigationHeight : AppSize.deviceNavigationHeight + 3;
+        final double height = _showBottomNav ? kBottomNavigationBarHeight + AppSize.deviceNavigationHeight + AppSize.bottomSafeAreaPadding : AppSize.deviceNavigationHeight;
 
         return Stack(
           children: [
@@ -43,9 +43,9 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
               right: 0,
               child: Consumer(
                 builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  // final _showSystemNavigation = ref.watch(showSystemNavigationProvider); // in reading chapter
+                  // final _showSystemNavigation = ref.watch(showSystemNavigationProvider); // full screen
                   // if (!_showSystemNavigation) return SizedBox.fromSize();
-                  Log.d('MainPage > build: $_showBottomNav - ${AppSize.deviceNavigationHeight} - $kBottomNavigationBarHeight - ${AppSize.bottomSafeAreaPadding}');
+                  // Log.d('MainPage > build: $_showBottomNav - ${AppSize.deviceNavigationHeight} - $kBottomNavigationBarHeight - ${AppSize.bottomSafeAreaPadding}');
                   return SizedBox(
                     height: height,
                     child: ClipRect(

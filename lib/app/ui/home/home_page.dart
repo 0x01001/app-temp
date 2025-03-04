@@ -47,7 +47,7 @@ class HomePage extends BasePage<HomeState, AutoDisposeStateNotifierProvider<Home
             items: users,
             total: total,
             itemBuilder: (_, index) => _Item(item: users?[index], index: index),
-            loadingWidget: const _LoadingWidget(),
+            loadingWidget: const AppLoadingShimmer(type: LoadingShimmerType.newData),
           );
         },
       ),

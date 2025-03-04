@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../data/index.dart';
 import '../resources/index.dart';
 import '../shared/index.dart';
 import 'index.dart';
@@ -42,9 +43,10 @@ class MyApp extends HookConsumerWidget {
             builder: (_) => MaterialApp.router(
               routerDelegate: _appRouter.delegate(
                 deepLinkBuilder: (deepLink) {
-                  // final _appPreferences = getIt.get<AppPreferences>();
-                  // final route = _appPreferences.isLoggedIn ? const MainRoute() : const LoginRoute();
-                  return const DeepLink([MainRoute()]);
+                  final _appPreferences = getIt.get<AppPreferences>();
+                  final _appInfo = getIt.get<AppInfo>();
+                  final route = _appPreferences.isLoggedIn || !_appInfo.isLoginRequired ? const MainRoute() : const LoginRoute();
+                  return DeepLink([route]);
                 },
                 navigatorObservers: () => [AppNavigatorObserver(), HeroController()], //note: for Hero animation
               ),
