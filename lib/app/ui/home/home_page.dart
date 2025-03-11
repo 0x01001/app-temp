@@ -69,7 +69,7 @@ class _Item extends StatelessWidget {
         leading: Container(
           width: 50.0,
           height: 50.0,
-          decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: context.colors.primary, width: 1.0)),
+          decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: context.colorScheme.primary, width: 1.0)),
           child: ClipOval(child: AppImage(item?.picture ?? '')),
         ),
         title: AppText('${item?.title?.toCapitalized()} ${item?.firstName} ${item?.lastName}', type: TextType.title),

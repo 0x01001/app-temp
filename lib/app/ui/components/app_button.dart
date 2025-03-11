@@ -60,7 +60,7 @@ class AppButton extends StatelessWidget {
           return OutlinedButton(
             style: OutlinedButton.styleFrom(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? Constant.defaultBorderRadiusButton)),
-              side: BorderSide(color: onPressed == null ? appColor.disabled : color ?? context.colors.primary, width: borderWidth ?? 1.0, style: BorderStyle.solid),
+              side: BorderSide(color: onPressed == null ? context.color.disabled : color ?? context.colorScheme.primary, width: borderWidth ?? 1.0, style: BorderStyle.solid),
               minimumSize: isExpand ? Size.fromHeight(height ?? Constant.defaultSizeButton) : null,
               padding: const EdgeInsets.all(0),
             ),
@@ -71,7 +71,7 @@ class AppButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   leftIcon != null ? leftIcon! : const SizedBox.shrink(),
-                  Padding(padding: const EdgeInsets.symmetric(horizontal: 5.0), child: AppText(value, isBold: isBold, color: onPressed == null ? appColor.grey5 : color, type: TextType.text)),
+                  Padding(padding: const EdgeInsets.symmetric(horizontal: 5.0), child: AppText(value, isBold: isBold, color: onPressed == null ? context.color.grey5 : color, type: TextType.text)),
                 ],
               ),
             ),
@@ -82,7 +82,7 @@ class AppButton extends StatelessWidget {
             onTap: onTap,
             child: Padding(
               padding: paddingButtonLink ?? const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-              child: Align(alignment: Alignment.centerLeft, child: AppText(value, type: textType ?? TextType.content, color: color ?? context.colors.primary, isBold: isBold, decoration: isUnderline == true ? TextDecoration.underline : TextDecoration.none)),
+              child: Align(alignment: Alignment.centerLeft, child: AppText(value, type: textType ?? TextType.content, color: color ?? context.colorScheme.primary, isBold: isBold, decoration: isUnderline == true ? TextDecoration.underline : TextDecoration.none)),
             ),
           );
 
@@ -90,7 +90,7 @@ class AppButton extends StatelessWidget {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? Constant.defaultBorderRadiusButton)),
-              backgroundColor: onPressed == null ? appColor.disabled : backgroundColor ?? context.colors.primary,
+              backgroundColor: onPressed == null ? context.color.disabled : backgroundColor ?? context.colorScheme.primary,
               minimumSize: isExpand ? Size.fromHeight(height ?? Constant.defaultSizeButton) : null,
               padding: const EdgeInsets.all(0),
             ),
@@ -103,7 +103,7 @@ class AppButton extends StatelessWidget {
                   leftIcon != null ? leftIcon! : const SizedBox.shrink(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                    child: AppText(value, isBold: isBold, color: color ?? context.colors.inverseSurface, type: TextType.text),
+                    child: AppText(value, isBold: isBold, color: color ?? context.colorScheme.inverseSurface, type: TextType.text),
                   ),
                 ],
               ),

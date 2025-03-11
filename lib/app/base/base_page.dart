@@ -27,7 +27,7 @@ abstract class BasePage<T extends BaseState, P extends ProviderListenable<AppSta
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) => Visibility(
             visible: ref.watch(provider.select((value) => value.isLoading ?? false)),
-            child: Container(color: appColor.black3, width: double.infinity, height: double.infinity, child: const AppLoading()),
+            child: Container(color: context.color.black3, width: double.infinity, height: double.infinity, child: const AppLoading()),
           ),
         ),
       ],

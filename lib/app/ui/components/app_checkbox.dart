@@ -5,7 +5,7 @@ import '../../../resources/index.dart';
 import '../../index.dart';
 
 class AppCheckBox extends HookWidget {
-  const AppCheckBox({this.text, this.value, this.onChanged, this.enabled, this.splashColor, this.padding, this.contentPadding = 0.0, super.key});
+  const AppCheckBox({this.text, this.value, this.onChanged, this.enabled, this.splashColor, this.padding, this.contentPadding = 0.0, this.textStyle, super.key});
 
   final Function(bool?)? onChanged;
   final String? text;
@@ -14,6 +14,7 @@ class AppCheckBox extends HookWidget {
   final Color? splashColor;
   final EdgeInsetsGeometry? padding;
   final double contentPadding;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -36,23 +37,23 @@ class AppCheckBox extends HookWidget {
             if (text != null)
               Align(
                 alignment: Alignment.centerLeft,
-                child: Padding(padding: EdgeInsets.only(left: 33 + contentPadding, right: contentPadding), child: AppText(text, maxLines: 2)),
+                child: Padding(padding: EdgeInsets.only(left: 33 + contentPadding, right: contentPadding), child: AppText(text, textStyle: textStyle, maxLines: 2)),
               ),
             SizedBox(
               width: 36,
               height: 36,
               child: Checkbox(
                 checkColor: Colors.white,
-                activeColor: context.colors.surface,
+                activeColor: context.colorScheme.surface,
                 fillColor: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
                   if (states.contains(WidgetState.disabled)) {
                     if (states.contains(WidgetState.selected)) {
-                      return context.colors.primary;
+                      return context.colorScheme.primary;
                     }
                     return Colors.transparent;
                   }
                   if (states.contains(WidgetState.selected)) {
-                    return context.colors.primary;
+                    return context.colorScheme.primary;
                   }
                   return Colors.transparent;
                 }),

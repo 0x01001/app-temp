@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../shared/index.dart';
+import '../index.dart';
 
 final appPreferencesProvider = Provider((ref) => getIt.get<AppPreferences>());
 
@@ -17,11 +18,12 @@ class AppPreferences {
 
   final SharedPreferences _sharedPreference;
   final FlutterSecureStorage _secureStorage;
+  UserEntity? _user; // cache user
 
   // keys should be removed when logout
   static const keyAccessToken = 'accessToken';
   static const keyRefreshToken = 'refreshToken';
-  static const keyUserId = 'userId';
+  static const keyUser = 'user';
   static const keyEmail = 'email';
   static const keyPassword = 'password';
   static const keyDeviceToken = 'deviceToken';
@@ -69,30 +71,26 @@ class AppPreferences {
     return _sharedPreference.setString(keyDeviceToken, token);
   }
 
-  String get userId => _sharedPreference.getString(keyUserId) ?? '';
-  String get email => _sharedPreference.getString(keyEmail) ?? '';
-  Future<String?> get password async => _secureStorage.read(key: keyPassword);
-
-  Future<bool> saveUserId(String userId) {
-    return _sharedPreference.setString(keyUserId, userId);
+  UserEntity? get user {
+    if (_user != null) return _user;
+    final data = _sharedPreference.getString(keyUser) ?? '';
+    if (data.isEmpty) return null;
+    _user = UserEntity.fromJson(data);
+    return _user;
   }
 
+  Future<bool> saveUser(UserEntity user) {
+    return _sharedPreference.setString(keyUser, user.toJson());
+  }
+
+  String get email => _sharedPreference.getString(keyEmail) ?? '';
   Future<bool> saveEmail(String email) {
     return _sharedPreference.setString(keyEmail, email);
   }
 
+  Future<String?> get password async => _secureStorage.read(key: keyPassword);
   Future<void> savePassword(String password) {
     return _secureStorage.write(key: keyPassword, value: password);
-  }
-
-  Future<bool> saveUserNickname({String? conversationId, String? memberId, String? nickname}) {
-    final key = '$keyNickName/$userId/$conversationId/$memberId';
-    return _sharedPreference.setString(key, nickname?.trim() ?? '');
-  }
-
-  String? getUserNickname({String? conversationId, String? memberId}) {
-    final key = '$keyNickName/$userId/$conversationId/$memberId';
-    return _sharedPreference.getString(key);
   }
 
   Future<void> clearCurrentUserData() async {
@@ -101,7 +99,7 @@ class AppPreferences {
         _sharedPreference.remove(keyAccessToken),
         _sharedPreference.remove(keyRefreshToken),
         _sharedPreference.remove(keyDeviceToken),
-        _sharedPreference.remove(keyUserId),
+        _sharedPreference.remove(keyUser),
         _sharedPreference.remove(keyEmail),
         _sharedPreference.remove(keyPassword),
         _sharedPreference.remove(keyIsLoggedIn),

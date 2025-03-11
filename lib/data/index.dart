@@ -14,7 +14,7 @@ export 'api/exception_mapper/dio_exception_mapper.dart';
 export 'api/exception_mapper/exception_mapper.dart';
 export 'api/exception_mapper/graphql_exception_mapper.dart';
 export 'api/firebase_auth_service.dart';
-export 'api/firebase_firestore_service.dart';
+export 'api/firebase_database_service.dart';
 export 'api/firebase_messaging_service.dart';
 export 'api/mapper/base/base_data_mapper.dart';
 export 'api/mapper/base/base_error_response_mapper.dart';

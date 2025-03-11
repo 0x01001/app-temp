@@ -3,6 +3,5 @@ export 'generated/fonts.gen.dart';
 export 'generated/l10n.dart';
 export 'styles/app_color.dart';
 export 'styles/app_size.dart';
+export 'styles/app_text_style.dart';
 export 'styles/app_themes.dart';
-export 'styles/app_typography.dart';
-export 'styles/chat_theme.dart';

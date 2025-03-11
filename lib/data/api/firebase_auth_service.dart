@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../shared/index.dart';
 
-final firebaseAuthServiceProvider = Provider<FirebaseAuthService>(
+final firebaseAuthProvider = Provider<FirebaseAuthService>(
   (ref) => getIt.get<FirebaseAuthService>(),
 );
 
@@ -36,15 +36,16 @@ class FirebaseAuthService {
     }
   }
 
-  Future<String> createUserWithEmailAndPassword(String email, String password) async {
+  Future<String?> createUserWithEmailAndPassword(String email, String password, String? name) async {
     try {
-      final user = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      final result = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
 
-      if (user.user == null) {
-        throw AppFirebaseAuthException(kind: AppFirebaseAuthExceptionKind.userDoesNotExist);
-      }
+      // if (result.user != null) {
+      //   await result.user?.updateDisplayName(name);
+      //   await result.user?.reload();
+      // }
 
-      return user.user!.uid;
+      return result.user?.uid;
     } on FirebaseAuthException catch (e) {
       Log.e('FirebaseAuthService > createUserWithEmailAndPassword > error: ${e.code} - ${e.message}');
       switch (e.code) {

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
+import '../../shared/index.dart';
+
 class AppSize {
   AppSize._();
 
@@ -32,21 +34,23 @@ class AppSize {
     bottomSafeAreaPadding = (Platform.isIOS && screenHeight >= 812.0 && MediaQuery.paddingOf(context).bottom == 0) ? 34.0 : MediaQuery.paddingOf(context).bottom;
     if (Platform.isIOS) {
       screenPaddingTop = topSafeAreaPadding;
+      navigationMode = DeviceNavigationMode.none;
+      deviceNavigationHeight = bottomSafeAreaPadding;
     } else {
       screenPaddingTop = topSafeAreaPadding + 6;
+      try {
+        navigationMode = await AndroidNavigationMode.getNavigationMode;
+      } on PlatformException {
+        navigationMode = DeviceNavigationMode.none;
+      }
+      deviceNavigationHeight = navigationMode == DeviceNavigationMode.threeButton || navigationMode == DeviceNavigationMode.twoButton
+          ? kMinInteractiveDimension
+          : navigationMode == DeviceNavigationMode.fullScreenGesture
+              ? 16.0
+              : 0.0;
     }
 
-    try {
-      navigationMode = await AndroidNavigationMode.getNavigationMode;
-    } on PlatformException {
-      navigationMode = DeviceNavigationMode.none;
-    }
-    deviceNavigationHeight = navigationMode == DeviceNavigationMode.threeButton || navigationMode == DeviceNavigationMode.twoButton
-        ? kMinInteractiveDimension
-        : navigationMode == DeviceNavigationMode.fullScreenGesture
-            ? 16.0
-            : 0.0;
-    //Log.d('AppSize > of: $screenWidth - $screenHeight - $orientation - $devicePixelRatio - $screenPaddingTop - $bottomSafeAreaPadding - $deviceNavigationHeight');
+    Log.d('AppSize > of: $navigationMode - $screenWidth - $screenHeight - $orientation - $devicePixelRatio - $screenPaddingTop - $bottomSafeAreaPadding - $deviceNavigationHeight');
   }
 
   bool isIphoneX() {

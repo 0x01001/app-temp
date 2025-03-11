@@ -192,7 +192,7 @@ class _SeparatorBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return type == AppListViewType.separated ? Divider(color: appColor.grey5, thickness: Constant.borderHeight, height: 1) : const SizedBox.shrink();
+    return type == AppListViewType.separated ? Divider(color: context.color.grey5, thickness: Constant.borderHeight, height: 1) : const SizedBox.shrink();
   }
 }
 

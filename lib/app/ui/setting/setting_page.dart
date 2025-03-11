@@ -28,7 +28,7 @@ class SettingPage extends BasePage {
   Widget render(BuildContext context, WidgetRef ref) {
     Log.d('SettingPage > build');
     final user = ref.watch(currentUserProvider);
-    final color = context.colors.inverseSurface;
+    final color = context.colorScheme.inverseSurface;
 
     Future<void> onPressLogout() async {
       final result = await ref.nav.showDialog(AppPopup.confirmDialog(
@@ -58,20 +58,20 @@ class SettingPage extends BasePage {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (user.id?.isNotEmpty == true)
+            if (user?.userId?.isNotEmpty == true)
               SizedBox(
                 height: 100,
                 child: Row(
                   children: [
-                    AppAvatar(text: user.email ?? ''),
+                    AppAvatar(text: user?.email ?? ''),
                     const SizedBox(width: 16),
-                    Flexible(child: AppText(user.name ?? '')),
+                    Flexible(child: AppText(user?.name ?? '')),
                     const SizedBox(width: 10),
-                    Flexible(child: AppText(user.email ?? '')),
+                    Flexible(child: AppText(user?.email ?? '')),
                   ],
                 ),
               ),
-            if (user.id?.isNotEmpty == true)
+            if (user?.userId?.isNotEmpty == true)
               ListTile(
                 title: AppText(S.current.editProfile, type: TextType.title, isBold: false),
                 leading: Icon(Icons.person, color: color),
@@ -112,7 +112,7 @@ class SettingPage extends BasePage {
                   Consumer(
                     builder: (BuildContext context, WidgetRef ref, Widget? child) {
                       final lang = ref.watch(languageCodeProvider);
-                      return AppText(languageToCountryCode[lang]?.language ?? 'English', color: appColor.grey5);
+                      return AppText(languageToCountryCode[lang]?.language ?? 'English', color: context.color.grey5);
                     },
                   ),
                   AppSize.XS,
@@ -136,7 +136,7 @@ class SettingPage extends BasePage {
                           : theme == 1
                               ? S.current.lightMode
                               : S.current.darkMode;
-                      return AppText(text, color: appColor.grey5);
+                      return AppText(text, color: context.color.grey5);
                     },
                   ),
                   AppSize.XS,
@@ -145,13 +145,13 @@ class SettingPage extends BasePage {
               ),
               onTap: () => ref.nav.push(const SettingThemeRoute()),
             ),
-            if (user.id?.isNotEmpty == true)
+            if (user?.userId?.isNotEmpty == true)
               ListTile(
-                title: AppText(S.current.deleteAccount, type: TextType.title, isBold: false, color: appColor.error),
-                leading: Icon(Icons.delete, color: appColor.error),
+                title: AppText(S.current.deleteAccount, type: TextType.title, isBold: false, color: context.colorScheme.error),
+                leading: Icon(Icons.delete, color: context.colorScheme.error),
                 onTap: onPressDeleteAccount,
               ),
-            if (user.id?.isNotEmpty == true)
+            if (user?.userId?.isNotEmpty == true)
               ListTile(
                 title: AppText(S.current.logout, type: TextType.title, isBold: false),
                 leading: Icon(Icons.logout, color: color),
@@ -226,7 +226,7 @@ class SettingLanguagePage extends ConsumerWidget {
                     leading: Container(
                       height: 16.0,
                       width: 22.0,
-                      decoration: BoxDecoration(border: Border.all(color: appColor.grey5, width: Constant.borderHeight)),
+                      decoration: BoxDecoration(border: Border.all(color: context.color.grey5, width: Constant.borderHeight)),
                       child: ClipRRect(
                         child: CountryPickerUtils.getDefaultFlagImage(CountryPickerUtils.getCountryByIsoCode(languageToCountryCode[x.languageCode]?.code ?? 'US')),
                       ),

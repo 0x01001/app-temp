@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../data/index.dart';
@@ -22,7 +21,7 @@ class AuthProvider extends BaseProvider<AuthState> {
       final userId = await _ref.firebaseAuth.signInWithEmailAndPassword(email, password);
       if (userId.isEmpty) return false;
 
-      final user = await _ref.firebaseFirestore.getCurrentUser(userId);
+      final user = await _ref.firebaseDatabase.getCurrentUser(userId);
       final deviceId = await _ref.device.id;
       if (user.deviceIds?.isNotEmpty == true && !user.deviceIds!.contains(deviceId)) {
         Log.d('ID: ${user.id} has logged in on new device ($deviceId)');
@@ -44,13 +43,15 @@ class AuthProvider extends BaseProvider<AuthState> {
     // return await runSafe(action: () => _ref.api.logout());
     try {
       final deviceToken = await _ref.share.deviceToken;
-      await _ref.firebaseFirestore.updateCurrentUser(userId: _ref.preferences.userId, data: {
+      final user = await _ref.firebaseDatabase.getCurrentUser(_ref.preferences.user?.userId ?? '');
+      final deviceTokens = user.deviceTokens?.remove(deviceToken);
+      await _ref.firebaseDatabase.updateCurrentUser(userId: _ref.preferences.user?.userId ?? '', data: {
         FirebaseUserModel.keyDeviceIds: [],
-        FirebaseUserModel.keyDeviceTokens: FieldValue.arrayRemove([deviceToken]),
+        FirebaseUserModel.keyDeviceTokens: deviceTokens,
       });
       await _ref.preferences.clearCurrentUserData();
       await _ref.firebaseAuth.signOut();
-      _ref.update<FirebaseUserModel>(currentUserProvider, (state) => FirebaseUserModel());
+      _ref.update<UserEntity?>(currentUserProvider, (state) => null);
       await _ref.nav.replaceAll([const LoginRoute()]);
     } catch (e) {
       await _ref.nav.replaceAll([const LoginRoute()]);
@@ -61,7 +62,7 @@ class AuthProvider extends BaseProvider<AuthState> {
     return runSafe(
       action: () async {
         await _ref.preferences.clearCurrentUserData();
-        await _ref.firebaseFirestore.deleteUser(_ref.preferences.userId);
+        await _ref.firebaseDatabase.deleteUser(_ref.preferences.user?.userId ?? '');
         await _ref.firebaseAuth.deleteAccount();
         await _ref.nav.replaceAll([const LoginRoute()]);
       },
@@ -82,13 +83,13 @@ class AuthProvider extends BaseProvider<AuthState> {
       // if (response != null) await _saveTokenAndUser(response);
       // return response != null;
 
-      final userId = await _ref.firebaseAuth.createUserWithEmailAndPassword(email, password);
-      if (userId.isEmpty) return false;
+      final userId = await _ref.firebaseAuth.createUserWithEmailAndPassword(email, password, name);
+      if (userId?.isEmpty == true) return false;
 
       final deviceToken = await _ref.share.deviceToken;
       final deviceId = await _ref.device.id;
       Log.d('deviceToken: $deviceToken');
-      final data = FirebaseUserModel(id: userId, email: email, isVip: false, deviceIds: [deviceId], deviceTokens: [deviceToken]);
+      final data = FirebaseUserModel(id: userId, email: email, name: name, isVip: false, deviceIds: [deviceId], deviceTokens: [deviceToken]);
       await _saveTokenAndUser(data, isUpdate: false);
       return true;
     });
@@ -111,10 +112,9 @@ class AuthProvider extends BaseProvider<AuthState> {
       // if (!data.accessToken.isNullOrEmpty) _ref.preferences.saveAccessToken(data.accessToken!),
       // if (!data.refreshToken.isNullOrEmpty) _ref.preferences.saveRefreshToken(data.refreshToken!),
       _ref.preferences.saveIsLoggedIn(true),
-      _ref.preferences.saveUserId(data.id ?? ''),
-      _ref.preferences.saveEmail(data.email ?? ''),
-      if (isUpdate == true) _ref.firebaseFirestore.updateCurrentUser(userId: data.id ?? '', data: data.toMap()),
-      if (isUpdate == false) _ref.firebaseFirestore.putUserToFireStore(userId: data.id ?? '', data: data),
+      _ref.preferences.saveUser(data.toEntity()),
+      if (isUpdate == true) _ref.firebaseDatabase.updateCurrentUser(userId: data.id ?? '', data: data.toMap()),
+      if (isUpdate == false) _ref.firebaseDatabase.putUserToRealtimeDB(userId: data.id ?? '', data: data),
     ]);
   }
 }

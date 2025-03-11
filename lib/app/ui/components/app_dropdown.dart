@@ -62,10 +62,10 @@ class AppDropdown extends HookConsumerWidget {
               valueListenable.value = value;
               onChanged?.call(val ?? '');
             },
-            buttonStyleData: ButtonStyleData(height: 24, width: isSmall ? 65 : 70, decoration: BoxDecoration(color: context.colors.surface)),
+            buttonStyleData: ButtonStyleData(height: 24, width: isSmall ? 65 : 70, decoration: BoxDecoration(color: context.colorScheme.surface)),
             menuItemStyleData: const MenuItemStyleData(padding: EdgeInsets.symmetric(vertical: 0, horizontal: 14)),
-            dropdownStyleData: DropdownStyleData(maxHeight: 400, width: isSmall ? 95 : 100, offset: const Offset(0, -3), padding: EdgeInsets.zero, decoration: BoxDecoration(color: context.colors.surface)),
-            dropdownSeparator: DropdownSeparator(height: 1, child: Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: Divider(color: appColor.grey5, thickness: Constant.borderHeight, height: 1))),
+            dropdownStyleData: DropdownStyleData(maxHeight: 400, width: isSmall ? 95 : 100, offset: const Offset(0, -3), padding: EdgeInsets.zero, decoration: BoxDecoration(color: context.colorScheme.surface)),
+            dropdownSeparator: DropdownSeparator(height: 1, child: Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: Divider(color: context.color.grey5, thickness: Constant.borderHeight, height: 1))),
           );
 
         default:
@@ -74,7 +74,7 @@ class AppDropdown extends HookConsumerWidget {
             initialValue: value == '' ? null : value,
             items: items.map((x) => DropdownMenuItem(alignment: AlignmentDirectional.centerStart, value: x, child: AppText(x, type: TextType.content))).toList(),
             focusNode: _focusNode,
-            style: context.bodySmall, // AppTextStyles.h14.copyWith(color: theme.appColors.black),
+            style: context.text.bodySmall, // AppTextStyles.h14.copyWith(color: theme.appColors.black),
             validator: validator ?? checkValidator(field),
             icon: const SizedBox(width: 8),
             // hint: AppText(hintText, type: TextType.content),
@@ -93,7 +93,7 @@ class AppDropdown extends HookConsumerWidget {
               isDense: true,
               suffixIcon: const Icon(Icons.arrow_drop_down, size: 30),
               suffixIconConstraints: const BoxConstraints.expand(width: 45, height: 45),
-              errorStyle: context.labelSmall?.copyWith(color: Colors.red),
+              errorStyle: context.text.labelSmall?.copyWith(color: Colors.red),
               errorMaxLines: 3,
               errorText: errorText,
               errorBorder: OutlineInputBorder(

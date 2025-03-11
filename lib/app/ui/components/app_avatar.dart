@@ -34,10 +34,10 @@ class AppAvatar extends StatelessWidget {
       width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(width / 2),
-        border: Border.all(color: appColor.borderButton, width: 0.5),
+        border: Border.all(color: context.color.borderButton, width: 0.5),
       ),
       child: Material(
-        color: backgroundColor ?? context.colors.surface,
+        color: backgroundColor ?? context.colorScheme.surface,
         borderRadius: BorderRadius.circular(width / 2),
         child: InkWell(
           onTap: onTap,

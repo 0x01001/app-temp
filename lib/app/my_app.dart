@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 // import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,14 +21,14 @@ class MyApp extends HookConsumerWidget {
     final _appRouter = ref.watch(appRouterProvider);
     Log.d('MyApp > build -----------------------------');
 
-    useEffect(() {
-      ref.listenManual(
-        isDarkModeProvider,
-        (previous, next) => AppTheme.type = next ? AppThemeType.dark : AppThemeType.light,
-        fireImmediately: true,
-      );
-      return null;
-    }, []);
+    // useEffect(() {
+    //   ref.listenManual(
+    //     isDarkModeProvider,
+    //     (previous, next) => AppTheme.type = next ? AppThemeType.dark : AppThemeType.light,
+    //     fireImmediately: true,
+    //   );
+    //   return null;
+    // }, []);
 
     return ScreenUtilInit(
       designSize: const Size(Constant.designDeviceWidth, Constant.designDeviceHeight),
@@ -54,8 +53,10 @@ class MyApp extends HookConsumerWidget {
               title: Constant.materialAppTitle,
               // color: Constants.taskMenuMaterialAppColor,
               themeMode: ThemeMode.values[themeMode],
-              theme: lightTheme,
-              darkTheme: darkTheme,
+              theme: AppTheme.lightTheme,
+              highContrastTheme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              highContrastDarkTheme: AppTheme.darkTheme,
               debugShowCheckedModeBanner: false,
               // useInheritedMediaQuery: true,  // `useInheritedMediaQuery` property set to `true` in order to use DevicePreview
               localeResolutionCallback: (Locale? locale, Iterable<Locale> supportedLocales) => supportedLocales.contains(locale) ? locale : const Locale(Constant.defaultLanguageCode),
@@ -72,7 +73,6 @@ class MyApp extends HookConsumerWidget {
               builder: (context, child) {
                 Log.d('MyApp > build languageCode: $languageCode - $themeMode');
                 S.of(context);
-                AppColor.of(context);
                 AppSize.of(context);
                 final widget = MediaQuery.withNoTextScaling(child: child ?? const SizedBox.shrink());
                 return Constant.enableDevicePreview

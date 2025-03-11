@@ -68,7 +68,7 @@ class AppInput extends BaseInput {
     final _border = enableBorder
         ? OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? Constant.defaultBorderRadiusTextInput)),
-            borderSide: BorderSide(width: 0, color: appColor.borderButton),
+            borderSide: BorderSide(width: 0, color: context.color.borderButton),
           )
         : InputBorder.none;
     // debugPrint('build: $field');
@@ -119,7 +119,7 @@ class AppInput extends BaseInput {
         autocorrect: false,
         textAlignVertical: TextAlignVertical.center,
         textAlign: textAlign,
-        style: context.bodySmall,
+        style: context.text.bodySmall,
         controller: controller ?? _controller,
         validator: validator ?? checkValidator(field),
         onChanged: onTextChanged,
@@ -132,17 +132,17 @@ class AppInput extends BaseInput {
           contentPadding: EdgeInsets.fromLTRB(8, 16, suffixIcon != null || _buildSuffixIcon() != null ? 0 : 8, 16),
           border: _border,
           enabledBorder: _border,
-          focusedBorder: _border.copyWith(borderSide: BorderSide(color: context.colors.primary)),
+          focusedBorder: _border.copyWith(borderSide: BorderSide(color: context.colorScheme.primary)),
           disabledBorder: _border,
           labelText: hintText ?? labelText,
-          labelStyle: context.bodySmall?.copyWith(color: appColor.disabled),
+          labelStyle: context.text.bodySmall?.copyWith(color: context.color.disabled),
           floatingLabelBehavior: FloatingLabelBehavior.never,
           alignLabelWithHint: true,
           isCollapsed: true,
           isDense: true,
           suffixIcon: suffixIcon ?? _buildSuffixIcon(),
           suffixIconConstraints: const BoxConstraints.expand(width: Constant.defaultSizeTextInput, height: Constant.defaultSizeTextInput),
-          errorStyle: context.labelMedium?.copyWith(color: Colors.red),
+          errorStyle: context.text.bodySmall?.copyWith(color: Colors.red),
           errorMaxLines: 3,
           errorText: errorText != null && errorText != '' ? errorText : null,
           errorBorder: _border.copyWith(borderSide: const BorderSide(color: Colors.red)),

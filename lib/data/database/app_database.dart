@@ -14,7 +14,7 @@ class AppDatabase {
   final Isar isar;
   final AppPreferences preferences;
 
-  String get userId => preferences.userId;
+  String? get userId => preferences.user?.userId;
 
   // Future<void> removeMessagesByConversationId(String id) {
   //   return isar.write((x) async {

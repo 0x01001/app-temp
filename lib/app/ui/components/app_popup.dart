@@ -173,7 +173,7 @@ class AppPopup {
       builder: (context, navigator) => SnackBar(
         content: AppText(message),
         duration: Constant.snackBarDuration,
-        backgroundColor: context.colors.surface,
+        backgroundColor: context.colorScheme.surface,
         action: action,
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(Constant.defaultPadding),
@@ -188,7 +188,7 @@ class AppPopup {
       builder: (context, navigator) => SnackBar(
         content: AppText(message),
         duration: Constant.snackBarDuration,
-        backgroundColor: context.colors.surface,
+        backgroundColor: context.colorScheme.surface,
         action: action,
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(Constant.defaultPadding),
@@ -217,18 +217,18 @@ class AppPopup {
     //   id: 'maintenanceModeDialog_$message'.hardcoded,
     //   builder: (context, navigator) => Scaffold(
     //     body: Container(
-    //       color: context.colors.surface,
+    //       color: context.colorScheme.surface,
     //       padding: const EdgeInsets.all(24),
     //       child: Column(
     //         mainAxisAlignment: MainAxisAlignment.center,
     //         crossAxisAlignment: CrossAxisAlignment.stretch,
     //         children: [
-    //           // Align(alignment: Alignment.topCenter, child: appImage.appLogo.svg(width: 128, height: 128)),
+    //           // Align(alignment: Alignment.topCenter, child: context.image.appLogo.svg(width: 128, height: 128)),
     //           const SizedBox(height: 32),
     //           AppText(S.current.messageMaintenance),
     //           const SizedBox(height: 8),
     //           Container(
-    //             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: context.colors.outlineVariant)),
+    //             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: context.colorScheme.outlineVariant)),
     //             padding: const EdgeInsets.all(12),
     //             child: AppText(message),
     //           ),
@@ -242,7 +242,7 @@ class AppPopup {
     //                 AppText(S.current.maintenanceTime),
     //                 const SizedBox(height: 8),
     //                 Container(
-    //                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: context.colors.outlineVariant)),
+    //                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: context.colorScheme.outlineVariant)),
     //                   padding: const EdgeInsets.all(12),
     //                   child: AppText(time),
     //                 ),

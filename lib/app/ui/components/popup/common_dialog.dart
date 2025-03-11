@@ -80,7 +80,7 @@ class CommonDialog extends StatelessWidget {
       contentPadding: contentPadding ?? const EdgeInsets.all(Constant.defaultPadding),
       buttonPadding: EdgeInsets.zero,
       actionsPadding: EdgeInsets.zero,
-      backgroundColor: context.colors.surface,
+      backgroundColor: context.colorScheme.surface,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
       titlePadding: title != null ? const EdgeInsets.fromLTRB(Constant.defaultPadding, Constant.defaultPadding, Constant.defaultPadding, 0) : EdgeInsets.zero,
       actionsAlignment: MainAxisAlignment.end,

@@ -91,13 +91,12 @@ final isDarkModeProvider = StateProvider<bool>(
   },
 );
 
-final currentUserProvider = StateProvider<FirebaseUserModel>(
+final currentUserProvider = StateProvider<UserEntity?>(
   (ref) {
     ref.listenSelf((previous, next) {
-      ref.preferences.saveUserId(next.id ?? '');
-      ref.preferences.saveEmail(next.email ?? '');
+      if (next != null) ref.preferences.saveUser(next);
     });
 
-    return FirebaseUserModel();
+    return ref.preferences.user;
   },
 );

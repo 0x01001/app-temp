@@ -22,17 +22,18 @@ class MainProvider extends BaseProvider<MainState> {
   @visibleForTesting
   StreamSubscription<String>? onTokenRefreshSubscription;
   @visibleForTesting
-  StreamSubscription<FirebaseUserModel>? currentUserSubscription;
+  StreamSubscription<FirebaseUserModel?>? currentUserSubscription;
   @visibleForTesting
   StreamSubscription<bool>? connectSubscription;
 
-  void _updateCurrentUser(FirebaseUserModel user) => _ref.update<FirebaseUserModel>(currentUserProvider, (_) => user);
+  void _updateCurrentUser(UserEntity? user) => _ref.update<UserEntity?>(currentUserProvider, (_) => user);
 
   FutureOr<void> init() async {
     Log.start('MainProvider > init > start');
+    S.instance.addLocaleTimeAgo();
     setInitialCurrentUserState();
     listenConnectivity();
-    listenToCurrentUser();
+    // listenToCurrentUser();
     listenOnDeviceTokenRefresh();
     listenOnMessageOpenedApp();
     await getInitialMessage();
@@ -40,7 +41,7 @@ class MainProvider extends BaseProvider<MainState> {
   }
 
   void setInitialCurrentUserState() {
-    _updateCurrentUser(FirebaseUserModel(id: _ref.preferences.userId, email: _ref.preferences.email));
+    _updateCurrentUser(UserEntity(userId: _ref.preferences.user?.userId ?? '', email: _ref.preferences.user?.email ?? ''));
   }
 
   void listenConnectivity() {
@@ -50,21 +51,22 @@ class MainProvider extends BaseProvider<MainState> {
     });
   }
 
-  void listenToCurrentUser() {
-    currentUserSubscription?.cancel();
-    final userId = _ref.preferences.userId;
-    currentUserSubscription = _ref.firebaseFirestore.getUserDetailStream(userId).listen((user) async {
-      // user deleted - force logout
-      if (user.id?.isEmpty == true) {
-        await _ref.nav.showDialog(AppPopup.forceLogout(S.current.forceLogout));
-        await _ref.preferences.clearCurrentUserData();
-        _updateCurrentUser(FirebaseUserModel());
-        await _ref.nav.replaceAll([const LoginRoute()]);
-      } else {
-        _updateCurrentUser(user);
-      }
-    });
-  }
+  // void listenToCurrentUser() {
+  //   currentUserSubscription?.cancel();
+  //   final userId = _ref.preferences.userId;
+  //   currentUserSubscription = _ref.firebaseDatabase.getUserDetailStream(userId).listen((user) async {
+  //     Log.d('MainProvider > listenToCurrentUser: ${user?.id}');
+  //     // user deleted - force logout
+  //     if (user?.id?.isEmpty == true) {
+  //       await _ref.nav.showDialog(AppPopup.forceLogout(S.current.forceLogout));
+  //       await _ref.preferences.clearCurrentUserData();
+  //       _updateCurrentUser(FirebaseUserModel());
+  //       await _ref.nav.replaceAll([const LoginRoute()]);
+  //     } else {
+  //       _updateCurrentUser(user);
+  //     }
+  //   });
+  // }
 
   void listenOnDeviceTokenRefresh() {
     onTokenRefreshSubscription?.cancel();
@@ -90,8 +92,9 @@ class MainProvider extends BaseProvider<MainState> {
   Future<void> getInitialMessage() async {
     await runSafe(
       action: () async {
-        // final initialMessage = await _ref.firebaseNotification.initialMessage;
-        // await goToChatPage(_ref.remoteMessageAppNotificationMapper.mapToLocal(initialMessage));
+        final message = await _ref.firebaseNotification.initialMessage;
+        Log.d('MainProvider > getInitialMessage: ${message?.data}');
+        // await goToCustomPage(NotificationModel.mapToLocal(initialMessage));
       },
       handleLoading: false,
     );

@@ -86,6 +86,7 @@ class Constant {
   static const paddingItemsGrid = 10.0;
   static const endReachedThreshold = 200.0;
 
+  static const largePadding = 32.0;
   static const defaultPadding = 16.0;
   static const smallPadding = 8.0;
   static const xsmallPadding = 5.0;

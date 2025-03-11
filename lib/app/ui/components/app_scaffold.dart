@@ -33,7 +33,7 @@ class AppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scaffold = Scaffold(
-      backgroundColor: backgroundColor ?? context.colors.surface,
+      backgroundColor: backgroundColor ?? context.colorScheme.surface,
       body: useSafeArea ? SafeArea(child: body) : body,
       appBar: appBar,
       drawer: drawer,

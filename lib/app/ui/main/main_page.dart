@@ -33,7 +33,7 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
       routes: ref.nav.routes,
       bottomNavigationBuilder: (_, tabsRouter) {
         ref.nav.tabsRouter = tabsRouter;
-        final double height = _showBottomNav ? kBottomNavigationBarHeight + AppSize.deviceNavigationHeight + AppSize.bottomSafeAreaPadding : AppSize.deviceNavigationHeight;
+        final double height = _showBottomNav ? kBottomNavigationBarHeight + AppSize.deviceNavigationHeight : AppSize.deviceNavigationHeight;
 
         return Stack(
           children: [
@@ -51,7 +51,7 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
                     child: ClipRect(
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                        child: Container(color: appColor.background.withOpacity(0.8)),
+                        child: Container(color: context.color.backgroundTab.withOpacity(0.8)),
                       ),
                     ),
                   );
@@ -75,12 +75,12 @@ class MainPage extends BasePage<MainState, AutoDisposeStateNotifierProvider<Main
                 showSelectedLabels: true,
                 showUnselectedLabels: true,
                 type: BottomNavigationBarType.fixed,
-                items: BottomTab.values.map((tab) => BottomNavigationBarItem(label: tab.title, icon: tab.icon, activeIcon: tab.activeIcon(context.colors.primary))).toList(),
-                selectedLabelStyle: context.labelSmall?.copyWith(fontWeight: FontWeight.bold),
-                unselectedLabelStyle: context.labelSmall,
+                items: BottomTab.values.map((tab) => BottomNavigationBarItem(label: tab.title, icon: tab.icon(context.color.grey5), activeIcon: tab.activeIcon(context.colorScheme.primary))).toList(),
+                selectedLabelStyle: context.text.labelSmall?.copyWith(fontWeight: FontWeight.bold),
+                unselectedLabelStyle: context.text.labelSmall,
                 backgroundColor: Colors.transparent,
-                selectedItemColor: context.colors.primary,
-                unselectedItemColor: appColor.grey5,
+                selectedItemColor: context.colorScheme.primary,
+                unselectedItemColor: context.color.grey5,
                 elevation: 0.0,
               ).animate(target: _showBottomNav ? 1.0 : 0.0).fade(begin: 0.0, end: 1.0, curve: Curves.easeInOutCubic).slideY(begin: 1.0, end: 0.0),
             ),
@@ -102,15 +102,15 @@ enum BottomTab {
   // final Widget icon;
   // final Widget activeIcon;
 
-  Widget get icon {
+  Widget icon(Color color) {
     switch (this) {
       case BottomTab.home:
-        return Icon(Icons.home, color: appColor.grey5);
+        return Icon(Icons.home, color: color);
       // return AppImage(appImage.iconHome.path, color: appColor.grey5);
       case BottomTab.ui:
-        return Icon(Icons.color_lens, color: appColor.grey5);
+        return Icon(Icons.color_lens, color: color);
       case BottomTab.setting:
-        return Icon(Icons.settings, color: appColor.grey5);
+        return Icon(Icons.settings, color: color);
     }
   }
 

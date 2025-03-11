@@ -207,7 +207,7 @@ class AppTopBar extends HookConsumerWidget implements PreferredSizeWidget {
       bottom: bottom,
       shadowColor: shadowColor,
       shape: shape, // ?? Border(bottom: BorderSide(color: context.theme.dividerColor, width: 1)),
-      backgroundColor: backgroundColor ?? Theme.of(context).color.background,
+      backgroundColor: backgroundColor ?? context.color.backgroundTab,
       foregroundColor: foregroundColor,
       iconTheme: iconTheme,
       actionsIconTheme: actionsIconTheme,
@@ -244,7 +244,7 @@ class _BuildTitle extends StatelessWidget {
         child: titleType == AppBarTitle.text
             ? AppText(text ?? '', textStyle: titleTextStyle, type: TextType.header)
             : titleType == AppBarTitle.logo
-                ? AppImage(appImage.logo.path, color: leadingIconColor ?? Colors.transparent, width: 10, height: 10)
+                ? AppImage(context.image.logo.path, color: leadingIconColor ?? Colors.transparent, width: 10, height: 10)
                 : null);
   }
 }

@@ -50,20 +50,20 @@ class AppText extends ConsumerWidget {
 
     switch (t) {
       case TextType.header:
-        _textStyle = context.titleLarge;
+        _textStyle = context.text.titleLarge;
         _isBold = isBold ?? true;
         break;
       case TextType.title:
-        _textStyle = context.titleMedium;
+        _textStyle = context.text.titleMedium;
         _isBold = isBold ?? true;
         break;
       case TextType.content:
-        _textStyle = context.bodyMedium;
+        _textStyle = context.text.bodyMedium;
         _isBold = isBold ?? false;
-        _color = color ?? context.textTheme.bodyMedium?.color;
+        _color = color ?? context.text.textTheme.bodyMedium?.color;
         break;
       case TextType.text:
-        _textStyle = context.bodySmall;
+        _textStyle = context.text.bodySmall;
         _isBold = isBold ?? false;
         break;
       default:
@@ -83,7 +83,7 @@ class AppText extends ConsumerWidget {
                   fontWeight: _fontWeight,
                 ),
             overflow: overflow ?? TextOverflow.ellipsis,
-            linkStyle: context.labelMedium?.copyWith(color: linkColor ?? context.colors.primary, decoration: decoration ?? TextDecoration.underline),
+            linkStyle: context.text.labelMedium?.copyWith(color: linkColor ?? context.colorScheme.primary, decoration: decoration ?? TextDecoration.underline),
           )
         : Text(
             value ?? '',

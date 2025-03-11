@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../resources/index.dart';
 import '../../../shared/index.dart';
 import 'color_card.dart';
 
@@ -23,7 +24,7 @@ class ShowColorSchemeColors extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
+    final ColorScheme colorScheme = context.colorScheme;
     final bool isDark = colorScheme.brightness == Brightness.dark;
     final bool useMaterial3 = theme.useMaterial3;
     final TextStyle headerStyle = theme.textTheme.titleMedium!;
@@ -47,18 +48,18 @@ class ShowColorSchemeColors extends StatelessWidget {
     final Color background = onBackgroundColor ?? theme.cardTheme.color ?? theme.cardColor;
 
     final String surfaceTooHigh = isDark
-        ? _isLight(theme.colorScheme.surface)
+        ? _isLight(context.colorScheme.surface)
             ? '\nTOO HIGH'
             : ''
-        : _isDark(theme.colorScheme.surface)
+        : _isDark(context.colorScheme.surface)
             ? '\nTOO HIGH'
             : '';
 
     final String backTooHigh = isDark
-        ? _isLight(theme.colorScheme.surface)
+        ? _isLight(context.colorScheme.surface)
             ? '\nTOO HIGH'
             : ''
-        : _isDark(theme.colorScheme.surface)
+        : _isDark(context.colorScheme.surface)
             ? '\nTOO HIGH'
             : '';
 
@@ -157,16 +158,6 @@ class ShowColorSchemeColors extends StatelessWidget {
                 label: 'onError\nContainer',
                 color: colorScheme.onErrorContainer,
                 textColor: colorScheme.errorContainer,
-              ),
-              ColorCard(
-                label: 'Background$backTooHigh',
-                color: colorScheme.surface,
-                textColor: colorScheme.onSurface,
-              ),
-              ColorCard(
-                label: 'on\nBackground',
-                color: colorScheme.onSurface,
-                textColor: colorScheme.surface,
               ),
               ColorCard(
                 label: 'Surface$surfaceTooHigh',

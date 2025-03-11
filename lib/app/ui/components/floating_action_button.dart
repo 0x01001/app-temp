@@ -56,9 +56,9 @@ class FAB extends HookConsumerWidget {
               borderRadius: BorderRadius.circular(33),
               child: FloatingActionButton(
                 heroTag: null, //note: fixed There are multiple heroes that share the same tag within a subtree. In this case, multiple heroes had the following tag: <default FloatingActionButton tag>
-                // backgroundColor: appColor.black3,
+                // backgroundColor: context.color.black3,
                 onPressed: _onPressed,
-                child: Icon(Icons.arrow_upward, color: appColor.white1, size: 20),
+                child: const Icon(Icons.arrow_upward, color: Colors.white, size: 20),
               ),
             ),
           ),

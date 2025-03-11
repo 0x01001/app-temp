@@ -32,7 +32,7 @@ class UserEntity {
 
   Map<String, dynamic> toMap() {
     return {
-      'userId': userId,
+      'id': userId,
       'email': email,
       'name': name,
     };
@@ -40,7 +40,7 @@ class UserEntity {
 
   factory UserEntity.fromMap(Map<String, dynamic> map) {
     return UserEntity(
-      userId: map['userId'],
+      userId: map['id'],
       email: map['email'],
       name: map['name'],
     );
